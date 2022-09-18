@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:paddingBottom="25dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="25dp"
+    android:backgroundTint="@color/weak_white"
+    tools:context=".activities.form_register.FormRegister">
+
+
+    <View
+        android:id="@+id/containerRegisterFragments"
+        style="@style/ContainerFragments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="40dp"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_nome"
+        style="@style/EditText"
+        android:drawableRight="@drawable/ic_person"
+        app:layout_constraintTop_toTopOf="@+id/containerRegisterFragments"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/nome"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_nome_de_usuario"
+        style="@style/EditText"
+        android:drawableRight="@drawable/ic_person"
+        app:layout_constraintTop_toBottomOf="@+id/activity_form_register_nome"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/nome_de_usuario"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_email"
+        style="@style/EditText"
+        android:drawableRight="@drawable/ic_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@+id/activity_form_register_nome_de_usuario"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/email"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_telefone"
+        style="@style/EditText"
+        android:inputType="phone"
+        android:drawableRight="@drawable/ic_baseline_phone_24"
+        app:layout_constraintTop_toBottomOf="@+id/activity_form_register_email"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/telefone"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_cpf"
+        style="@style/EditText"
+
+        android:drawableRight="@drawable/ic_person"
+        app:layout_constraintTop_toBottomOf="@+id/activity_form_register_telefone"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/cpf"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_password"
+        style="@style/EditText"
+        android:drawableRight="@drawable/ic_eye"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/activity_form_register_cpf"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/password"
+        />
+
+    <EditText
+        android:id="@+id/activity_form_register_confirm_password"
+        style="@style/EditText"
+        android:drawableRight="@drawable/ic_eye"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/activity_form_register_password"
+        app:layout_constraintStart_toStartOf="@+id/containerRegisterFragments"
+        app:layout_constraintEnd_toEndOf="@id/containerRegisterFragments"
+        android:hint="@string/confirm_password"
+        android:layout_marginBottom="18dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

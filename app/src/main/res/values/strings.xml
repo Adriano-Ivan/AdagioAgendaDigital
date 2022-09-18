@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">AdagioAgendaDigital</string>
+    <string name="email">Email</string>
+    <string name="nome_de_usuario">Nome de usuário</string>
+    <string name="entrar">Entrar</string>
+    <string name="text_to_cadastro">Crie uma conta clicando aqui</string>
+    <string name="password">Senha</string>
+    <string name="register_activity_title">CADASTRE-SE</string>
+    <string name="salvar">Salvar</string>
+    <string name="nome">Nome</string>
+    <string name="telefone">Telefone</string>
+    <string name="cpf">CPF</string>
+    <string name="confirm_password">Confirme a senha</string>
+</resources>
