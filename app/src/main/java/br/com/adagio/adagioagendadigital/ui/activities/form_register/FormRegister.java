@@ -1,4 +1,4 @@
-package br.com.adagio.adagioagendadigital.activities.form_register;
+package br.com.adagio.adagioagendadigital.ui.activities.form_register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

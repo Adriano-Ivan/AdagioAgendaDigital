@@ -15,7 +15,7 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="25dp"
     android:backgroundTint="@color/weak_white"
-    tools:context=".activities.form_register.FormRegister">
+    tools:context=".ui.activities.form_register.FormRegister">
 
 
     <View

@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="@color/weak_white"
     android:paddingBottom="25dp"
-    tools:context=".activities.form_login.FormLogin">
+    tools:context=".ui.activities.form_login.FormLogin">
 
     <ImageView
         android:id="@+id/user_logo"

@@ -11,4 +11,11 @@
     <string name="telefone">Telefone</string>
     <string name="cpf">CPF</string>
     <string name="confirm_password">Confirme a senha</string>
+    <string name="activity_home_manage_your_time_message">GERENCIE SEU TEMPO</string>
+    <string name="year">Ano:</string>
+    <string name="month">Mês:</string>
+    <string name="mode_calendar">Modo do calendário:</string>
+    <string name="choose">Escolher</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

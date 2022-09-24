@@ -1,8 +1,7 @@
-package br.com.adagio.adagioagendadigital.activities.form_login;
+package br.com.adagio.adagioagendadigital.ui.activities.form_login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import br.com.adagio.adagioagendadigital.R;
-import br.com.adagio.adagioagendadigital.activities.form_register.FormRegister;
-import br.com.adagio.adagioagendadigital.activities.home.Home;
+import br.com.adagio.adagioagendadigital.ui.activities.form_register.FormRegister;
+import br.com.adagio.adagioagendadigital.ui.activities.home.Home;
 
 public class FormLogin extends AppCompatActivity implements View.OnClickListener {
 

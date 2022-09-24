@@ -14,15 +14,14 @@
         android:theme="@style/Theme.AdagioAgendaDigital"
         tools:targetApi="31">
         <activity
-            android:name=".activities.home.Home"
+            android:name=".ui.activities.home.Home"
             android:exported="false" />
         <activity
-            android:name=".activities.form_register.FormRegister"
+            android:name=".ui.activities.form_register.FormRegister"
             android:exported="true"
-            android:parentActivityName=".activities.form_login.FormLogin" />
-        <activity android:name=".activities.MainActivity" />
+            android:parentActivityName=".ui.activities.form_login.FormLogin" />
         <activity
-            android:name=".activities.form_login.FormLogin"
+            android:name=".ui.activities.form_login.FormLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
