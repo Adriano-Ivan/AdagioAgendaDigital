@@ -17,9 +17,10 @@
     <ImageView
         android:id="@+id/banner_home"
         android:layout_width="0dp"
-        android:layout_height="180dp"
+        android:layout_height="210dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -74,6 +75,7 @@
         android:id="@+id/activity_home_text_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/year"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,13 +83,14 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/activity_home_menu_button"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.100000024" />
+        app:layout_constraintVertical_bias="0.082" />
 
     <Button
         android:id="@+id/activity_home_button_choose_year"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="13dp"
+        android:layout_marginBottom="7dp"
         android:text="@string/choose"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -101,6 +104,8 @@
         android:id="@+id/activity_home_text_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="18dp"
         android:text="@string/month"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -108,25 +113,44 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/activity_home_text_year"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16000003" />
+        app:layout_constraintVertical_bias="0.143" />
 
-    <Button
-        android:id="@+id/activity_home_button_choose_month"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="13dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/activity_home_choose_month"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:text="@string/choose"
         android:textSize="12sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toEndOf="@+id/activity_home_text_month"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.13"
+        android:padding="0dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/activity_home_months_options"
+            android:inputType="none"
+            android:backgroundTintMode="src_over"
+            android:backgroundTint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:padding="0dp"
+            android:layout_marginLeft="10dp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:id="@+id/activity_home_text_mode_calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
         android:text="@string/mode_calendar"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"

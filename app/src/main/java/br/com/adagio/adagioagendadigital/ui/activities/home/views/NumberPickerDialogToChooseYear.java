@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,16 +21,27 @@ import java.time.LocalDateTime;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
+import br.com.adagio.adagioagendadigital.ui.activities.home.HomeStaticValues;
 
 public class NumberPickerDialogToChooseYear extends DialogFragment implements DialogInterface.OnClickListener {
 
     private NumberPicker numberPicker;
+    private TextView pickedYearLabel;
     private int pickedYear;
     private int pickedYearFromHomepage;
     private onSaveYearListener saveYearListener;
 
     public NumberPickerDialogToChooseYear(int pickedYearFromHomepage){
         this.pickedYearFromHomepage = pickedYearFromHomepage;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public NumberPickerDialogToChooseYear(){
+        if(HomeStaticValues.PICKED_YEAR_MEMO >= LimitsYearValues.MIN_YEAR.value
+           && HomeStaticValues.PICKED_YEAR_MEMO <= LimitsYearValues.MAX_YEAR.value){
+            pickedYearFromHomepage = HomeStaticValues.PICKED_YEAR_MEMO;
+            pickedYear  = HomeStaticValues.PICKED_YEAR_MEMO;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -47,29 +59,46 @@ public class NumberPickerDialogToChooseYear extends DialogFragment implements Di
         builder.setView(layout);
 
         numberPicker = layout.findViewById(R.id.number_picker_to_choose_year);
+        pickedYearLabel = layout.findViewById(R.id.picked_year_label);
 
-        setNumberPickerAttributes();
+        setAttributes();
         setListener();
 
 
         return builder.create();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setListener(){
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 
                 if(newVal >= LimitsYearValues.MIN_YEAR.value && newVal <= LimitsYearValues.MAX_YEAR.value){
                     pickedYear = newVal;
+                    pickedYearLabel.setText(pickedYear+"");
+                    HomeStaticValues.setPickedYearMemo(pickedYear);
                 }
             }
         });
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setAttributes(){
+        setNumberPickerAttributes();
+
+        if(pickedYearFromHomepage >= LimitsYearValues.MIN_YEAR.value &&
+                pickedYearFromHomepage <= LimitsYearValues.MAX_YEAR.value){
+            pickedYearLabel.setText(pickedYearFromHomepage+"");
+        } else {
+            pickedYearLabel.setText(LocalDateTime.now().getYear()+"");
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setNumberPickerAttributes(){
-        numberPicker.setBackgroundColor(Color.parseColor(("#EEEEEE")));
+
         numberPicker.setMaxValue(LimitsYearValues.MAX_YEAR.value);
         numberPicker.setMinValue(LimitsYearValues.MIN_YEAR.value);
 
@@ -86,6 +115,7 @@ public class NumberPickerDialogToChooseYear extends DialogFragment implements Di
         if(which == dialog.BUTTON_POSITIVE){
             if(pickedYear >= LimitsYearValues.MIN_YEAR.value && pickedYear <= LimitsYearValues.MAX_YEAR.value) {
                 saveYearListener.onSaveYear(pickedYear);
+
             }
         }
     }
