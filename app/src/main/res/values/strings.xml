@@ -21,7 +21,21 @@
     <string name="choose_the_month">Escolha o mês</string>
 
     <string name="january">Janeiro</string>
-
+    <string name="activity_home_mode_slide_text">Slide</string>
+    <string name="activity_home_mode_mosaic_text">Mosaico</string>
+    <string name="home">Home</string>
+    <string name="create_task">Criar tarefa</string>
+    <string name="tasks">Tarefas</string>
+    <string name="logout">Sair</string>
+    <string name="name_temporary_example">Adriano Ivan</string>
+    <string name="email_temporary_example">adrianoivandepaulacampos@gmail.com</string>
+    <string name="open">Abrir</string>
+    <string name="close">Fechar</string>
+    <string name="button_to_sidebar">Atalho para abrir sidebar</string>
+    <string name="container_sidebar">Sidebar container</string>
+    <string name="notifications">Notificações</string>
+    <string name="estatisticas">Estatísticas</string>
+    <string name="tags_button">Tags</string>
     <string-array name="months">
         <item>Janeiro</item>
         <item>Fevereiro</item>

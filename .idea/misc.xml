@@ -13,7 +13,10 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17864583333333334" />
         <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/number_picker_to_choose_year_view.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/sidebar_header.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/sidebar_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_register_user.xml" value="0.15208333333333332" />
+        <entry key="app/src/main/res/menu/sidebar.xml" value="0.22" />
       </map>
     </option>
   </component>

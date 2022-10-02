@@ -3,67 +3,115 @@ package br.com.adagio.adagioagendadigital.ui.activities.home;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.chrono.ChronoLocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
 import br.com.adagio.adagioagendadigital.ui.activities.home.views.NumberPickerDialogToChooseYear;
-import kotlin.time.MonoTimeSourceKt;
 
-public class Home extends AppCompatActivity implements CalendarView.OnDateChangeListener, View.OnClickListener,
-        NumberPickerDialogToChooseYear.onSaveYearListener {
+public class Home extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener
+       {
 
+    private View rootView;
     private CalendarView calendarView;
     private Button buttonToChooseYear;
+    private ImageButton homeMenuButton;
 
+    public Home(){
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+       rootView = inflater.inflate(R.layout.activity_home, container, false);
+
+       setAttributes();
+
+
+        return rootView;
+    }
+
+   @Override
+   public void onCreate(@Nullable Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+   }
+
+   @Override
+   public void onResume() {
+       super.onResume();
+       setAttributes();
+   }
+
+   private void setAttributes(){
+       defineViews();
+       defineListeners();
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+           setMonthsDropdownProperties();
+       }
+
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+           setMaxAndMinDateOfCalendar();
+       }
+   }
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        setTitle(getResources().getString(R.string.activity_home_manage_your_time_message));
+//        setUpDrawerLayoutSidebar();
     }
+*/
 
+    /*
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onResume() {
         super.onResume();
 
-        definirViews();
-        definirListeners();
+        defineViews();
+        defineListeners();
         setMonthsDropdownProperties();
 
-        getSupportActionBar().hide();
-    }
+        setMaxAndMinDateOfCalendar();
 
+//        getSupportActionBar().hide();
+
+//        setUpDrawerLayoutSidebar();
+    }
+*/
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setMonthsDropdownProperties (){
         String[] months = getResources().getStringArray(R.array.months);
 
-        ArrayAdapter<String> adapter   = new ArrayAdapter<>(this,
+        ArrayAdapter<String> adapter   = new ArrayAdapter<>(getActivity(),
                 R.layout.dropdown_months_item,months);
 
-        TextInputLayout containerOptions = findViewById(R.id.activity_home_choose_month);
-        AutoCompleteTextView monthsOptions = findViewById(R.id.activity_home_months_options);
+        TextInputLayout containerOptions = rootView.findViewById(R.id.activity_home_choose_month);
+        AutoCompleteTextView monthsOptions = rootView.findViewById(R.id.activity_home_months_options);
 
         monthsOptions.setAdapter(adapter);
 
@@ -81,15 +129,38 @@ public class Home extends AppCompatActivity implements CalendarView.OnDateChange
 
     }
 
-    private void definirViews(){
-        calendarView = findViewById(R.id.activity_home_calendar);
-        buttonToChooseYear = findViewById(R.id.activity_home_button_choose_year);
+    private void defineViews(){
+        calendarView = rootView.findViewById(R.id.activity_home_calendar);
+        buttonToChooseYear = rootView.findViewById(R.id.activity_home_button_choose_year);
+//        homeMenuButton = findViewById(R.id.activity_home_menu_button);
+
     }
 
-    private void definirListeners(){
+    private void defineListeners(){
         calendarView.setOnDateChangeListener(this);
 
         buttonToChooseYear.setOnClickListener(this);
+//        homeMenuButton.setOnClickListener(this);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setMaxAndMinDateOfCalendar(){
+        LocalDateTime minDate = LocalDateTime.of(LimitsYearValues.MIN_YEAR.getValue(), 1,1,0,0, 0);
+        LocalDateTime maxDate = LocalDateTime.of(LimitsYearValues.MAX_YEAR.getValue(), 12, 31, 23, 59, 59);
+
+        Calendar calendarForMin = Calendar.getInstance();
+        Calendar calendarForMax = Calendar.getInstance();
+
+        calendarForMin.set(minDate.getYear(), minDate.getMonth().getValue() -1,
+                            minDate.getDayOfMonth());
+        calendarForMax.set(maxDate.getYear(), maxDate.getMonth().getValue() - 1,
+                maxDate.getDayOfMonth());
+
+        calendarView.setMinDate(calendarForMin.getTimeInMillis());
+        calendarView.setMaxDate(calendarForMax.getTimeInMillis());
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -104,15 +175,25 @@ public class Home extends AppCompatActivity implements CalendarView.OnDateChange
     public void onClick(View v) {
         if(v.getId() == R.id.activity_home_button_choose_year){
             NumberPickerDialogToChooseYear dialog = new NumberPickerDialogToChooseYear(HomeStaticValues.PICKED_YEAR_MEMO);
-            dialog.show(getSupportFragmentManager(), "dialog");
+            dialog.show(getActivity().getSupportFragmentManager(), "dialog");
+        } else if(v.getId() == R.id.activity_home_menu_button){
+            if(!HomeStaticValues.SIDE_BAR_IS_OPEN){
+                HomeStaticValues.setSideBarIsOpen(true);
+//                openSidebar();
+                homeMenuButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_baseline_arrow_back_24));
+            } else {
+//                closeSidebar();
+                HomeStaticValues.setSideBarIsOpen(false);
+                homeMenuButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_baseline_menu_24));
+            }
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setNewStateOfCalendar(){
+    public void setNewStateOfCalendar(){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime newDate =  LocalDateTime.of(HomeStaticValues.PICKED_YEAR_MEMO,  HomeStaticValues.PICKED_MONTH_MEMO,
-                now.getDayOfMonth(),now.getHour(),now.getMinute());
+                HomeStaticValues.PICKED_DAY_MEMO,now.getHour(),now.getMinute());
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(HomeStaticValues.PICKED_YEAR_MEMO,newDate.getMonth().getValue()-1,newDate.getDayOfMonth());
@@ -121,11 +202,5 @@ public class Home extends AppCompatActivity implements CalendarView.OnDateChange
 
         Log.i("PERÍODO: ", "onSaveYear: "+HomeStaticValues.PICKED_YEAR_MEMO+" "+now.getMonth().getValue());
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onSaveYear(int year) {
-        HomeStaticValues.setPickedYearMemo(year);
 
-        setNewStateOfCalendar();
-    }
 }

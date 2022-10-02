@@ -14,6 +14,7 @@ public  class HomeStaticValues {
     public static int PICKED_YEAR_MEMO = LocalDateTime.now().getYear();
     public static int PICKED_DAY_MEMO = LocalDateTime.now().getDayOfMonth();
     public static int PICKED_MONTH_MEMO = LocalDateTime.now().getMonth().getValue();
+    public static boolean SIDE_BAR_IS_OPEN = true;
 
     public static void setPickedYearMemo(int year){
         PICKED_YEAR_MEMO = year;
@@ -25,5 +26,9 @@ public  class HomeStaticValues {
 
     public static void setPickedMonthMemo(int month){
         PICKED_MONTH_MEMO = month;
+    }
+
+    public static void setSideBarIsOpen(boolean isOpen){
+        SIDE_BAR_IS_OPEN  = isOpen;
     }
 }

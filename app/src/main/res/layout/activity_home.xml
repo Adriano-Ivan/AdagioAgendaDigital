@@ -6,18 +6,167 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="25dp"
     android:fillViewport="true"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:orientation="vertical"
     tools:context=".ui.activities.home.Home">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/adagio_purple"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+>
+                <TextView
+                    android:id="@+id/activity_home_text_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/year"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/activity_home_menu_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.082" />
+                <Button
+                    android:id="@+id/activity_home_button_choose_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/choose"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.08"
+                    app:layout_constraintStart_toEndOf="@+id/activity_home_text_year"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.06999999" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/activity_home_text_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/month"
+                    android:textColor="#FFFFFF"
+                    />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_home_choose_month"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/choose"
+                    android:textSize="12sp"
+
+                    android:padding="0dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/activity_home_months_options"
+                        android:inputType="none"
+                        android:backgroundTintMode="src_over"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:padding="0dp"
+                        android:layout_marginLeft="10dp"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CalendarView
+                android:id="@+id/activity_home_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+
+                >
+            </CalendarView>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <!--
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout_sidebar"
+        android:layout_width="350dp"
+        android:layout_height="480dp"
+        android:background="@color/adagio_purple"
+        android:layout_gravity="start"
+        android:contentDescription="@string/container_sidebar"
+        >
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navbar_view"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+
+            android:layout_gravity="left|start"
+            app:headerLayout="@layout/sidebar_header"
+            app:menu="@menu/sidebar" />
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+    -->
+
+    <!--
+
+
+
+    <LinearLayout
+        android:id="@+id/drawer_layout_sidebar_container"
+        android:layout_alignParentTop="true"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
+-->
+
+    <!--
     <ImageView
         android:id="@+id/banner_home"
         android:layout_width="0dp"
-        android:layout_height="210dp"
+        android:layout_height="185dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -25,19 +174,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@color/adagio_purple" />
+-->
 
-    <CalendarView
-        android:id="@+id/activity_home_calendar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/banner_home"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
-        >
+    <!--
 
-    </CalendarView>
-
+ -->
+    <!--
     <ImageButton
         android:id="@+id/activity_home_menu_button"
         android:layout_width="wrap_content"
@@ -51,116 +194,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
+        android:tooltipText="@string/button_to_sidebar"
+        android:contentDescription="@string/button_to_sidebar"
         app:srcCompat="@drawable/ic_baseline_menu_24" />
-
-    <TextView
-        android:id="@+id/activity_view_manage_your_time_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="14dp"
-        android:text="@string/activity_home_manage_your_time_message"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/activity_home_menu_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/activity_home_text_year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/year"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/activity_home_menu_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.082" />
-
-    <Button
-        android:id="@+id/activity_home_button_choose_year"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="7dp"
-        android:text="@string/choose"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
-        app:layout_constraintStart_toEndOf="@+id/activity_home_text_year"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06999999" />
-
-    <TextView
-        android:id="@+id/activity_home_text_month"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="18dp"
-        android:text="@string/month"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/activity_home_text_year"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.143" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/activity_home_choose_month"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/choose"
-        android:textSize="12sp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
-        app:layout_constraintStart_toEndOf="@+id/activity_home_text_month"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13"
-        android:padding="0dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        >
-
-        <AutoCompleteTextView
-            android:id="@+id/activity_home_months_options"
-            android:inputType="none"
-            android:backgroundTintMode="src_over"
-            android:backgroundTint="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:padding="0dp"
-            android:layout_marginLeft="10dp"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/activity_home_text_mode_calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
-        android:text="@string/mode_calendar"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/activity_home_text_month"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+-->
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
 
 </ScrollView>
