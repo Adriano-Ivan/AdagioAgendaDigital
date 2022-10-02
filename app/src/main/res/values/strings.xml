@@ -36,6 +36,7 @@
     <string name="notifications">Notificações</string>
     <string name="estatisticas">Estatísticas</string>
     <string name="tags_button">Tags</string>
+    <string name="adagio">Adagio</string>
     <string-array name="months">
         <item>Janeiro</item>
         <item>Fevereiro</item>

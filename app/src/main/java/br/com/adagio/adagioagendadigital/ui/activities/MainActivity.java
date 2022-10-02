@@ -44,6 +44,7 @@ public  class MainActivity extends AppCompatActivity implements  NumberPickerDia
     }
 
     private void setNavigationAttributes(){
+        setTitle(getResources().getString(R.string.adagio));
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         homeFragment = new Home();
 
