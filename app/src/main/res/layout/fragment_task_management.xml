@@ -143,6 +143,13 @@
             android:id="@+id/fragment_task_hide_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:outlineAmbientShadowColor="@android:color/transparent"
+            android:shadowColor="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:gravity="right"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_gravity="right"
             android:text="@string/fragment_task_hide_options"
             />
     </LinearLayout>

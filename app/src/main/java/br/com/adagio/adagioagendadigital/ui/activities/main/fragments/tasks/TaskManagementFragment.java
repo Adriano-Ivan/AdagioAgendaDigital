@@ -48,7 +48,9 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
 
     private void setAttributes(){
         defineViews();
+        setConfigurationVisibilitity();
         defineListeners();
+
     }
 
     private void defineViews(){
@@ -60,20 +62,24 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
          buttonHideContainerOptions.setOnClickListener(this);
     }
 
+    private void setConfigurationVisibilitity(){
+        if(!TaskStaticValues.CONTAINER_OPTIONS_IS_GONE){
+            containerOptions.setVisibility(View.GONE);
+            TaskStaticValues.setContainerOptionsIsGone(true);
+            buttonHideContainerOptions.setText(getResources().getString(R.string.task_show_options));
+        } else if(TaskStaticValues.CONTAINER_OPTIONS_IS_GONE){
+            containerOptions.setVisibility(View.VISIBLE);
+            TaskStaticValues.setContainerOptionsIsGone(false);
+            buttonHideContainerOptions.setText(getResources().getString(R.string.fragment_task_hide_options));
+        }
+
+    }
+
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.fragment_task_hide_options){
 
-            if(!TaskStaticValues.CONTAINER_OPTIONS_IS_GONE){
-                containerOptions.setVisibility(View.GONE);
-                TaskStaticValues.setContainerOptionsIsGone(true);
-                buttonHideContainerOptions.setText(getResources().getString(R.string.task_show_options));
-            } else if(TaskStaticValues.CONTAINER_OPTIONS_IS_GONE){
-                containerOptions.setVisibility(View.VISIBLE);
-                TaskStaticValues.setContainerOptionsIsGone(false);
-                buttonHideContainerOptions.setText(getResources().getString(R.string.fragment_task_hide_options));
-            }
-
+           setConfigurationVisibilitity();
         }
     }
 }

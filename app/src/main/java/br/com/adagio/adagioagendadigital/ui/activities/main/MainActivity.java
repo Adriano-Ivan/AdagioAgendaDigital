@@ -40,7 +40,6 @@ public  class MainActivity extends AppCompatActivity implements  NumberPickerDia
         setContentView(R.layout.activity_main);
 
         setNavigationAttributes();
-
     }
 
     @Override

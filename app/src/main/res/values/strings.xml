@@ -71,7 +71,7 @@
     <string name="fragment_task_initial_moment_desc">Momento incial (maior para menor)</string>
     <string name="fragment_task_user_wants_to_create_task">Quero criar uma tarefa</string>
     <string name="fragment_task_update_list">Atualizar listagem</string>
-    <string name="fragment_task_hide_options">Esconder opções</string>
-    <string name="task_show_options">Mostrar opções</string>
+    <string name="fragment_task_hide_options">Esconder opções de configuração</string>
+    <string name="task_show_options">Mostrar opções de configuração</string>
 
 </resources>
