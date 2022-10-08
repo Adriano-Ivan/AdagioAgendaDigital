@@ -51,5 +51,27 @@
         <item>Novembro</item>
         <item>Dezembro</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tags">Tags</string>
+    <string name="relatories">Relatórios</string>
+    <string name="manage_your_tasks">Gerencie suas tarefas</string>
+    <string name="view_your_notifications">Suas notificações</string>
+    <string name="manage_your_tags">Gerencie suas tags</string>
+    <string name="view_your_relatories">Visualize seus relatórios</string>
+    <string name="fragment_task_order_by_date">Ordenar por qual momento ?</string>
+    <string name="fragment_task_limit_moment">Momento limite</string>
+    <string name="fragment_task_initial_moment">Momento inicial</string>
+    <string name="fragment_task_order_by_priority">Ordenação por prioridade</string>
+    <string name="fragment_task_order_by_priority_desc">Maior para menor</string>
+    <string name="fragment_task_order_by_priority_asc">Menor para maior</string>
+    <string name="fragment_task_initial_moment_asc">Momento inicial (menor para maior)</string>
+    <string name="fragment_task_limit_moment_asc">Momento limite (menor para maior)</string>
+    <string name="fragment_task_limit_moment_desc">Momento limite (maior para menor)</string>
+    <string name="fragment_task_initial_moment_desc">Momento incial (maior para menor)</string>
+    <string name="fragment_task_user_wants_to_create_task">Quero criar uma tarefa</string>
+    <string name="fragment_task_update_list">Atualizar listagem</string>
+    <string name="fragment_task_hide_options">Esconder opções</string>
+    <string name="task_show_options">Mostrar opções</string>
 
 </resources>

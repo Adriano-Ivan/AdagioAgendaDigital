@@ -1,10 +1,9 @@
-package br.com.adagio.adagioagendadigital.ui.activities.home.views;
+package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import java.time.LocalDateTime;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
-import br.com.adagio.adagioagendadigital.ui.activities.home.HomeStaticValues;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
 
 public class NumberPickerDialogToChooseYear extends DialogFragment implements DialogInterface.OnClickListener {
 

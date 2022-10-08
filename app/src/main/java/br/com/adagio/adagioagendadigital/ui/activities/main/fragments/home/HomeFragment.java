@@ -1,4 +1,4 @@
-package br.com.adagio.adagioagendadigital.ui.activities.home;
+package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,17 +26,16 @@ import java.util.Calendar;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
-import br.com.adagio.adagioagendadigital.ui.activities.home.views.NumberPickerDialogToChooseYear;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.NumberPickerDialogToChooseYear;
 
-public class Home extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener
+public class HomeFragment extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener
        {
 
     private View rootView;
     private CalendarView calendarView;
     private Button buttonToChooseYear;
-    private ImageButton homeMenuButton;
 
-    public Home(){
+    public HomeFragment(){
 
     }
 
@@ -45,10 +43,9 @@ public class Home extends Fragment implements CalendarView.OnDateChangeListener,
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       rootView = inflater.inflate(R.layout.activity_home, container, false);
+        rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-       setAttributes();
-
+        setAttributes();
 
         return rootView;
     }
@@ -68,6 +65,9 @@ public class Home extends Fragment implements CalendarView.OnDateChangeListener,
        defineViews();
        defineListeners();
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+           setNewStateOfCalendar();
+       }
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
            setMonthsDropdownProperties();
        }
 
@@ -75,34 +75,7 @@ public class Home extends Fragment implements CalendarView.OnDateChangeListener,
            setMaxAndMinDateOfCalendar();
        }
    }
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
-        setTitle(getResources().getString(R.string.activity_home_manage_your_time_message));
-//        setUpDrawerLayoutSidebar();
-    }
-*/
-
-    /*
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        defineViews();
-        defineListeners();
-        setMonthsDropdownProperties();
-
-        setMaxAndMinDateOfCalendar();
-
-//        getSupportActionBar().hide();
-
-//        setUpDrawerLayoutSidebar();
-    }
-*/
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setMonthsDropdownProperties (){
         String[] months = getResources().getStringArray(R.array.months);
@@ -132,7 +105,6 @@ public class Home extends Fragment implements CalendarView.OnDateChangeListener,
     private void defineViews(){
         calendarView = rootView.findViewById(R.id.activity_home_calendar);
         buttonToChooseYear = rootView.findViewById(R.id.activity_home_button_choose_year);
-//        homeMenuButton = findViewById(R.id.activity_home_menu_button);
 
     }
 
@@ -140,7 +112,6 @@ public class Home extends Fragment implements CalendarView.OnDateChangeListener,
         calendarView.setOnDateChangeListener(this);
 
         buttonToChooseYear.setOnClickListener(this);
-//        homeMenuButton.setOnClickListener(this);
     }
 
 
@@ -179,12 +150,9 @@ public class Home extends Fragment implements CalendarView.OnDateChangeListener,
         } else if(v.getId() == R.id.activity_home_menu_button){
             if(!HomeStaticValues.SIDE_BAR_IS_OPEN){
                 HomeStaticValues.setSideBarIsOpen(true);
-//                openSidebar();
-                homeMenuButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_baseline_arrow_back_24));
+
             } else {
-//                closeSidebar();
                 HomeStaticValues.setSideBarIsOpen(false);
-                homeMenuButton.setImageDrawable(getActivity().getDrawable(R.drawable.ic_baseline_menu_24));
             }
         }
     }

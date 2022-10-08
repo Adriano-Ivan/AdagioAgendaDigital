@@ -13,7 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activities.home.Home">
+    tools:context=".ui.activities.main.fragments.home.HomeFragment">
 
 
     <LinearLayout
@@ -124,81 +124,6 @@
 
 
     </LinearLayout>
-
-
-    <!--
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout_sidebar"
-        android:layout_width="350dp"
-        android:layout_height="480dp"
-        android:background="@color/adagio_purple"
-        android:layout_gravity="start"
-        android:contentDescription="@string/container_sidebar"
-        >
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navbar_view"
-            android:layout_width="350dp"
-            android:layout_height="match_parent"
-
-            android:layout_gravity="left|start"
-            app:headerLayout="@layout/sidebar_header"
-            app:menu="@menu/sidebar" />
-    </androidx.drawerlayout.widget.DrawerLayout>
-
-    -->
-
-    <!--
-
-
-
-    <LinearLayout
-        android:id="@+id/drawer_layout_sidebar_container"
-        android:layout_alignParentTop="true"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </LinearLayout>
--->
-
-    <!--
-    <ImageView
-        android:id="@+id/banner_home"
-        android:layout_width="0dp"
-        android:layout_height="185dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@color/adagio_purple" />
--->
-
-
-    <!--
-
- -->
-    <!--
-    <ImageButton
-        android:id="@+id/activity_home_menu_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/adagio_purple"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:tooltipText="@string/button_to_sidebar"
-        android:contentDescription="@string/button_to_sidebar"
-        app:srcCompat="@drawable/ic_baseline_menu_24" />
--->
-
 
 </RelativeLayout>
 

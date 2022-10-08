@@ -1,4 +1,4 @@
-package br.com.adagio.adagioagendadigital.ui.activities.home;
+package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home;
 
 import android.os.Build;
 

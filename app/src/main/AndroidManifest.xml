@@ -22,7 +22,7 @@
             android:name=".ui.activities.form_login.FormLogin"
             android:exported="true"/>
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.main.MainActivity"
 
             android:exported="true" >
             <intent-filter>

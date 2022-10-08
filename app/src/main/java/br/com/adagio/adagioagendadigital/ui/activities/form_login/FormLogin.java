@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.ui.activities.form_register.FormRegister;
-import br.com.adagio.adagioagendadigital.ui.activities.home.Home;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 
 public class FormLogin extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,7 +50,7 @@ public class FormLogin extends AppCompatActivity implements View.OnClickListener
 
     private void goHomePage(){
         Intent intent = new Intent(this,
-                Home.class);
+                HomeFragment.class);
         startActivity(intent);
     }
 }

@@ -10,11 +10,11 @@
         <item android:id="@+id/tags_button"
             android:icon="@drawable/ic_baseline_flag_24"
             android:title="@string/tags_button"/>
-        <item android:id="@+id/notifications_button"
-            android:icon="@drawable/ic_baseline_notifications_none_24"
-            android:title="@string/notifications"/>
         <item android:id="@+id/graph_relatory_button"
             android:icon="@drawable/ic_baseline_description_24"
             android:title="@string/estatisticas"
             />
+        <item android:id="@+id/notifications_button"
+            android:icon="@drawable/ic_baseline_notifications_none_24"
+            android:title="@string/notifications"/>
 </menu>
