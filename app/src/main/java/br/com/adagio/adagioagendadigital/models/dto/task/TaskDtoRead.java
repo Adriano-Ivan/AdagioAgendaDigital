@@ -1,18 +1,33 @@
-package br.com.adagio.adagioagendadigital.models.entities;
+package br.com.adagio.adagioagendadigital.models.dto.task;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Task {
+public class TaskDtoRead {
 
-    public Task(int id,  String description, LocalDateTime initialMoment, LocalDateTime limitMoment,
-                boolean isFinished){
+
+    public TaskDtoRead(int id, String description, LocalDateTime initialMoment,
+                         LocalDateTime limitMoment,
+                         boolean isFinished){
         this.id = id;
+        setAttributesExceptId(description,initialMoment,limitMoment,isFinished);
+    }
+
+    public TaskDtoRead(String description, LocalDateTime initialMoment,
+                         LocalDateTime limitMoment,
+                         boolean isFinished){
+        setAttributesExceptId(description,initialMoment,limitMoment,isFinished);
+    }
+
+    private void setAttributesExceptId(String description, LocalDateTime initialMoment,
+                                       LocalDateTime limitMoment,
+                                       boolean isFinished){
         this.description=description;
         this.initialMoment=initialMoment;
         this.limitMoment=limitMoment;
         this.isFinished=isFinished;
     }
+
 
     private int id;
 
@@ -26,15 +41,11 @@ public class Task {
 
     private List<Integer> tags;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setInitialMoment(LocalDateTime initialMoment) {
+    public void setInitialMoment( LocalDateTime initialMoment) {
         this.initialMoment = initialMoment;
     }
 
@@ -48,10 +59,6 @@ public class Task {
 
     public void setTags(List<Integer> tags) {
         this.tags = tags;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getDescription() {
@@ -73,4 +80,13 @@ public class Task {
     public List<Integer> getTags() {
         return tags;
     }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
+    }
+
 }

@@ -158,7 +158,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setNewStateOfCalendar(){
+    private void auxSetNewStateOfCalendar(){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime newDate =  LocalDateTime.of(HomeStaticValues.PICKED_YEAR_MEMO,  HomeStaticValues.PICKED_MONTH_MEMO,
                 HomeStaticValues.PICKED_DAY_MEMO,now.getHour(),now.getMinute());
@@ -167,8 +167,18 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         calendar.set(HomeStaticValues.PICKED_YEAR_MEMO,newDate.getMonth().getValue()-1,newDate.getDayOfMonth());
 
         calendarView.setDate(calendar.getTimeInMillis());
+    }
 
-        Log.i("PERÍODO: ", "onSaveYear: "+HomeStaticValues.PICKED_YEAR_MEMO+" "+now.getMonth().getValue());
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setNewStateOfCalendar(){
+
+        try {
+          auxSetNewStateOfCalendar();
+        }catch(Exception e){
+            HomeStaticValues.setPickedDayMemo(01);
+            auxSetNewStateOfCalendar();
+        }
+
     }
 
 }
