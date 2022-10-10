@@ -2,6 +2,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.form_task.FormTaskFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.NumberPickerDialogToChooseYear;
@@ -24,7 +26,8 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.Task
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.MainStaticValues;
 
-public  class MainActivity extends AppCompatActivity implements  NumberPickerDialogToChooseYear.onSaveYearListener {
+public  class MainActivity extends AppCompatActivity implements
+        NumberPickerDialogToChooseYear.onSaveYearListener , TaskManagementFragment.OnFragmentTaskFormInteractionListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -32,6 +35,7 @@ public  class MainActivity extends AppCompatActivity implements  NumberPickerDia
     private TaskManagementFragment taskFragment = new TaskManagementFragment();
     private RelatoriesFragment relatoriesFragment = new RelatoriesFragment();
     private NotificationsFragment notificationsFragment = new NotificationsFragment();
+    private FormTaskFragment ftFragment = new FormTaskFragment();
     private TagsFragment tagsFragment = new TagsFragment();
 
     @Override
@@ -91,6 +95,10 @@ public  class MainActivity extends AppCompatActivity implements  NumberPickerDia
         });
     }
 
+    public void changeInFragmentToTaskForm(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, ftFragment).commit();
+    }
+
     private Fragment returnCurrentFragment(){
         if(MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.RELATORIES){
             return relatoriesFragment;
@@ -130,5 +138,11 @@ public  class MainActivity extends AppCompatActivity implements  NumberPickerDia
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setNewStateOfCalendar(){
         homeFragment.setNewStateOfCalendar();
+    }
+
+    @Override
+    public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action) {
+        Log.i("TESTE", "onFragmentTaskFormInteraction: ");
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,ftFragment).commit();
     }
 }

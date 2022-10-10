@@ -1,5 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.widget.ListView;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.form_task.FormTaskFragment;
 import kotlinx.coroutines.internal.ThreadSafeHeap;
 
 
@@ -21,9 +24,11 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
 
     private LinearLayout containerOptions;
     private Button buttonHideContainerOptions;
+    private Button buttonGoToFormTasks;
     private ListView listTasks;
     private View rootView;
     private ListTaskBridgeView listTaskBridgeView;
+    private OnFragmentTaskFormInteractionListener mListener;
 
     public TaskManagementFragment() {
 
@@ -64,10 +69,12 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
         containerOptions = rootView.findViewById(R.id.fragment_task_container_options);
         buttonHideContainerOptions = rootView.findViewById(R.id.fragment_task_hide_options);
         listTasks = rootView.findViewById(R.id.fragment_task_list_tasks);
+        buttonGoToFormTasks = rootView.findViewById((R.id.fragment_task_user_wants_to_create_task));
     }
 
     private void defineListeners(){
-         buttonHideContainerOptions.setOnClickListener(this);
+        buttonHideContainerOptions.setOnClickListener(this);
+        buttonGoToFormTasks.setOnClickListener(this);
     }
 
     private void  setContainerOptionsIsGone (){
@@ -105,6 +112,34 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
         if(view.getId() == R.id.fragment_task_hide_options){
 
            setConfigurationVisibilitity(false);
+        } else if(view.getId() == R.id.fragment_task_user_wants_to_create_task){
+            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentTaskFormInteractionListener) {
+            mListener = (OnFragmentTaskFormInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentTaskFormInteractionListener {
+
+        void onFragmentTaskFormInteraction(Action action);
+    }
+
+    public enum Action {
+        GO_TO_TASK,
     }
 }
