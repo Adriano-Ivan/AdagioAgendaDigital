@@ -71,6 +71,7 @@ public  class MainActivity extends AppCompatActivity implements
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                returnScreenButton.setVisibility(View.GONE);
                 switch(item.getItemId()){
                     case R.id.home_button:
                         MainStaticValues.setCurrentFragment(CurrentFragment.HOME);
