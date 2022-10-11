@@ -18,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.form_task.FormTaskFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
@@ -25,12 +26,16 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.notifications.NotificationsFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories.RelatoriesFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagsFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.ListTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.MainStaticValues;
 
 public  class MainActivity extends AppCompatActivity implements
-        NumberPickerDialogToChooseYear.onSaveYearListener, TaskManagementFragment.OnFragmentTaskFormInteractionListener, View.OnClickListener {
+        NumberPickerDialogToChooseYear.onSaveYearListener,
+        TaskManagementFragment.OnFragmentTaskFormInteractionListener,
+        FormTaskFragment.OnFragmentTaskFormCreateInteractionListener,
+        View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -42,6 +47,7 @@ public  class MainActivity extends AppCompatActivity implements
     private TagsFragment tagsFragment = new TagsFragment();
     private TextView textTop;
     private ImageButton returnScreenButton;
+    private ListTaskBridgeView listBridge;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +67,7 @@ public  class MainActivity extends AppCompatActivity implements
     private void setNavigationAttributes(){
         textTop = findViewById(R.id.main_activity_text_top);
         textTop.setText(getResources().getString(returnCurrentTitle()));
-
+        listBridge = new ListTaskBridgeView(this);
         setViews();
         setListeners();
 
@@ -171,5 +177,13 @@ public  class MainActivity extends AppCompatActivity implements
             returnScreenButton.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,taskFragment).commit();
         }
+    }
+
+    @Override
+    public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task) {
+        listBridge.insert(task);
+
+        returnScreenButton.setVisibility(View.GONE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, taskFragment).commit();
     }
 }

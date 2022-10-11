@@ -91,7 +91,7 @@ public class TaskDAO {
         values.put(DbTaskStructure.Columns.IS_FINISHED, task.isFinished());
 
         long id = db.insert(DbTaskStructure.TABLE_NAME, null, values);
-        task.setId((int) id);
+//        task.setId((int) id);
     }
 
     public void delete(int id){

@@ -24,6 +24,11 @@ public class ListTaskBridgeView {
         listTaskAdapter.update(taskDAO.list(limit,offset));
     }
 
+    public void insert(TaskDtoCreate t){
+        taskDAO.save(t);
+        updateList(10,0);
+    }
+
     public void configureAdapter(ListView tasksList){
         tasksList.setAdapter(listTaskAdapter);
     }

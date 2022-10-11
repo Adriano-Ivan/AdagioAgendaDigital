@@ -4,12 +4,12 @@ import java.util.List;
 
 public class TaskDtoCreate {
 
-    public TaskDtoCreate(int id, String description, String initialMoment,
-                         String limitMoment,
-                         int isFinished){
-        this.id = id;
-        setAttributesExceptId(description,initialMoment,limitMoment,isFinished);
-    }
+//    public TaskDtoCreate(int id, String description, String initialMoment,
+//                         String limitMoment,
+//                         int isFinished){
+//        this.id = id;
+//        setAttributesExceptId(description,initialMoment,limitMoment,isFinished);
+//    }
 
     public TaskDtoCreate(String description, String initialMoment,
                          String limitMoment,
@@ -27,7 +27,7 @@ public class TaskDtoCreate {
     }
 
 
-    private int id;
+//    private int id;
 
     private String description;
 
@@ -79,12 +79,12 @@ public class TaskDtoCreate {
         return tags;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
-
-    public int getId(){
-        return id;
-    }
+//    public void setId(int id){
+//        this.id = id;
+//    }
+//
+//    public int getId(){
+//        return id;
+//    }
 
 }
