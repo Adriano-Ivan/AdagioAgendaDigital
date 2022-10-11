@@ -74,5 +74,6 @@
     <string name="fragment_task_hide_options">Esconder opções de configuração</string>
     <string name="task_show_options">Mostrar opções de configuração</string>
     <string name="create_your_task">Crie sua tarefa</string>
+    <string name="teste">Teste</string>
 
 </resources>

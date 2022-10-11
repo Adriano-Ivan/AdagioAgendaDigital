@@ -27,7 +27,8 @@
             android:background="@color/adagio_purple"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+            android:padding="10dp"
+            android:paddingTop="0dp"
             >
             <LinearLayout
                 android:layout_width="match_parent"

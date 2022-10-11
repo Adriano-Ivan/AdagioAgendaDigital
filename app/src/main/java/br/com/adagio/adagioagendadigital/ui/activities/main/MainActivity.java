@@ -4,6 +4,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +30,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragmen
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.MainStaticValues;
 
 public  class MainActivity extends AppCompatActivity implements
-        NumberPickerDialogToChooseYear.onSaveYearListener , TaskManagementFragment.OnFragmentTaskFormInteractionListener {
+        NumberPickerDialogToChooseYear.onSaveYearListener, TaskManagementFragment.OnFragmentTaskFormInteractionListener, View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -37,6 +40,8 @@ public  class MainActivity extends AppCompatActivity implements
     private NotificationsFragment notificationsFragment = new NotificationsFragment();
     private FormTaskFragment ftFragment = new FormTaskFragment();
     private TagsFragment tagsFragment = new TagsFragment();
+    private TextView textTop;
+    private ImageButton returnScreenButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,9 +59,13 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     private void setNavigationAttributes(){
-        setTitle(getResources().getString(returnCurrentTitle()));
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        textTop = findViewById(R.id.main_activity_text_top);
+        textTop.setText(getResources().getString(returnCurrentTitle()));
 
+        setViews();
+        setListeners();
+
+        getSupportActionBar().hide();
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, returnCurrentFragment()).commit();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -64,28 +73,28 @@ public  class MainActivity extends AppCompatActivity implements
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()){
                     case R.id.home_button:
-                        setTitle(R.string.adagio);
                         MainStaticValues.setCurrentFragment(CurrentFragment.HOME);
+                        textTop.setText(getResources().getString(returnCurrentTitle()));
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, homeFragment).commit();
                         return true;
                     case R.id.tasks_button:
-                        setTitle(R.string.manage_your_tasks);
                         MainStaticValues.setCurrentFragment(CurrentFragment.TASKS);
+                        textTop.setText(getResources().getString(returnCurrentTitle()));
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,taskFragment).commit();
                         return true;
                     case R.id.notifications_button:
-                        setTitle(R.string.view_your_notifications);
                         MainStaticValues.setCurrentFragment(CurrentFragment.NOTIFICATIONS);
+                        textTop.setText(getResources().getString(returnCurrentTitle()));
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, notificationsFragment).commit();
                         return true;
                     case R.id.tags_button:
-                        setTitle(R.string.manage_your_tags);
                         MainStaticValues.setCurrentFragment(CurrentFragment.TAGS);
+                        textTop.setText(getResources().getString(returnCurrentTitle()));
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, tagsFragment).commit();
                         return true;
                     case R.id.graph_relatory_button:
-                        setTitle(R.string.view_your_relatories);
                         MainStaticValues.setCurrentFragment(CurrentFragment.RELATORIES);
+                        textTop.setText(getResources().getString(returnCurrentTitle()));
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, relatoriesFragment).commit();
                         return true;
                 }
@@ -95,6 +104,14 @@ public  class MainActivity extends AppCompatActivity implements
         });
     }
 
+    private void setViews(){
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        returnScreenButton = findViewById(R.id.main_activity_return_screen_button);
+    }
+
+    private void setListeners(){
+        returnScreenButton.setOnClickListener(this);
+    }
     public void changeInFragmentToTaskForm(){
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, ftFragment).commit();
     }
@@ -142,7 +159,16 @@ public  class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action) {
-        Log.i("TESTE", "onFragmentTaskFormInteraction: ");
+        returnScreenButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,ftFragment).commit();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.main_activity_return_screen_button &&
+        MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
+            returnScreenButton.setVisibility(View.GONE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,taskFragment).commit();
+        }
     }
 }
