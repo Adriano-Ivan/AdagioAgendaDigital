@@ -76,5 +76,10 @@
     <string name="create_your_task">Crie sua tarefa</string>
     <string name="teste">Teste</string>
     <string name="fragment_task_submit">SUBMETER</string>
+    <string name="task_delete_option">Deletar tarefa</string>
+    <string name="task_edit_option">Editar tarefa</string>
+    <string name="task_confirmation_delete">Deseja realmente apagar essa tarefa ?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 
 </resources>

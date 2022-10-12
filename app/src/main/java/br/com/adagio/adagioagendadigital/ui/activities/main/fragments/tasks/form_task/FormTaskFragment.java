@@ -1,4 +1,4 @@
-package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.form_task;
+package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -19,7 +19,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.form_task.FormTaskFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.NumberPickerDialogToChooseYear;
@@ -28,6 +28,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagsFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.ListTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.MainStaticValues;
 
@@ -35,7 +36,7 @@ public  class MainActivity extends AppCompatActivity implements
         NumberPickerDialogToChooseYear.onSaveYearListener,
         TaskManagementFragment.OnFragmentTaskFormInteractionListener,
         FormTaskFragment.OnFragmentTaskFormCreateInteractionListener,
-        View.OnClickListener {
+        View.OnClickListener, DeleteTaskConfirmationModal.OnFragmentTaskDeleteInteractionListener  {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -168,6 +169,11 @@ public  class MainActivity extends AppCompatActivity implements
     public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action) {
         returnScreenButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,ftFragment).commit();
+    }
+
+    @Override
+    public void onFragmentTaskDeleteInteraction(int position) {
+       taskFragment.onFragmentTaskDeleteInteraction(position);
     }
 
     @Override

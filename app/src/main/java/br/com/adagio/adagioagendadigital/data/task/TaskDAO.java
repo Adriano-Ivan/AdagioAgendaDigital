@@ -94,7 +94,26 @@ public class TaskDAO {
 //        task.setId((int) id);
     }
 
-    public void delete(int id){
+    public TaskDtoRead get(int id){
+        String query = String.format("SELECT * FROM %s WHERE %s = %s;",
+                DbTaskStructure.TABLE_NAME,DbTaskStructure.Columns.ID, id);
+
+        TaskDtoRead task = null;
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    task = fromCursor(c);
+
+                }while(c.moveToNext());
+            }
+
+        }
+
+        return task;
+    }
+
+    public void delete(long id){
       db.delete(DbTaskStructure.TABLE_NAME,String.format(
               "%s = %s", DbTaskStructure.Columns.ID,
               id

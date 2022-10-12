@@ -1,26 +1,30 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import br.com.adagio.adagioagendadigital.R;
-import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.form_task.FormTaskFragment;
-import kotlinx.coroutines.internal.ThreadSafeHeap;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
 
 
-public class TaskManagementFragment extends Fragment implements View.OnClickListener {
+public class TaskManagementFragment extends Fragment
+        implements View.OnClickListener, DeleteTaskConfirmationModal.OnFragmentTaskDeleteInteractionListener {
 
     private LinearLayout containerOptions;
     private Button buttonHideContainerOptions;
@@ -29,6 +33,7 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
     private View rootView;
     private ListTaskBridgeView listTaskBridgeView;
     private OnFragmentTaskFormInteractionListener mListener;
+    private DeleteTaskConfirmationModal deleteTaskConfirmationModal;
 
     public TaskManagementFragment() {
 
@@ -63,6 +68,7 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
 
         configureAdapter();
         updateTasksList();
+
     }
 
     private void defineViews(){
@@ -98,15 +104,42 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private void configureAdapter(){
+    private void configureAdapter() {
         listTaskBridgeView = new ListTaskBridgeView(getActivity());
 
         listTaskBridgeView.configureAdapter(listTasks);
+        registerForContextMenu(listTasks);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+
+        inflater.inflate(R.menu.menu_task_item, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        Log.i("SELECTED", "onContextItemSelected: ");
+
+        if(item.getItemId() == R.id.menu_task_delete){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
+                    item.getMenuInfo();
+            deleteTaskConfirmationModal = new DeleteTaskConfirmationModal(info.position);
+            deleteTaskConfirmationModal.show(getActivity().getSupportFragmentManager(), "dialog");
+
+            //            listTaskBridgeView.delete(info.position);
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     private void updateTasksList(){
         listTaskBridgeView.updateList(TaskStaticValues.LIMIT_LIST, TaskStaticValues.OFFSET_LIST);
     }
+
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.fragment_task_hide_options){
@@ -124,7 +157,7 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
             mListener = (OnFragmentTaskFormInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentTaskFormInteractionListener");
         }
     }
 
@@ -132,6 +165,11 @@ public class TaskManagementFragment extends Fragment implements View.OnClickList
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onFragmentTaskDeleteInteraction(int position) {
+       listTaskBridgeView.delete(position);
     }
 
     public interface OnFragmentTaskFormInteractionListener {

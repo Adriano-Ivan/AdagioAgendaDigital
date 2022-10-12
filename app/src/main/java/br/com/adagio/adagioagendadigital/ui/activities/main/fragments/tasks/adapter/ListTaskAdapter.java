@@ -34,9 +34,9 @@ public class ListTaskAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
+
         return tasks.get(position).getId();
     }
-
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
