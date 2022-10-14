@@ -11,13 +11,24 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:padding="12dp"
-        android:textSize="16dp"
+        android:textSize="18dp"
         android:text="@string/create_your_task" />
 
     <EditText
         android:id="@+id/fragment_form_task_description"
         android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:hint="@string/fragment_form_task_placeholder_decription"
         android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/fragment_form_task_choose_initial_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/fragment_form_task_choose_initial_date"
+        />
 
     <Button
         android:id="@+id/fragment_form_task_submit"

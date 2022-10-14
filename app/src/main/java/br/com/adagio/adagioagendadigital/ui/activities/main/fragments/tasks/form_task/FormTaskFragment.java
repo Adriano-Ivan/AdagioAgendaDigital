@@ -1,5 +1,6 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -9,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+
+import java.util.Calendar;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
@@ -21,6 +25,9 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private EditText descriptionEditText;
     private Button submitButton;
     private OnFragmentTaskFormCreateInteractionListener tListener;
+    private Button buttonToShowInitialDateDialog;
+
+    private DatePickerDialog initialDateDialog;
 
     public FormTaskFragment() {
 
@@ -57,10 +64,14 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private void defineViews(){
         descriptionEditText = rootView.findViewById(R.id.fragment_form_task_description);
         submitButton = rootView.findViewById(R.id.fragment_form_task_submit);
+        buttonToShowInitialDateDialog = rootView.findViewById(R.id.fragment_form_task_choose_initial_date);
     }
 
     private void defineListeners(){
+
         submitButton.setOnClickListener(this);
+
+        buttonToShowInitialDateDialog.setOnClickListener(this);
     }
 
     @Override
@@ -73,7 +84,27 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                     );
 
             tListener.onFragmentTaskFormSubmitInteraction(tCreate);
+        } else if(view.getId() == R.id.fragment_form_task_choose_initial_date){
+
+            showInitialDateDialog();
         }
+    }
+
+    private void showInitialDateDialog(){
+        final Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        initialDateDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        buttonToShowInitialDateDialog.setText(day+" "+month+" "+year);
+                    }
+                },year,month,day);
+
+        initialDateDialog.show();
     }
 
     @Override

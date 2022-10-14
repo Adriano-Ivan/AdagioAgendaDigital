@@ -81,5 +81,9 @@
     <string name="task_confirmation_delete">Deseja realmente apagar essa tarefa ?</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="fragment_form_task_placeholder_decription">Descrição da tarefa</string>
+    <string name="fragment_form_task_placeholder_initial_date">Data de início</string>
+    <string name="fragment_form_task_placeholder_final_date">Data limite</string>
+    <string name="fragment_form_task_choose_initial_date">Escolha a data de início</string>
 
 </resources>
