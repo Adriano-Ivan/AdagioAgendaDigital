@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     private View rootView;
     private CalendarView calendarView;
     private Button buttonToChooseYear;
+    private TextView textViewTodayDate;
 
     public HomeFragment(){
 
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
    private void setAttributes(){
        defineViews();
        defineListeners();
+       defineDefaultValues();
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
            setNewStateOfCalendar();
        }
@@ -83,8 +85,8 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         ArrayAdapter<String> adapter   = new ArrayAdapter<>(getActivity(),
                 R.layout.dropdown_months_item,months);
 
-        TextInputLayout containerOptions = rootView.findViewById(R.id.activity_home_choose_month);
-        AutoCompleteTextView monthsOptions = rootView.findViewById(R.id.activity_home_months_options);
+        TextInputLayout containerOptions = rootView.findViewById(R.id.fragment_home_choose_month);
+        AutoCompleteTextView monthsOptions = rootView.findViewById(R.id.fragment_home_months_options);
 
         monthsOptions.setAdapter(adapter);
 
@@ -103,9 +105,9 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     }
 
     private void defineViews(){
-        calendarView = rootView.findViewById(R.id.activity_home_calendar);
-        buttonToChooseYear = rootView.findViewById(R.id.activity_home_button_choose_year);
-
+        calendarView = rootView.findViewById(R.id.fragment_home_calendar);
+        buttonToChooseYear = rootView.findViewById(R.id.fragment_home_button_choose_year);
+        textViewTodayDate = rootView.findViewById(R.id.fragment_home_indicative_date);
     }
 
     private void defineListeners(){
@@ -114,6 +116,17 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         buttonToChooseYear.setOnClickListener(this);
     }
 
+    private void defineDefaultValues(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int year = calendar.get(Calendar.YEAR);
+
+        textViewTodayDate.setText(String.format(
+                "%s %s/%s/%s",
+                getResources().getString(R.string.today_text),
+                day,month,year));
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setMaxAndMinDateOfCalendar(){
@@ -130,8 +143,6 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
         calendarView.setMinDate(calendarForMin.getTimeInMillis());
         calendarView.setMaxDate(calendarForMax.getTimeInMillis());
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -144,7 +155,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.activity_home_button_choose_year){
+        if(v.getId() == R.id.fragment_home_button_choose_year){
             NumberPickerDialogToChooseYear dialog = new NumberPickerDialogToChooseYear(HomeStaticValues.PICKED_YEAR_MEMO);
             dialog.show(getActivity().getSupportFragmentManager(), "dialog");
         } else if(v.getId() == R.id.activity_home_menu_button){

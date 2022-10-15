@@ -88,5 +88,14 @@
     <string name="fragment_form_task_choose_initial_hour">Escolha a hora inicial</string>
     <string name="fragment_form_task_choose_final_date">Escolha a data final</string>
     <string name="fragment_form_task_choose_final_hour">Escolha a hora final</string>
+    <string name="today_text">Hoje:</string>
+    <string name="fragment_form_task_choose_is_finished">Concluída</string>
+    <string name="fragment_form_task_choose_is_not_finished">Para começar</string>
+    <string name="fragment_form_task_text_view_is_to_finish_or_not">É para começar ou gravar como concluída ?</string>
+    <string name="fragment_form_task_choose_average">Média</string>
+    <string name="fragment_form_task_choose_short">Baixa</string>
+    <string name="fragment_form_task_choose_high">Alta</string>
+    <string name="fragment_form_task_choose_critical">Crítica</string>
+    <string name="fragment_form_task_text_view_choose_priority">Qual nível de prioridade ?</string>
 
 </resources>

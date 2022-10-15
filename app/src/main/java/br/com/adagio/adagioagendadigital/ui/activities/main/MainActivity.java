@@ -48,6 +48,7 @@ public  class MainActivity extends AppCompatActivity implements
     private TagsFragment tagsFragment = new TagsFragment();
     private TextView textTop;
     private ImageButton returnScreenButton;
+    private ImageButton checkRegisterButton;
     private ListTaskBridgeView listBridge;
 
     @Override
@@ -79,6 +80,7 @@ public  class MainActivity extends AppCompatActivity implements
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 returnScreenButton.setVisibility(View.GONE);
+                checkRegisterButton.setVisibility(View.GONE);
                 switch(item.getItemId()){
                     case R.id.home_button:
                         MainStaticValues.setCurrentFragment(CurrentFragment.HOME);
@@ -115,13 +117,12 @@ public  class MainActivity extends AppCompatActivity implements
     private void setViews(){
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         returnScreenButton = findViewById(R.id.main_activity_return_screen_button);
+        checkRegisterButton = findViewById(R.id.main_activity_check_register);
     }
 
     private void setListeners(){
         returnScreenButton.setOnClickListener(this);
-    }
-    public void changeInFragmentToTaskForm(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, ftFragment).commit();
+        checkRegisterButton.setOnClickListener(this);
     }
 
     private Fragment returnCurrentFragment(){
@@ -168,6 +169,7 @@ public  class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action) {
         returnScreenButton.setVisibility(View.VISIBLE);
+        checkRegisterButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,ftFragment).commit();
     }
 
@@ -180,16 +182,24 @@ public  class MainActivity extends AppCompatActivity implements
     public void onClick(View view) {
         if(view.getId() == R.id.main_activity_return_screen_button &&
         MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
-            returnScreenButton.setVisibility(View.GONE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,taskFragment).commit();
+            goToTaskManagement();
+        } else if(view.getId() == R.id.main_activity_check_register &&
+                MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
+            ftFragment.auxSubmitTask();
+           goToTaskManagement();
         }
     }
 
     @Override
     public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task) {
         listBridge.insert(task);
+        goToTaskManagement();
+    }
+
+    private void goToTaskManagement(){
 
         returnScreenButton.setVisibility(View.GONE);
+        checkRegisterButton.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, taskFragment).commit();
     }
 }

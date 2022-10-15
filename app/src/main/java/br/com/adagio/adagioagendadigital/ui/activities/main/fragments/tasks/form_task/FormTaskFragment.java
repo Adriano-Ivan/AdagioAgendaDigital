@@ -7,15 +7,21 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 import br.com.adagio.adagioagendadigital.R;
@@ -25,7 +31,13 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.Task
 public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     private View rootView;
+
     private EditText descriptionEditText;
+    private String limitMomentDate;
+    private String initialMomentDate;
+    private String limitMomentTime;
+    private String initialMomentTime;
+
     private Button submitButton;
     private OnFragmentTaskFormCreateInteractionListener tListener;
 
@@ -43,6 +55,13 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private TextView textViewFinalDate;
     private TextView textViewInitialTime;
     private TextView textViewFinalTime;
+
+    private RadioGroup radioGroupToChooseIsFinishedOrNot;
+
+    private int day;private int month; private int year;private int hour; private int minute;
+    private int finalDay; private int finalMonth; private int finalYear;private int finalHour;
+    private int finalMinute;
+    private int isFinished;
 
     public FormTaskFragment() {
 
@@ -90,26 +109,64 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         textViewFinalDate = rootView.findViewById(R.id.fragment_form_text_view_final_date);
         textViewInitialTime = rootView.findViewById(R.id.fragment_form_task_text_view_initial_hour);
         textViewFinalTime = rootView.findViewById(R.id.fragment_form_task_text_view_final_hour);
+
+        radioGroupToChooseIsFinishedOrNot = rootView.findViewById(R.id.fragment_form_task_group_choose_is_finished_or_not);
     }
 
     private void defineDefaultValues(){
-        final Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        int hour = calendar.get(Calendar.HOUR);
-        int minute = calendar.get(Calendar.MINUTE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            final LocalDateTime today = LocalDateTime.now();
 
-        textViewInitialDate.setText(String.format("%s/%s/%s",day,month,year));
-        textViewFinalDate.setText(String.format("%s/%s/%s",day,month,year));
+            day = today.getDayOfMonth();
+            finalDay = today.getDayOfMonth();
 
-        textViewInitialTime.setText(String.format("%s:%s",hour,minute));
-        textViewFinalTime.setText(String.format("%s:%s",23,59));
+            month = today.getMonthValue();
+            finalMonth = today.getMonthValue();
 
+            year = today.getYear();
+            finalYear =today.getYear();
+
+            hour = today.getHour();
+            finalHour  = 23;
+
+            minute = today.getMinute();
+            finalMinute=59;
+
+            textViewInitialDate.setText(String.format("%s/%s/%s", returnDayOrMonthOrHourOrMinute(day),
+                    returnDayOrMonthOrHourOrMinute(month),year));
+            textViewFinalDate.setText(String.format("%s/%s/%s",returnDayOrMonthOrHourOrMinute(finalDay),
+                    returnDayOrMonthOrHourOrMinute(finalMonth),finalYear));
+
+            textViewInitialTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(hour),
+                    returnDayOrMonthOrHourOrMinute(minute)));
+            textViewFinalTime.setText(String.format("%s:%s",finalHour,finalMinute));
+
+            initialMomentDate = String.format("%s-%s-%s",
+                    year,
+                    returnDayOrMonthOrHourOrMinute(month),
+                    returnDayOrMonthOrHourOrMinute(day)
+                    );
+            limitMomentDate = String.format("%s-%s-%s",
+                    year,
+                    returnDayOrMonthOrHourOrMinute(finalMonth),
+                    returnDayOrMonthOrHourOrMinute(finalDay)
+            );
+
+            initialMomentTime = String.format("%s:%s:%s",
+                    returnDayOrMonthOrHourOrMinute(hour),
+                    returnDayOrMonthOrHourOrMinute(minute),
+                    "00");
+            limitMomentTime = String.format("%s:%s:%s",
+                    returnDayOrMonthOrHourOrMinute(finalHour),
+                    returnDayOrMonthOrHourOrMinute(finalMinute),
+                    "00");
+
+            isFinished = 0;
+        }
     }
 
-    private void defineListeners(){
 
+    private void defineListeners(){
         submitButton.setOnClickListener(this);
 
         buttonToShowInitialDateDialog.setOnClickListener(this);
@@ -117,18 +174,25 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
         buttonToShowFinalDateDialog.setOnClickListener(this);
         buttonToShowFinalHourDialog.setOnClickListener(this);
+
+        radioGroupToChooseIsFinishedOrNot.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(i == R.id.fragment_form_task_choose_is_finished){
+                    Log.i("É PARA ", "CONCLUIR ");
+                    isFinished = 1;
+                } else {
+                    Log.i("É PARA ", "COMEÇAR ");
+                    isFinished = 0;
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.fragment_form_task_submit){
-            TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
-                    "2022-08-12T23:23:38",
-                    "2023-09-12T12:23:28",
-                    0
-                    );
-
-            tListener.onFragmentTaskFormSubmitInteraction(tCreate);
+            submitTask();
         } else if(view.getId() == R.id.fragment_form_task_choose_initial_date){
 
             showInitialDateDialog();
@@ -142,71 +206,132 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showInitialDateDialog(){
-        final Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-        initialDateDialog = new DatePickerDialog(getActivity(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        textViewInitialDate.setText(day+" "+month+" "+year);
-                    }
-                },year,month,day);
+            initialDateDialog = new DatePickerDialog(getActivity(),
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
+                            day=dayL;month=monthL+1;year=yearL;
+                            initialMomentDate = String.format("%s-%s-%s",
+                                    year,
+                                    returnDayOrMonthOrHourOrMinute(month),
+                                    returnDayOrMonthOrHourOrMinute(day)
+                                    );
+                            textViewInitialDate.setText(String.format("%s/%s/%s",
+                                    returnDayOrMonthOrHourOrMinute(day),
+                                    returnDayOrMonthOrHourOrMinute(month),
+                                    year
+                                    ));
+                        }
+                    },year,month-1,day);
 
-        initialDateDialog.show();
+            initialDateDialog.show();
+        }
     }
 
     private void showInitialHourDialog(){
-        final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR);
-        int minute = calendar.get(Calendar.MINUTE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-        initialTimeDialog = new TimePickerDialog(getActivity(),
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        textViewInitialTime.setText(i+" "+i1);
-                    }
-                }, hour, minute,true
-        );
+            initialTimeDialog = new TimePickerDialog(getActivity(),
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
+                            hour=hourL; minute=minuteL;
+                            initialMomentTime=String.format("%s:%s:%s",
+                                    returnDayOrMonthOrHourOrMinute(hour),
+                                    returnDayOrMonthOrHourOrMinute(minute),
+                                    "00"
+                                    );
 
-        initialTimeDialog.show();
+                            textViewInitialTime.setText(String.format("%s:%s",
+                                    returnDayOrMonthOrHourOrMinute(hour),
+                                    returnDayOrMonthOrHourOrMinute(minute)));
+                        }
+                    }, hour, minute,true
+            );
+
+            initialTimeDialog.show();
+        }
     }
 
     private void showFinalDateDialog(){
-        final Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-        finalDateDialog = new DatePickerDialog(getActivity(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        textViewFinalDate.setText(day+" "+month+" "+year);
-                    }
-                },year,month,day);
+            finalDateDialog = new DatePickerDialog(getActivity(),
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
+                            finalDay=dayL;finalMonth=monthL+1;finalYear=yearL;
+                            limitMomentDate = String.format("%s-%s-%s",
+                                    year,
+                                    returnDayOrMonthOrHourOrMinute(finalMonth),
+                                    returnDayOrMonthOrHourOrMinute(finalDay)
+                                    );
+                            textViewFinalDate.setText(String.format("%s/%s/%s",
+                                    returnDayOrMonthOrHourOrMinute(finalDay),
+                                            returnDayOrMonthOrHourOrMinute(finalMonth),
+                                            finalYear));
+                        }
+                    },finalYear,finalMonth-1,finalDay);
 
-        finalDateDialog.show();
+            finalDateDialog.show();
+        }
     }
 
     private void showFinalTimeDialog(){
-        final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR);
-        int minute = calendar.get(Calendar.MINUTE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-        finalTimeDialog = new TimePickerDialog(getActivity(),
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        textViewFinalTime.setText(i+" "+i1);
-                    }
-                }, hour, minute,true
+            finalTimeDialog = new TimePickerDialog(getActivity(),
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
+                            finalHour = hourL; minute=minuteL;
+                            limitMomentTime = String.format("%s:%s:%s",
+                                    returnDayOrMonthOrHourOrMinute(finalHour),
+                                    returnDayOrMonthOrHourOrMinute(finalMinute),
+                                    "00"
+                                    );
+
+                            textViewFinalTime.setText(String.format("%s:%s",
+                                    returnDayOrMonthOrHourOrMinute(finalHour),
+                                            returnDayOrMonthOrHourOrMinute(finalMinute)));
+                        }
+                    }, finalHour, finalMinute,true
+            );
+
+            finalTimeDialog.show();
+        }
+    }
+
+    private String returnDayOrMonthOrHourOrMinute(int dayOrMonthOrHourOrMinute) {
+        if(Integer.toString(dayOrMonthOrHourOrMinute).length() ==1 ){
+            return "0"+dayOrMonthOrHourOrMinute;
+        }
+
+        return Integer.toString(dayOrMonthOrHourOrMinute);
+    }
+
+    public void auxSubmitTask(){
+        submitTask();
+    }
+
+    private void submitTask(){
+        TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
+                returnInitialMoment(),
+                returnLimitMoment(),
+                isFinished
         );
 
-        finalTimeDialog.show();
+        tListener.onFragmentTaskFormSubmitInteraction(tCreate);
+    }
+
+    private String returnInitialMoment(){
+        return String.format("%sT%s",initialMomentDate,initialMomentTime);
+    }
+
+    private String returnLimitMoment(){
+        return String.format("%sT%s",limitMomentDate,limitMomentTime);
     }
 
     @Override
