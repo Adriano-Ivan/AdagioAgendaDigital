@@ -85,5 +85,8 @@
     <string name="fragment_form_task_placeholder_initial_date">Data de início</string>
     <string name="fragment_form_task_placeholder_final_date">Data limite</string>
     <string name="fragment_form_task_choose_initial_date">Escolha a data de início</string>
+    <string name="fragment_form_task_choose_initial_hour">Escolha a hora inicial</string>
+    <string name="fragment_form_task_choose_final_date">Escolha a data final</string>
+    <string name="fragment_form_task_choose_final_hour">Escolha a hora final</string>
 
 </resources>
