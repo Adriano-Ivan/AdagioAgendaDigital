@@ -56,12 +56,12 @@ public class ListTaskBridgeView {
     }
 
     private void auxTeste(){
-        TaskDtoCreate task = new TaskDtoCreate("TESTE", "2022-08-09T14:30:32",
-                "2022-08-11T15:43:38", 0);
-        TaskDtoCreate task2 = new TaskDtoCreate("TESTE 2", "2022-09-09T14:30:32",
-                "2022-10-11T15:43:38", 0);
-
-        taskDAO.save(task);
-        taskDAO.save(task2);
+//        TaskDtoCreate task = new TaskDtoCreate("TESTE", "2022-08-09T14:30:32",
+//                "2022-08-11T15:43:38", 0);
+//        TaskDtoCreate task2 = new TaskDtoCreate("TESTE 2", "2022-09-09T14:30:32",
+//                "2022-10-11T15:43:38", 0);
+//
+//        taskDAO.save(task);
+//        taskDAO.save(task2);
     }
 }

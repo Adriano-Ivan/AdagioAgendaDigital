@@ -36,14 +36,6 @@ public class TaskDAO {
 
     public List<TaskDtoRead> list(int limit, int offset){
 
-        String[] columns ={
-                DbTaskStructure.Columns.ID,
-                DbTaskStructure.Columns.DESCRIPTION,
-                DbTaskStructure.Columns.INITIAL_MOMENT,
-                DbTaskStructure.Columns.LIMIT_MOMENT,
-                DbTaskStructure.Columns.IS_FINISHED
-        };
-
         List<TaskDtoRead> tasks = new ArrayList<>();
 
         String query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
@@ -89,9 +81,9 @@ public class TaskDAO {
         values.put(DbTaskStructure.Columns.INITIAL_MOMENT, task.getInitialMoment());
         values.put(DbTaskStructure.Columns.LIMIT_MOMENT, task.getLimitMoment());
         values.put(DbTaskStructure.Columns.IS_FINISHED, task.isFinished());
+        values.put(DbTaskStructure.Columns.PRIORITY_ID, task.getPriority_id());
 
         long id = db.insert(DbTaskStructure.TABLE_NAME, null, values);
-//        task.setId((int) id);
     }
 
     public TaskDtoRead get(int id){

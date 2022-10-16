@@ -47,6 +47,7 @@
                 android:id="@+id/fragment_form_task_choose_initial_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
                 android:padding="8dp"
                 android:text="@string/fragment_form_task_choose_initial_date"
                 />
@@ -67,6 +68,7 @@
             <Button
                 android:id="@+id/fragment_form_task_choose_initial_hour"
                 android:layout_width="wrap_content"
+                android:backgroundTint="@color/green"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="@string/fragment_form_task_choose_initial_hour"
@@ -88,6 +90,7 @@
                 android:id="@+id/fragment_form_task_choose_final_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
                 android:padding="8dp"
                 android:text="@string/fragment_form_task_choose_final_date"
                 />
@@ -108,6 +111,7 @@
                 android:id="@+id/fragment_form_task_choose_final_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
                 android:padding="8dp"
                 android:text="@string/fragment_form_task_choose_final_hour"
                 />
@@ -182,10 +186,31 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="12dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+        >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_form_task_text_view_tags"/>
+
+            <Button
+                android:id="@+id/fragment_form_task_button_to_open_tags_diailog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:text="@string/fragment_form_task_button_to_open_tags_diailog"
+                />
+        </LinearLayout>
+
         <Button
             android:id="@+id/fragment_form_task_submit"
             android:layout_width="match_parent"
             android:text="@string/fragment_task_submit"
+            android:backgroundTint="@color/green"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

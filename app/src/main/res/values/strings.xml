@@ -97,5 +97,7 @@
     <string name="fragment_form_task_choose_high">Alta</string>
     <string name="fragment_form_task_choose_critical">Crítica</string>
     <string name="fragment_form_task_text_view_choose_priority">Qual nível de prioridade ?</string>
+    <string name="fragment_form_task_text_view_tags">Você pode escolher tags para a tarefa</string>
+    <string name="fragment_form_task_button_to_open_tags_diailog">Escolher tags</string>
 
 </resources>

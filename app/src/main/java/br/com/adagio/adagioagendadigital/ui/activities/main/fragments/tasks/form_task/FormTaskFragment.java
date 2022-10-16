@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -22,10 +23,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.data.priority.PriorityDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
+import br.com.adagio.adagioagendadigital.models.entities.Priority;
+import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 
 public class FormTaskFragment extends Fragment implements View.OnClickListener {
@@ -57,6 +63,20 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private TextView textViewFinalTime;
 
     private RadioGroup radioGroupToChooseIsFinishedOrNot;
+    private RadioGroup radioGroupToChoosePriority;
+
+    private RadioButton radioButtonToChooseNotFinished;
+    private RadioButton radioButtonToChooseFinished;
+
+    private RadioButton radioButtonPriorityLow;
+    private RadioButton radioButtonPriorityAverage;
+    private RadioButton radioButtonPriorityHigh;
+    private RadioButton radioButtonPriorityCritical;
+
+    private PriorityDAO priorityDAO;
+    private int priority_id;
+
+    private List<Priority> priorities;
 
     private int day;private int month; private int year;private int hour; private int minute;
     private int finalDay; private int finalMonth; private int finalYear;private int finalHour;
@@ -91,9 +111,20 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setAttributes(){
+        defineAttributes();
         defineViews();
         defineListeners();
         defineDefaultValues();
+    }
+
+    private void defineAttributes(){
+        priorityDAO =PriorityDAO.getInstance(getActivity());
+
+        priorities = new ArrayList<>(priorityDAO.list());
+
+        for(Priority priority:priorities){
+            Log.i("PRIORITY: ", priority.getId() + ", "+priority.getName());
+        }
     }
 
     private void defineViews(){
@@ -111,6 +142,18 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         textViewFinalTime = rootView.findViewById(R.id.fragment_form_task_text_view_final_hour);
 
         radioGroupToChooseIsFinishedOrNot = rootView.findViewById(R.id.fragment_form_task_group_choose_is_finished_or_not);
+        radioGroupToChoosePriority = rootView.findViewById(R.id.fragment_form_task_group_choose_priority);
+
+        radioButtonToChooseFinished = rootView.findViewById(R.id.fragment_form_task_choose_is_finished);
+        radioButtonToChooseNotFinished = rootView.findViewById(R.id.fragment_form_task_choose_is_not_finished);
+
+        radioButtonPriorityLow=rootView.findViewById(R.id.fragment_form_task_choose_short);
+        radioButtonPriorityAverage=rootView.findViewById(R.id.fragment_form_task_choose_average);
+        radioButtonPriorityHigh=rootView.findViewById(R.id.fragment_form_task_choose_high);
+        radioButtonPriorityCritical=rootView.findViewById(R.id.fragment_form_task_choose_critical);
+
+        radioButtonPriorityLow.setChecked(true);
+        radioButtonToChooseNotFinished.setChecked(true);
     }
 
     private void defineDefaultValues(){
@@ -162,6 +205,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                     "00");
 
             isFinished = 0;
+
+            priority_id = priorities.get(1).getId();
         }
     }
 
@@ -179,14 +224,39 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if(i == R.id.fragment_form_task_choose_is_finished){
-                    Log.i("É PARA ", "CONCLUIR ");
                     isFinished = 1;
                 } else {
-                    Log.i("É PARA ", "COMEÇAR ");
                     isFinished = 0;
                 }
             }
         });
+
+        radioGroupToChoosePriority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                defineLevelPriority(i);
+            }
+        });
+    }
+
+    private void defineLevelPriority(int i){
+        if(i == radioButtonPriorityLow.getId()){
+            definePriority(Priorities.LOW);
+        } else if(i == radioButtonPriorityAverage.getId()){
+            definePriority(Priorities.AVERAGE);
+        } else if(i == radioButtonPriorityHigh.getId()){
+            definePriority(Priorities.HIGH);
+        } else if(i == radioButtonPriorityCritical.getId()){
+            definePriority(Priorities.CRITICAL);
+        }
+    }
+
+    private void definePriority(Priorities priorityEnum){
+        for(Priority priority : priorities){
+            if(priority.getName() == priorityEnum.getValue()){
+                priority_id = priority.getId();
+            }
+        }
     }
 
     @Override
@@ -320,6 +390,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
                 returnInitialMoment(),
                 returnLimitMoment(),
+                priority_id,
                 isFinished
         );
 

@@ -4,30 +4,21 @@ import java.util.List;
 
 public class TaskDtoCreate {
 
-//    public TaskDtoCreate(int id, String description, String initialMoment,
-//                         String limitMoment,
-//                         int isFinished){
-//        this.id = id;
-//        setAttributesExceptId(description,initialMoment,limitMoment,isFinished);
-//    }
-
     public TaskDtoCreate(String description, String initialMoment,
-                         String limitMoment,
+                         String limitMoment,int priority_id,
                          int isFinished){
-       setAttributesExceptId(description,initialMoment,limitMoment,isFinished);
+       setAttributesExceptId(description,initialMoment,limitMoment,isFinished,priority_id);
     }
 
     private void setAttributesExceptId(String description, String initialMoment,
-                                  String limitMoment,
+                                  String limitMoment, int priority_id,
                                   int isFinished){
         this.description=description;
         this.initialMoment=initialMoment;
         this.limitMoment=limitMoment;
         this.isFinished=isFinished;
+        this.priority_id = priority_id;
     }
-
-
-//    private int id;
 
     private String description;
 
@@ -38,6 +29,16 @@ public class TaskDtoCreate {
     private int isFinished;
 
     private List<Integer> tags;
+
+    private int priority_id;
+
+    public void setPriority_id(int priority_id) {
+        this.priority_id = priority_id;
+    }
+
+    public int getPriority_id() {
+        return priority_id;
+    }
 
     public void setDescription(String description) {
         this.description = description;
@@ -71,6 +72,10 @@ public class TaskDtoCreate {
         return limitMoment;
     }
 
+    public void setIsFinished(int isFinished) {
+        this.isFinished = isFinished;
+    }
+
     public int isFinished() {
         return isFinished;
     }
@@ -78,13 +83,5 @@ public class TaskDtoCreate {
     public List<Integer> getTags() {
         return tags;
     }
-
-//    public void setId(int id){
-//        this.id = id;
-//    }
-//
-//    public int getId(){
-//        return id;
-//    }
 
 }

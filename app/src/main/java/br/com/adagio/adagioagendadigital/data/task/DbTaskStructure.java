@@ -10,5 +10,6 @@ public class DbTaskStructure {
         public static final String INITIAL_MOMENT = "initial_moment";
         public static final String LIMIT_MOMENT = "limit_moment";
         public static final String IS_FINISHED = "is_finished";
+        public static final String PRIORITY_ID = "priority_id";
     }
 }
