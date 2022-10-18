@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
 
@@ -29,6 +31,7 @@ public class TaskManagementFragment extends Fragment
     private LinearLayout containerOptions;
     private Button buttonHideContainerOptions;
     private Button buttonGoToFormTasks;
+    private FloatingActionButton fabButtonGoToTasks;
     private ListView listTasks;
     private View rootView;
     private ListTaskBridgeView listTaskBridgeView;
@@ -75,12 +78,14 @@ public class TaskManagementFragment extends Fragment
         containerOptions = rootView.findViewById(R.id.fragment_task_container_options);
         buttonHideContainerOptions = rootView.findViewById(R.id.fragment_task_hide_options);
         listTasks = rootView.findViewById(R.id.fragment_task_list_tasks);
+        fabButtonGoToTasks = rootView.findViewById(R.id.fragment_task_fab_button_tasks);
         buttonGoToFormTasks = rootView.findViewById((R.id.fragment_task_user_wants_to_create_task));
     }
 
     private void defineListeners(){
         buttonHideContainerOptions.setOnClickListener(this);
         buttonGoToFormTasks.setOnClickListener(this);
+        fabButtonGoToTasks.setOnClickListener(this);
     }
 
     private void  setContainerOptionsIsGone (){
@@ -146,6 +151,8 @@ public class TaskManagementFragment extends Fragment
 
            setConfigurationVisibilitity(false);
         } else if(view.getId() == R.id.fragment_task_user_wants_to_create_task){
+            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK);
+        }else if(view.getId() == R.id.fragment_task_fab_button_tasks){
             mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK);
         }
     }
