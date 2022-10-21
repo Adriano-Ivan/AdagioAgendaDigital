@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:orientation="vertical"
+    android:fillViewport="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.activities.main.fragments.tasks.form_task.FormTaskFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:textSize="22dp"
+
+            android:text="@string/create_your_tag" />
+
+        <EditText
+            android:id="@+id/fragment_form_tag_name"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:hint="@string/fragment_form_tag_placeholder_name"
+            android:layout_height="wrap_content"/>
+
+
+        <Button
+            android:id="@+id/fragment_form_tag_submit"
+            android:layout_width="match_parent"
+            android:text="@string/fragment_task_submit"
+            android:backgroundTint="@color/green"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

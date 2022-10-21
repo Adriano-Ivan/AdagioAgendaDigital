@@ -26,10 +26,8 @@ public class DbLayer extends SQLiteOpenHelper
     );
     private static final String SQL_CREATE_TAGS_TB = String.format(
         "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, "+
-         "%s TEXT NOT NULL, "+
          "%s TEXT NOT NULL) ", DbTagStructure.TABLE_NAME,
-            DbTagStructure.Columns.ID,DbTagStructure.Columns.NAME,
-            DbTagStructure.Columns.CREATED_AT
+            DbTagStructure.Columns.ID,DbTagStructure.Columns.NAME
     );
 
     private static final String SQL_DROP_PRIORITIES_TB = String.format(

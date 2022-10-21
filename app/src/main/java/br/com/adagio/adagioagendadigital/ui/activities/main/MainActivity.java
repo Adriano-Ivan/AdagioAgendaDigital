@@ -2,7 +2,6 @@ package br.com.adagio.adagioagendadigital.ui.activities.main;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -19,6 +18,10 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
+import br.com.adagio.adagioagendadigital.models.entities.Tag;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.FormTagFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationModal;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
@@ -36,20 +39,26 @@ public  class MainActivity extends AppCompatActivity implements
         NumberPickerDialogToChooseYear.onSaveYearListener,
         TaskManagementFragment.OnFragmentTaskFormInteractionListener,
         FormTaskFragment.OnFragmentTaskFormCreateInteractionListener,
+        FormTagFragment.OnFragmentTagFormCreateInteractionListener,
+        TagsFragment.OnFragmentTagFormInteractionListener,
+        DeleteTagConfirmationModal.OnFragmentTagDeleteInteractionListener,
         View.OnClickListener, DeleteTaskConfirmationModal.OnFragmentTaskDeleteInteractionListener  {
 
     private BottomNavigationView bottomNavigationView;
 
     private HomeFragment homeFragment = new HomeFragment();
     private TaskManagementFragment taskFragment = new TaskManagementFragment();
+    private TagsFragment tagsFragment = new TagsFragment();
+    private FormTaskFragment formTaskFragment = new FormTaskFragment();
+    private FormTagFragment formTagFragment = new FormTagFragment();
     private RelatoriesFragment relatoriesFragment = new RelatoriesFragment();
     private NotificationsFragment notificationsFragment = new NotificationsFragment();
-    private FormTaskFragment ftFragment = new FormTaskFragment();
-    private TagsFragment tagsFragment = new TagsFragment();
     private TextView textTop;
     private ImageButton returnScreenButton;
     private ImageButton checkRegisterButton;
-    private ListTaskBridgeView listBridge;
+
+    private ListTaskBridgeView listTaskBridgeView;
+    private ListTagBridgeView listTagBridgeView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +78,9 @@ public  class MainActivity extends AppCompatActivity implements
     private void setNavigationAttributes(){
         textTop = findViewById(R.id.main_activity_text_top);
         textTop.setText(getResources().getString(returnCurrentTitle()));
-        listBridge = new ListTaskBridgeView(this);
+        listTaskBridgeView = new ListTaskBridgeView(this);
+        listTagBridgeView = new ListTagBridgeView(this);
+
         setViews();
         setListeners();
 
@@ -170,7 +181,14 @@ public  class MainActivity extends AppCompatActivity implements
     public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action) {
         returnScreenButton.setVisibility(View.VISIBLE);
         checkRegisterButton.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,ftFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, formTaskFragment).commit();
+    }
+
+    @Override
+    public void onFragmentTagFormInteraction(TagsFragment.Action action) {
+        returnScreenButton.setVisibility(View.VISIBLE);
+        checkRegisterButton.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,formTagFragment).commit();
     }
 
     @Override
@@ -179,27 +197,56 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onFragmentTagDeleteInteraction(int position) {
+        tagsFragment.onFragmentTagDeleteInteraction(position);
+    }
+
+    @Override
     public void onClick(View view) {
         if(view.getId() == R.id.main_activity_return_screen_button &&
         MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
-            goToTaskManagement();
+            goToTaskOrTagManagement(GoTo.TASK);
         } else if(view.getId() == R.id.main_activity_check_register &&
                 MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
-            ftFragment.auxSubmitTask();
-           goToTaskManagement();
+            formTaskFragment.auxSubmitTask();
+           goToTaskOrTagManagement(GoTo.TASK);
+        } else if(view.getId() == R.id.main_activity_return_screen_button &&
+                MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TAGS){
+            goToTaskOrTagManagement(GoTo.TAG);
+        } else if(view.getId() == R.id.main_activity_check_register &&
+                MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TAGS){
+            formTagFragment.auxSubmitTag();
+            goToTaskOrTagManagement(GoTo.TAG);
         }
     }
 
     @Override
     public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task) {
-        listBridge.insert(task);
-        goToTaskManagement();
+        listTaskBridgeView.insert(task);
+        goToTaskOrTagManagement(GoTo.TASK);
     }
 
-    private void goToTaskManagement(){
+    private void goToTaskOrTagManagement(GoTo goTo){
 
         returnScreenButton.setVisibility(View.GONE);
         checkRegisterButton.setVisibility(View.GONE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, taskFragment).commit();
+
+        if(goTo == GoTo.TASK){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, taskFragment).commit();
+        } else if(goTo == GoTo.TAG){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, tagsFragment).commit();
+        }
+
+    }
+
+    @Override
+    public void onFragmentTagFormSubmitInteraction(Tag tag) {
+        listTagBridgeView.insert(tag);
+        goToTaskOrTagManagement(GoTo.TAG);
+    }
+
+    private enum GoTo{
+        TAG,
+        TASK
     }
 }

@@ -99,5 +99,9 @@
     <string name="fragment_form_task_text_view_choose_priority">Qual nível de prioridade ?</string>
     <string name="fragment_form_task_text_view_tags">Você pode escolher tags para a tarefa</string>
     <string name="fragment_form_task_button_to_open_tags_diailog">Escolher tags</string>
+    <string name="fragment_tag_user_wants_to_create_tag">Criar tag</string>
+    <string name="tag_confirmation_delete">Deseja realmente deletar esta tag ?</string>
+    <string name="create_your_tag">Crie sua tag</string>
+    <string name="fragment_form_tag_placeholder_name">Nome da tag</string>
 
 </resources>

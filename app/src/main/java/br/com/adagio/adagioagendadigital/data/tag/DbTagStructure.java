@@ -7,6 +7,5 @@ public class DbTagStructure {
     public static final class Columns {
         public static final String ID = "_id";
         public static final String NAME = "name";
-        public static final String CREATED_AT = "created_at";
     }
 }

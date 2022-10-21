@@ -25,13 +25,23 @@
             android:layout_height="match_parent"
             >
 
-         <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/tags" />
+            <ListView
+                android:id="@+id/fragment_tags_list_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-      </LinearLayout>
+        </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_tag_fab_button_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_baseline_add_24"
+            android:contentDescription="@string/fragment_tag_user_wants_to_create_tag"
+            android:layout_margin="10dp" />
     </RelativeLayout>
 
 </ScrollView>
