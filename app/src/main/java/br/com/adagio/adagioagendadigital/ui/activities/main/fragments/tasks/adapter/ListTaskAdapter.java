@@ -7,16 +7,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 
 public class ListTaskAdapter extends BaseAdapter {
 
     private final List<TaskDtoRead> tasks = new ArrayList<>();
     private final Context context;
+    private TaskManagementFragment parentFragment;
 
     public ListTaskAdapter(Context context){
         this.context = context;
@@ -28,7 +32,7 @@ public class ListTaskAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public TaskDtoRead getItem(int position) {
         return tasks.get(position);
     }
 
@@ -38,12 +42,19 @@ public class ListTaskAdapter extends BaseAdapter {
         return tasks.get(position).getId();
     }
 
+    public void setFragment(TaskManagementFragment fragment){
+        parentFragment=fragment;
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         TaskDtoRead task = tasks.get(i);
 
         View genereatedView = returnTaskView(viewGroup);
         defineTaskInformation(task, genereatedView);
+
+        TextView teste = genereatedView.findViewById(R.id.test_clickable);
+        teste.setOnClickListener(parentFragment);
 
         return genereatedView;
     }

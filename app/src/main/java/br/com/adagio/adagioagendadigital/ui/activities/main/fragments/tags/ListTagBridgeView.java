@@ -32,8 +32,8 @@ public class ListTagBridgeView {
         updateListAux();
     }
 
-    public Tag get(int id){
-        return listTagAdapter.getItem(id);
+    public Tag get(int position){
+        return listTagAdapter.getItem(position);
     }
 
     public void delete(int position){

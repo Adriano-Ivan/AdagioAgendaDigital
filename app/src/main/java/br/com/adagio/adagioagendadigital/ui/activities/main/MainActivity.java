@@ -2,6 +2,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.FormTagFragment;
@@ -178,10 +180,23 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action) {
+    public void onFragmentTaskFormInteraction(TaskManagementFragment.Action action, TaskDtoRead task) {
         returnScreenButton.setVisibility(View.VISIBLE);
         checkRegisterButton.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, formTaskFragment).commit();
+
+        if(task == null){
+            formTaskFragment = new FormTaskFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, formTaskFragment).commit();
+        } else {
+            Bundle data = new Bundle();
+            formTaskFragment  = new FormTaskFragment();
+
+            data.putSerializable("taskToEdit", task);
+            formTaskFragment.setArguments(data);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,formTaskFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -235,8 +250,15 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task) {
-        listTaskBridgeView.insert(task);
+    public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task,Integer id) {
+        Log.i("PRIORITY", task.getPriority_id()+"");
+
+        if(id == null){
+            listTaskBridgeView.insert(task);
+        } else {
+            listTaskBridgeView.update(task,id);
+        }
+
         goToTaskOrTagManagement(GoTo.TASK);
     }
 

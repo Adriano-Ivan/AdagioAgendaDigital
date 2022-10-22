@@ -4,8 +4,11 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
 
 public class ListTaskBridgeView {
@@ -29,6 +32,15 @@ public class ListTaskBridgeView {
         updateListAux();
     }
 
+    public void update(TaskDtoCreate t, Integer id){
+        taskDAO.update(t, id);
+        updateListAux();
+    }
+
+    public TaskDtoRead get(int position){
+        return listTaskAdapter.getItem(position);
+    }
+
     public void delete(int position){
         long id = listTaskAdapter.getItemId(position);
         Log.i("DELETE", "delete: "+id);
@@ -41,10 +53,10 @@ public class ListTaskBridgeView {
                 TaskStaticValues.OFFSET_LIST);
     }
 
-    public void configureAdapter(ListView tasksList){
+    public void configureAdapter(ListView tasksList, TaskManagementFragment fragment){
 
         tasksList.setAdapter(listTaskAdapter);
-
+        listTaskAdapter.setFragment(fragment);
     }
 
     private void testValues(){

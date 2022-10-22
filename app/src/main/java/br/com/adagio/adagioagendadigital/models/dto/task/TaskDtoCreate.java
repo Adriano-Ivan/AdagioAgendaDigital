@@ -1,5 +1,7 @@
 package br.com.adagio.adagioagendadigital.models.dto.task;
 
+import android.util.Log;
+
 import java.util.List;
 
 public class TaskDtoCreate {
@@ -7,7 +9,7 @@ public class TaskDtoCreate {
     public TaskDtoCreate(String description, String initialMoment,
                          String limitMoment,int priority_id,
                          int isFinished){
-       setAttributesExceptId(description,initialMoment,limitMoment,isFinished,priority_id);
+       setAttributesExceptId(description,initialMoment,limitMoment,priority_id,isFinished);
     }
 
     private void setAttributesExceptId(String description, String initialMoment,
@@ -17,6 +19,7 @@ public class TaskDtoCreate {
         this.initialMoment=initialMoment;
         this.limitMoment=limitMoment;
         this.isFinished=isFinished;
+        Log.i("CRIADO COM ISSO : ", ""+priority_id);
         this.priority_id = priority_id;
     }
 

@@ -46,15 +46,7 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         rootView= inflater.inflate(R.layout.fragment_form_tag, container, false);
 
-        if(getArguments() != null){
-            isToEdit = true;
-            tagToEdit = (Tag) getArguments().getSerializable("tagToEdit");
-
-            Log.i("tag", tagToEdit.getName()+" "+tagToEdit.getId());
-        } else {
-            isToEdit = false;
-            tagToEdit=null;
-        }
+        definePossibleAttributesToEdition();
 
         setAttributes();
         return rootView;
@@ -70,6 +62,18 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         defineViews();
         defineListeners();
         defineFields();
+    }
+
+    private void definePossibleAttributesToEdition(){
+        if(getArguments() != null){
+            isToEdit = true;
+            tagToEdit = (Tag) getArguments().getSerializable("tagToEdit");
+
+            Log.i("tag", tagToEdit.getName()+" "+tagToEdit.getId());
+        } else {
+            isToEdit = false;
+            tagToEdit=null;
+        }
     }
 
     private void defineViews(){

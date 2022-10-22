@@ -75,7 +75,7 @@
     <string name="task_show_options">Mostrar opções de configuração</string>
     <string name="create_your_task">Crie sua tarefa</string>
     <string name="teste">Teste</string>
-    <string name="fragment_task_submit">SUBMETER</string>
+    <string name="fragment_task_submit">Salvar tarefa</string>
     <string name="task_delete_option">Deletar tarefa</string>
     <string name="task_edit_option">Editar tarefa</string>
     <string name="task_confirmation_delete">Deseja realmente apagar essa tarefa ?</string>
@@ -104,5 +104,7 @@
     <string name="create_your_tag">Crie sua tag</string>
     <string name="fragment_form_tag_placeholder_name">Nome da tag</string>
     <string name="edit_your_tag">Edite sua tag</string>
+    <string name="fragment_form_is_finished_question">Concluída ?</string>
+    <string name="edit_your_task">Edite sua task</string>
 
 </resources>

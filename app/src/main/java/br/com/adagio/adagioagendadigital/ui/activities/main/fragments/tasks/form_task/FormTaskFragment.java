@@ -3,8 +3,10 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.for
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -12,12 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import org.w3c.dom.Text;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,6 +35,7 @@ import java.util.List;
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.data.priority.PriorityDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
@@ -38,6 +44,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     private View rootView;
 
+    private TextView textTopCreateOrEdit;
     private EditText descriptionEditText;
     private String limitMomentDate;
     private String initialMomentDate;
@@ -62,11 +69,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private TextView textViewInitialTime;
     private TextView textViewFinalTime;
 
-    private RadioGroup radioGroupToChooseIsFinishedOrNot;
+    private SwitchCompat switchCompatFinishedOrNot;
     private RadioGroup radioGroupToChoosePriority;
-
-    private RadioButton radioButtonToChooseNotFinished;
-    private RadioButton radioButtonToChooseFinished;
 
     private RadioButton radioButtonPriorityLow;
     private RadioButton radioButtonPriorityAverage;
@@ -82,6 +86,9 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private int finalDay; private int finalMonth; private int finalYear;private int finalHour;
     private int finalMinute;
     private int isFinished;
+
+    private TaskDtoRead possibleTaskToEdit;
+    private boolean isToEdit;
 
     public FormTaskFragment() {
 
@@ -99,6 +106,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_form_task, container, false);
 
+        definePossibleAttributesToEdition();
         setAttributes();
 
         return rootView;
@@ -117,6 +125,20 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         defineDefaultValues();
     }
 
+    private void definePossibleAttributesToEdition(){
+        if(getArguments() != null)    {
+            isToEdit = true;
+            possibleTaskToEdit = (TaskDtoRead) getArguments().getSerializable("taskToEdit");
+
+            Log.i("TASK", possibleTaskToEdit.getId()+
+                    " "+possibleTaskToEdit.getDescription()+
+                    " "+possibleTaskToEdit.getPriority_id());
+        } else {
+            isToEdit = false;
+            possibleTaskToEdit = null;
+        }
+    }
+
     private void defineAttributes(){
         priorityDAO =PriorityDAO.getInstance(getActivity());
 
@@ -128,6 +150,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void defineViews(){
+        textTopCreateOrEdit =rootView.findViewById(R.id.fragment_form_create_or_edit_your_task_text_view);
         descriptionEditText = rootView.findViewById(R.id.fragment_form_task_description);
         submitButton = rootView.findViewById(R.id.fragment_form_task_submit);
 
@@ -141,39 +164,26 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         textViewInitialTime = rootView.findViewById(R.id.fragment_form_task_text_view_initial_hour);
         textViewFinalTime = rootView.findViewById(R.id.fragment_form_task_text_view_final_hour);
 
-        radioGroupToChooseIsFinishedOrNot = rootView.findViewById(R.id.fragment_form_task_group_choose_is_finished_or_not);
+        switchCompatFinishedOrNot = rootView.findViewById(R.id.fragment_form_task_is_finished_or_not);
         radioGroupToChoosePriority = rootView.findViewById(R.id.fragment_form_task_group_choose_priority);
-
-        radioButtonToChooseFinished = rootView.findViewById(R.id.fragment_form_task_choose_is_finished);
-        radioButtonToChooseNotFinished = rootView.findViewById(R.id.fragment_form_task_choose_is_not_finished);
 
         radioButtonPriorityLow=rootView.findViewById(R.id.fragment_form_task_choose_short);
         radioButtonPriorityAverage=rootView.findViewById(R.id.fragment_form_task_choose_average);
         radioButtonPriorityHigh=rootView.findViewById(R.id.fragment_form_task_choose_high);
         radioButtonPriorityCritical=rootView.findViewById(R.id.fragment_form_task_choose_critical);
 
-        radioButtonPriorityLow.setChecked(true);
-        radioButtonToChooseNotFinished.setChecked(true);
+        if(possibleTaskToEdit == null){
+            switchCompatFinishedOrNot.setChecked(false);
+        } else if(isToEdit){
+            switchCompatFinishedOrNot.setChecked(possibleTaskToEdit.isFinished());
+        }
     }
 
     private void defineDefaultValues(){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             final LocalDateTime today = LocalDateTime.now();
 
-            day = today.getDayOfMonth();
-            finalDay = today.getDayOfMonth();
-
-            month = today.getMonthValue();
-            finalMonth = today.getMonthValue();
-
-            year = today.getYear();
-            finalYear =today.getYear();
-
-            hour = today.getHour();
-            finalHour  = 23;
-
-            minute = today.getMinute();
-            finalMinute=59;
+            defineMomentProperties(today);
 
             textViewInitialDate.setText(String.format("%s/%s/%s", returnDayOrMonthOrHourOrMinute(day),
                     returnDayOrMonthOrHourOrMinute(month),year));
@@ -182,7 +192,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
             textViewInitialTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(hour),
                     returnDayOrMonthOrHourOrMinute(minute)));
-            textViewFinalTime.setText(String.format("%s:%s",finalHour,finalMinute));
+            textViewFinalTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(finalHour),
+                    returnDayOrMonthOrHourOrMinute(finalMinute)));
 
             initialMomentDate = String.format("%s-%s-%s",
                     year,
@@ -204,9 +215,80 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                     returnDayOrMonthOrHourOrMinute(finalMinute),
                     "00");
 
-            isFinished = 0;
+            defineDescriptionAndIsFinishedAndPriority();
+        }
+    }
 
+    private void defineDescriptionAndIsFinishedAndPriority(){
+        if(possibleTaskToEdit == null){
+            isFinished = 0;
             priority_id = priorities.get(1).getId();
+            descriptionEditText.setText("");
+            radioGroupToChoosePriority.check(radioButtonPriorityLow.getId());
+            textTopCreateOrEdit.setText(getResources().getString(R.string.create_your_task));
+        } else {
+            isFinished = possibleTaskToEdit.isFinished() ? 1 : 0;
+            defineTaskToEditPriority(possibleTaskToEdit.getPriority_id());
+            descriptionEditText.setText(possibleTaskToEdit.getDescription());
+            textTopCreateOrEdit.setText(getResources().getString(R.string.edit_your_task));
+        }
+    }
+
+    private void defineTaskToEditPriority(int priority_id) {
+        Priorities priority = null;
+
+        for(Priority priorityEnt : priorities){
+            if(priorityEnt.getId() == priority_id){
+                if(priorityEnt.getName().equals(Priorities.LOW.getValue())){
+                    priority = Priorities.LOW;
+                } else if(priorityEnt.getName().equals(Priorities.AVERAGE.getValue())){
+                    priority = Priorities.AVERAGE;
+                } else if(priorityEnt.getName().equals(Priorities.HIGH.getValue())){
+                    priority = Priorities.HIGH;
+                } else if(priorityEnt.getName().equals(Priorities.CRITICAL.getValue())){
+                    priority = Priorities.CRITICAL;
+                }
+            }
+        }
+
+        Log.i("PRIORITY VALUE", ""+priority.getValue());
+
+        definePriority(priority);
+    }
+
+    private void defineMomentProperties(LocalDateTime today) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            if(possibleTaskToEdit == null){
+                day = today.getDayOfMonth();
+                finalDay = today.getDayOfMonth();
+
+                month = today.getMonthValue();
+                finalMonth = today.getMonthValue();
+
+                year = today.getYear();
+                finalYear =today.getYear();
+
+                hour = today.getHour();
+                finalHour  = 23;
+
+                minute = today.getMinute();
+                finalMinute=59;
+            }else {
+                day = possibleTaskToEdit.getInitialMoment().getDayOfMonth();
+                finalDay = possibleTaskToEdit.getLimitMoment().getDayOfMonth();
+
+                month = possibleTaskToEdit.getInitialMoment().getMonthValue();
+                finalMonth = possibleTaskToEdit.getLimitMoment().getMonthValue();
+
+                year = possibleTaskToEdit.getInitialMoment().getYear();
+                finalYear = possibleTaskToEdit.getLimitMoment().getYear();
+
+                hour = possibleTaskToEdit.getInitialMoment().getHour();
+                finalHour =possibleTaskToEdit.getLimitMoment().getHour();
+
+                minute = possibleTaskToEdit.getInitialMoment().getMinute();
+                finalMinute = possibleTaskToEdit.getLimitMoment().getMinute();
+            }
         }
     }
 
@@ -220,12 +302,12 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         buttonToShowFinalDateDialog.setOnClickListener(this);
         buttonToShowFinalHourDialog.setOnClickListener(this);
 
-        radioGroupToChooseIsFinishedOrNot.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        switchCompatFinishedOrNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(i == R.id.fragment_form_task_choose_is_finished){
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
                     isFinished = 1;
-                } else {
+                } else{
                     isFinished = 0;
                 }
             }
@@ -237,6 +319,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                 defineLevelPriority(i);
             }
         });
+
     }
 
     private void defineLevelPriority(int i){
@@ -253,8 +336,20 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     private void definePriority(Priorities priorityEnum){
         for(Priority priority : priorities){
-            if(priority.getName() == priorityEnum.getValue()){
+            if(priority.getName().equals(priorityEnum.getValue())){
                 priority_id = priority.getId();
+
+                if(priorityEnum == Priorities.LOW){
+                    radioGroupToChoosePriority.check(radioButtonPriorityLow.getId());
+                } else if(priorityEnum == Priorities.AVERAGE){
+                    radioGroupToChoosePriority.check(radioButtonPriorityAverage.getId());
+                } else if(priorityEnum == Priorities.HIGH){
+                    radioGroupToChoosePriority.check(radioButtonPriorityHigh.getId());
+                } else if(priorityEnum == Priorities.CRITICAL){
+                    radioGroupToChoosePriority.check(radioButtonPriorityCritical.getId());
+                }
+
+                break;
             }
         }
     }
@@ -262,9 +357,9 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.fragment_form_task_submit){
+            Log.i("priority id", priority_id+"");
             submitTask();
         } else if(view.getId() == R.id.fragment_form_task_choose_initial_date){
-
             showInitialDateDialog();
         } else if(view.getId() == R.id.fragment_form_task_choose_initial_hour){
             showInitialHourDialog();
@@ -356,7 +451,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                     new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
-                            finalHour = hourL; minute=minuteL;
+                            finalHour = hourL; finalMinute=minuteL;
                             limitMomentTime = String.format("%s:%s:%s",
                                     returnDayOrMonthOrHourOrMinute(finalHour),
                                     returnDayOrMonthOrHourOrMinute(finalMinute),
@@ -387,14 +482,21 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void submitTask(){
+        Log.i("priority", "submitTask: "+priority_id);
         TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
                 returnInitialMoment(),
                 returnLimitMoment(),
                 priority_id,
                 isFinished
         );
+        Log.i("priority", "submitTask: "+tCreate.getPriority_id());
 
-        tListener.onFragmentTaskFormSubmitInteraction(tCreate);
+        if(possibleTaskToEdit == null){
+            tListener.onFragmentTaskFormSubmitInteraction(tCreate,null);
+        } else {
+            tListener.onFragmentTaskFormSubmitInteraction(tCreate, possibleTaskToEdit.getId());
+        }
+
     }
 
     private String returnInitialMoment(){
@@ -424,6 +526,6 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     public interface OnFragmentTaskFormCreateInteractionListener {
 
-        void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task);
+        void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task,Integer id);
     }
 }

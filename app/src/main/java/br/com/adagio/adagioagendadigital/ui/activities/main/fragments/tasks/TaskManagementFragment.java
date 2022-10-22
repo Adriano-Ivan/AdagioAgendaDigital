@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
 
 
@@ -112,7 +113,8 @@ public class TaskManagementFragment extends Fragment
     private void configureAdapter() {
         listTaskBridgeView = new ListTaskBridgeView(getActivity());
 
-        listTaskBridgeView.configureAdapter(listTasks);
+        listTaskBridgeView.configureAdapter(listTasks,this);
+
         registerForContextMenu(listTasks);
     }
 
@@ -135,6 +137,12 @@ public class TaskManagementFragment extends Fragment
             deleteTaskConfirmationModal = new DeleteTaskConfirmationModal(info.position);
             deleteTaskConfirmationModal.show(getActivity().getSupportFragmentManager(), "dialog");
 
+        } else if(item.getItemId() == R.id.menu_task_edit){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
+                    item.getMenuInfo();
+
+            TaskDtoRead task = listTaskBridgeView.get(info.position);
+            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK, task);
         }
 
         return super.onContextItemSelected(item);
@@ -150,9 +158,11 @@ public class TaskManagementFragment extends Fragment
 
            setConfigurationVisibilitity(false);
         } else if(view.getId() == R.id.fragment_task_user_wants_to_create_task){
-            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK);
+            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
         }else if(view.getId() == R.id.fragment_task_fab_button_tasks){
-            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK);
+            mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
+        } else if(view.getId() == R.id.test_clickable){
+            Log.i("teste", "onClick: test clickable");
         }
     }
 
@@ -180,7 +190,7 @@ public class TaskManagementFragment extends Fragment
 
     public interface OnFragmentTaskFormInteractionListener {
 
-        void onFragmentTaskFormInteraction(Action action);
+        void onFragmentTaskFormInteraction(Action action, TaskDtoRead task);
     }
 
     public enum Action {

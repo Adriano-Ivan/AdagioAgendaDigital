@@ -61,6 +61,7 @@ public class TaskDAO {
         @SuppressLint("Range") String initialMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.INITIAL_MOMENT));
         @SuppressLint("Range") String limitMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.LIMIT_MOMENT));
         @SuppressLint("Range") int isFinished = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.IS_FINISHED));
+        @SuppressLint("Range") int priority_id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.PRIORITY_ID));
 
         LocalDateTime initialMomentDateTime=null;
         LocalDateTime limitMomentDateTime=null;
@@ -72,7 +73,7 @@ public class TaskDAO {
 
         boolean isFinishedBoolean = isFinished == 0 ? false : true;
 
-        return new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean);
+        return new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean,priority_id);
     }
 
     public void save(TaskDtoCreate task) {
@@ -110,6 +111,19 @@ public class TaskDAO {
               "%s = %s", DbTaskStructure.Columns.ID,
               id
       ) ,null);
+    }
+
+    public void update(TaskDtoCreate t, Integer id) {
+        ContentValues values = new ContentValues();
+        values.put(DbTaskStructure.Columns.PRIORITY_ID, t.getPriority_id());
+        values.put(DbTaskStructure.Columns.IS_FINISHED,t.isFinished());
+        values.put(DbTaskStructure.Columns.DESCRIPTION,t.getDescription());
+        values.put(DbTaskStructure.Columns.INITIAL_MOMENT,t.getInitialMoment());
+        values.put(DbTaskStructure.Columns.LIMIT_MOMENT,t.getLimitMoment());
+
+        db.update(DbTaskStructure.TABLE_NAME,values,
+                 DbTaskStructure.Columns.ID + " = ?",
+                new String[] { String.valueOf(id)});
     }
 }
 
