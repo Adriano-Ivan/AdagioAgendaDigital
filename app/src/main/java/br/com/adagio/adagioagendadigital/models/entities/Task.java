@@ -24,6 +24,8 @@ public class Task {
 
     private boolean isFinished;
 
+    private int priority_id;
+
     private List<Integer> tags;
 
     public void setId(int id) {
