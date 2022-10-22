@@ -125,6 +125,15 @@ public class TaskDAO {
                  DbTaskStructure.Columns.ID + " = ?",
                 new String[] { String.valueOf(id)});
     }
+
+    public void updateToFinished(TaskDtoRead task){
+        ContentValues values = new ContentValues();
+        values.put(DbTaskStructure.Columns.IS_FINISHED, 1);
+
+        db.update(DbTaskStructure.TABLE_NAME, values,
+                DbTaskStructure.Columns.ID + " = ?",
+                new String[] {String.valueOf(task.getId())});
+    }
 }
 
 

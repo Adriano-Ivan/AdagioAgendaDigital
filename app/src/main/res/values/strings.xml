@@ -106,5 +106,6 @@
     <string name="edit_your_tag">Edite sua tag</string>
     <string name="fragment_form_is_finished_question">Concluída ?</string>
     <string name="edit_your_task">Edite sua task</string>
+    <string name="item_task_finish_task">Concluir</string>
 
 </resources>

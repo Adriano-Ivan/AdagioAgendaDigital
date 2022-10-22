@@ -37,6 +37,11 @@ public class ListTaskBridgeView {
         updateListAux();
     }
 
+    public void setTaskAsFinished(TaskDtoRead task){
+        taskDAO.updateToFinished(task);
+        updateListAux();
+    }
+
     public TaskDtoRead get(int position){
         return listTaskAdapter.getItem(position);
     }

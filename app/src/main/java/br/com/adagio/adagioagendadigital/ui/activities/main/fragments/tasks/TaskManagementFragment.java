@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
 
@@ -161,9 +162,11 @@ public class TaskManagementFragment extends Fragment
             mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
         }else if(view.getId() == R.id.fragment_task_fab_button_tasks){
             mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
-        } else if(view.getId() == R.id.test_clickable){
-            Log.i("teste", "onClick: test clickable");
         }
+    }
+
+    public void setTaskAsFinished(TaskDtoRead task){
+        listTaskBridgeView.setTaskAsFinished(task);
     }
 
     @Override

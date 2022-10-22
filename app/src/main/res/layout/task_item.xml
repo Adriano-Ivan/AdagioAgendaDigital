@@ -52,11 +52,17 @@
         android:layout_weight="1"/>
 
     <TextView
-        android:id="@+id/test_clickable"
+        android:id="@+id/item_task_finish_task"
         android:clickable="true"
+        android:backgroundTint="@color/green"
+        android:background="@color/green"
+        android:padding="9dp"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="teste"
+        android:textSize="18dp"
+        android:layout_margin="8dp"
+        android:text="@string/item_task_finish_task"
         />
 
 </LinearLayout>

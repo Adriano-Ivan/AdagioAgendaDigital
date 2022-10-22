@@ -1,6 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,16 @@ public class ListTaskAdapter extends BaseAdapter {
         View genereatedView = returnTaskView(viewGroup);
         defineTaskInformation(task, genereatedView);
 
-        TextView teste = genereatedView.findViewById(R.id.test_clickable);
-        teste.setOnClickListener(parentFragment);
+        TextView teste = genereatedView.findViewById(R.id.item_task_finish_task);
+
+
+        teste.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("FINISH", "onClick: ");
+                parentFragment.setTaskAsFinished(task);
+            }
+        });
 
         return genereatedView;
     }
