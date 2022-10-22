@@ -29,7 +29,7 @@ public class ListTagAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Tag getItem(int position) {
         return tags.get(position);
     }
 

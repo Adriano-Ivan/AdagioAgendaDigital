@@ -135,7 +135,6 @@ public class TaskManagementFragment extends Fragment
             deleteTaskConfirmationModal = new DeleteTaskConfirmationModal(info.position);
             deleteTaskConfirmationModal.show(getActivity().getSupportFragmentManager(), "dialog");
 
-            //            listTaskBridgeView.delete(info.position);
         }
 
         return super.onContextItemSelected(item);

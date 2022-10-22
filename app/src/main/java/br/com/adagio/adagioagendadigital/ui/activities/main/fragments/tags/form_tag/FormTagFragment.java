@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,12 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
     private OnFragmentTagFormCreateInteractionListener tListener;
 
     private View rootView;
+    private TextView createOrEditYourTagTextView;
     private TextView nameTextView;
     private Button buttonSubmit;
+
+    private boolean isToEdit;
+    private Tag tagToEdit;
 
     public FormTagFragment() {
 
@@ -41,22 +46,54 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         rootView= inflater.inflate(R.layout.fragment_form_tag, container, false);
 
+        if(getArguments() != null){
+            isToEdit = true;
+            tagToEdit = (Tag) getArguments().getSerializable("tagToEdit");
+
+            Log.i("tag", tagToEdit.getName()+" "+tagToEdit.getId());
+        } else {
+            isToEdit = false;
+            tagToEdit=null;
+        }
+
         setAttributes();
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setAttributes();
     }
 
     private void setAttributes(){
         defineViews();
         defineListeners();
+        defineFields();
     }
 
     private void defineViews(){
         nameTextView = rootView.findViewById(R.id.fragment_form_tag_name);
         buttonSubmit = rootView.findViewById(R.id.fragment_form_tag_submit);
+        createOrEditYourTagTextView=rootView.findViewById(R.id.create_or_edit_your_tag_text_view);
+
     }
 
     private void defineListeners(){
         buttonSubmit.setOnClickListener(this);
+    }
+
+    private void defineFields(){
+        if(isToEdit){
+            createOrEditYourTagTextView.setText(getResources()
+                    .getString(R.string.edit_your_tag));
+
+            nameTextView.setText(tagToEdit.getName());
+            Log.i("INPUT NAME", nameTextView.getText().toString());
+        } else {
+            createOrEditYourTagTextView.setText(getResources()
+                    .getString(R.string.create_your_tag));
+        }
     }
 
     @Override
@@ -69,7 +106,12 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
     private void submitTag(){
         Tag tag = new Tag(nameTextView.getText().toString());
 
-        tListener.onFragmentTagFormSubmitInteraction(tag);
+        if(isToEdit){
+            tListener.onFragmentTagFormEditInteraction(tag, tagToEdit);
+        } else {
+            tListener.onFragmentTagFormSubmitInteraction(tag);
+        }
+
     }
 
     public void auxSubmitTag() {
@@ -97,5 +139,6 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentTagFormCreateInteractionListener {
 
         void onFragmentTagFormSubmitInteraction(Tag tag);
+        void onFragmentTagFormEditInteraction(Tag tag,Tag tagToEdit);
     }
 }

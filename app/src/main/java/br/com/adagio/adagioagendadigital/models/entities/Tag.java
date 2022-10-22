@@ -1,8 +1,9 @@
 package br.com.adagio.adagioagendadigital.models.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Tag {
+public class Tag implements Serializable {
 
     private int id;
 

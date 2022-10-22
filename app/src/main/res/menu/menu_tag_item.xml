@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_tag_dit"
-
+    <item android:id="@+id/menu_tag_edit"
         android:title="@string/task_edit_option"/>
-    <item android:id="@+id/menu_tag_delete"
 
+    <item android:id="@+id/menu_tag_delete"
         android:title="@string/task_delete_option"/>
 </menu>

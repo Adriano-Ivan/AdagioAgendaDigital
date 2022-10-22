@@ -96,4 +96,13 @@ public class TagDAO {
                 id
         ) ,null);
     }
+
+    public void update(int id, Tag tag) {
+        ContentValues values = new ContentValues();
+        values.put(DbTagStructure.Columns.NAME, tag.getName());
+
+        db.update(DbTagStructure.TABLE_NAME,values,
+                DbTagStructure.Columns.ID + " = ?",
+                new String[] {String.valueOf(id)});
+    }
 }

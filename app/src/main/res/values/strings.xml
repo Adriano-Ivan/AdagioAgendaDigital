@@ -103,5 +103,6 @@
     <string name="tag_confirmation_delete">Deseja realmente deletar esta tag ?</string>
     <string name="create_your_tag">Crie sua tag</string>
     <string name="fragment_form_tag_placeholder_name">Nome da tag</string>
+    <string name="edit_your_tag">Edite sua tag</string>
 
 </resources>

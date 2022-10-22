@@ -32,6 +32,10 @@ public class ListTagBridgeView {
         updateListAux();
     }
 
+    public Tag get(int id){
+        return listTagAdapter.getItem(id);
+    }
+
     public void delete(int position){
         long id = listTagAdapter.getItemId(position);
         Log.i("DELETE", "delete: "+id);
@@ -46,5 +50,10 @@ public class ListTagBridgeView {
 
     public void configureAdapter(ListView tagsList){
         tagsList.setAdapter(listTagAdapter);
+    }
+
+    public void update(Tag tag, int id) {
+        tagDAO.update(id, tag);
+        updateListAux();
     }
 }

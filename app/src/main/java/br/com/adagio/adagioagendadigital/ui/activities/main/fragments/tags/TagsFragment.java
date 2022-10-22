@@ -16,10 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.entities.Tag;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationModal;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.ListTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
@@ -36,6 +38,8 @@ public class TagsFragment extends Fragment
     private FloatingActionButton fabButtonGoToTags;
     private OnFragmentTagFormInteractionListener fListener;
     private DeleteTagConfirmationModal deleteTagConfirmationModal;
+
+    private Tag possibleTagToEdit;
 
     public TagsFragment() {
 
@@ -64,6 +68,8 @@ public class TagsFragment extends Fragment
     }
 
     private void setAttributes(){
+        possibleTagToEdit = null;
+
         defineViews();
         defineListeners();
 
@@ -110,7 +116,12 @@ public class TagsFragment extends Fragment
             deleteTagConfirmationModal = new DeleteTagConfirmationModal(info.position);
             deleteTagConfirmationModal.show(getActivity().getSupportFragmentManager(), "dialog");
 
+        } else if(item.getItemId() == R.id.menu_tag_edit){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
+                    item.getMenuInfo();
 
+            possibleTagToEdit = listTagBridgeView.get(info.position);
+            fListener.onFragmentTagFormInteraction(Action.GO_TO_TAG,possibleTagToEdit);
         }
 
         return super.onContextItemSelected(item);
@@ -141,13 +152,13 @@ public class TagsFragment extends Fragment
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.fragment_tag_fab_button_tag){
-            fListener.onFragmentTagFormInteraction(Action.GO_TO_TAG);
+            fListener.onFragmentTagFormInteraction(Action.GO_TO_TAG,null);
         }
     }
 
     public interface OnFragmentTagFormInteractionListener {
 
-        void onFragmentTagFormInteraction(Action action);
+        void onFragmentTagFormInteraction(Action action, Tag tag);
     }
 
     public enum Action {

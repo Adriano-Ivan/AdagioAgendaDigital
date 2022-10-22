@@ -185,10 +185,24 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentTagFormInteraction(TagsFragment.Action action) {
+    public void onFragmentTagFormInteraction(TagsFragment.Action action, Tag tag) {
         returnScreenButton.setVisibility(View.VISIBLE);
         checkRegisterButton.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,formTagFragment).commit();
+
+        if(tag == null){
+            formTagFragment =new FormTagFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,formTagFragment)
+                    .commit();
+        } else{
+            Bundle data = new Bundle();
+            formTagFragment = new FormTagFragment();
+
+            data.putSerializable("tagToEdit", tag);
+            formTagFragment.setArguments(data);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,formTagFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -242,6 +256,12 @@ public  class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentTagFormSubmitInteraction(Tag tag) {
         listTagBridgeView.insert(tag);
+        goToTaskOrTagManagement(GoTo.TAG);
+    }
+
+    @Override
+    public void onFragmentTagFormEditInteraction(Tag tag, Tag tagToEdit) {
+        listTagBridgeView.update(tag, tagToEdit.getId());
         goToTaskOrTagManagement(GoTo.TAG);
     }
 
