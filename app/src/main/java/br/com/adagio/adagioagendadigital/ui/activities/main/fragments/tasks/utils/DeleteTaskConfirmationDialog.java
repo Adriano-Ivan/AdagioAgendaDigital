@@ -9,15 +9,14 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import br.com.adagio.adagioagendadigital.R;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 
-public class DeleteTaskConfirmationModal  extends DialogFragment {
+public class DeleteTaskConfirmationDialog extends DialogFragment {
 
     private  OnFragmentTaskDeleteInteractionListener dListener;
 
     private int positionOfTaskToDelete;
 
-    public DeleteTaskConfirmationModal(int position){
+    public DeleteTaskConfirmationDialog(int position){
         positionOfTaskToDelete=position;
     }
 

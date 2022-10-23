@@ -22,14 +22,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.w3c.dom.Text;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
@@ -39,6 +33,7 @@ import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 
 public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
@@ -87,8 +82,13 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private int finalMinute;
     private int isFinished;
 
+    private AddTagToTaskDialog addTagToTaskDialog;
+    private ArrayList<Integer> acumulatedIdTags =new ArrayList<>();
+
     private TaskDtoRead possibleTaskToEdit;
     private boolean isToEdit;
+
+    private Button buttonToOpenTagDialog;
 
     public FormTaskFragment() {
 
@@ -172,6 +172,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         radioButtonPriorityHigh=rootView.findViewById(R.id.fragment_form_task_choose_high);
         radioButtonPriorityCritical=rootView.findViewById(R.id.fragment_form_task_choose_critical);
 
+        buttonToOpenTagDialog = rootView.findViewById(R.id.fragment_form_task_button_to_open_tags_dialog);
+
         if(possibleTaskToEdit == null){
             switchCompatFinishedOrNot.setChecked(false);
         } else if(isToEdit){
@@ -215,19 +217,21 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                     returnDayOrMonthOrHourOrMinute(finalMinute),
                     "00");
 
-            defineDescriptionAndIsFinishedAndPriority();
+            defineDescriptionAndIsFinishedAndPriorityAndTagIds();
         }
     }
 
-    private void defineDescriptionAndIsFinishedAndPriority(){
+    private void defineDescriptionAndIsFinishedAndPriorityAndTagIds(){
         if(possibleTaskToEdit == null){
             isFinished = 0;
             priority_id = priorities.get(1).getId();
             descriptionEditText.setText("");
             radioGroupToChoosePriority.check(radioButtonPriorityLow.getId());
             textTopCreateOrEdit.setText(getResources().getString(R.string.create_your_task));
+            acumulatedIdTags = new ArrayList<>();
         } else {
             isFinished = possibleTaskToEdit.isFinished() ? 1 : 0;
+            acumulatedIdTags =new ArrayList<>(possibleTaskToEdit.getTags()) ;
             defineTaskToEditPriority(possibleTaskToEdit.getPriority_id());
             descriptionEditText.setText(possibleTaskToEdit.getDescription());
             textTopCreateOrEdit.setText(getResources().getString(R.string.edit_your_task));
@@ -301,6 +305,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
         buttonToShowFinalDateDialog.setOnClickListener(this);
         buttonToShowFinalHourDialog.setOnClickListener(this);
+        buttonToOpenTagDialog.setOnClickListener(this);
 
         switchCompatFinishedOrNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -367,7 +372,14 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             showFinalDateDialog();
         } else if(view.getId() == R.id.fragment_form_task_choose_final_hour){
             showFinalTimeDialog();
+        } else if(view.getId() == R.id.fragment_form_task_button_to_open_tags_dialog){
+            addTagToTaskDialog = new AddTagToTaskDialog(acumulatedIdTags);
+            addTagToTaskDialog.show(getActivity().getSupportFragmentManager(),"dialog");
         }
+    }
+
+    public void defineTagIds(ArrayList<Integer> ids){
+        acumulatedIdTags = new ArrayList<>(ids);
     }
 
     private void showInitialDateDialog(){
@@ -487,7 +499,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                 returnInitialMoment(),
                 returnLimitMoment(),
                 priority_id,
-                isFinished
+                isFinished,
+                acumulatedIdTags
         );
         Log.i("priority", "submitTask: "+tCreate.getPriority_id());
 

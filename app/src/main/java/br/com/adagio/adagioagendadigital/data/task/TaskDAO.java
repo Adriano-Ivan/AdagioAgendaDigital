@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
+import br.com.adagio.adagioagendadigital.data.tag.DbTagStructure;
+import br.com.adagio.adagioagendadigital.data.task_tag.DbTaskTagStructure;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 
@@ -55,7 +57,7 @@ public class TaskDAO {
 
     }
 
-    private static TaskDtoRead fromCursor(Cursor c){
+    private  TaskDtoRead fromCursor(Cursor c){
         @SuppressLint("Range") int id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.ID));
         @SuppressLint("Range") String description = c.getString(c.getColumnIndex(DbTaskStructure.Columns.DESCRIPTION));
         @SuppressLint("Range") String initialMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.INITIAL_MOMENT));
@@ -71,9 +73,12 @@ public class TaskDAO {
               limitMomentDateTime = LocalDateTime.parse(limitMoment);
         }
 
+        ArrayList<Integer> tagIds = returnTagIds(id);
+
         boolean isFinishedBoolean = isFinished == 0 ? false : true;
 
-        return new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean,priority_id);
+        return new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean,priority_id,
+                tagIds);
     }
 
     public void save(TaskDtoCreate task) {
@@ -85,6 +90,67 @@ public class TaskDAO {
         values.put(DbTaskStructure.Columns.PRIORITY_ID, task.getPriority_id());
 
         long id = db.insert(DbTaskStructure.TABLE_NAME, null, values);
+
+        insertTaskTags(id, task.getTags());
+    }
+
+    private  ArrayList<Integer> returnTagIds(Integer id){
+        String query = String.format("SELECT * FROM %s WHERE %s = %s;",
+                DbTaskTagStructure.TABLE_NAME,DbTaskTagStructure.Columns.TASK_ID, id);
+
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    @SuppressLint("Range") int tagId = c.getInt(
+                            c.getColumnIndex(DbTaskTagStructure.Columns.TAG_ID)
+                    );
+                    ids.add(tagId);
+                }while(c.moveToNext());
+            }
+
+        }
+
+        return new ArrayList<>(ids);
+    }
+
+    private boolean tagAndTaskVinculationAlreadyExists(long task, int tag){
+        String query = String.format("SELECT * FROM %s WHERE %s = %s and %s = %s;",
+                DbTaskTagStructure.TABLE_NAME,DbTaskTagStructure.Columns.TASK_ID, task,
+                                    DbTaskTagStructure.Columns.TAG_ID, tag);
+
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    @SuppressLint("Range") int tagId = c.getInt(
+                            c.getColumnIndex(DbTaskTagStructure.Columns.TAG_ID)
+                    );
+                    ids.add(tagId);
+                }while(c.moveToNext());
+            }
+
+        }
+
+        return ids.size() > 0;
+    }
+
+    private void insertTaskTags(long id, ArrayList<Integer> tags){
+        for(Integer tagId: tags){
+            if(!tagAndTaskVinculationAlreadyExists(id, tagId)){
+                ContentValues values = new ContentValues();
+
+                values.put(DbTaskTagStructure.Columns.TASK_ID,id);
+                values.put(DbTaskTagStructure.Columns.TAG_ID, tagId);
+
+                db.insert(DbTaskTagStructure.TABLE_NAME, null, values);
+            }
+
+        }
     }
 
     public TaskDtoRead get(int id){
@@ -113,6 +179,15 @@ public class TaskDAO {
       ) ,null);
     }
 
+    private void deleteUndoneVinculation(Integer taskId, ArrayList<Integer> tagIds){
+        for(Integer tagId : tagIds){
+            db.delete(DbTaskTagStructure.TABLE_NAME,String.format(
+                    "%s = %s and %s = %s ", DbTaskTagStructure.Columns.TASK_ID,
+                    taskId, DbTaskTagStructure.Columns.TAG_ID,tagId
+            ) ,null);
+        }
+    }
+
     public void update(TaskDtoCreate t, Integer id) {
         ContentValues values = new ContentValues();
         values.put(DbTaskStructure.Columns.PRIORITY_ID, t.getPriority_id());
@@ -124,6 +199,10 @@ public class TaskDAO {
         db.update(DbTaskStructure.TABLE_NAME,values,
                  DbTaskStructure.Columns.ID + " = ?",
                 new String[] { String.valueOf(id)});
+
+        insertTaskTags(id, t.getTags());
+        ArrayList<Integer> undoneVinculations = returnUndoneVinculation(id,t.getTags());
+        deleteUndoneVinculation(id, undoneVinculations);
     }
 
     public void updateToFinished(TaskDtoRead task){
@@ -133,6 +212,45 @@ public class TaskDAO {
         db.update(DbTaskStructure.TABLE_NAME, values,
                 DbTaskStructure.Columns.ID + " = ?",
                 new String[] {String.valueOf(task.getId())});
+    }
+
+    private ArrayList<Integer> returnUndoneVinculation(Integer id, ArrayList<Integer> tagIds){
+        ArrayList<Integer> undoneVinculations = new ArrayList<>();
+
+        String query = String.format("SELECT * FROM %s WHERE %s = %s;",
+                DbTaskTagStructure.TABLE_NAME,DbTaskTagStructure.Columns.TASK_ID, id);
+
+        ArrayList<Integer> oldTags = new ArrayList<>();
+
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    @SuppressLint("Range") int tagId = c.getInt(
+                            c.getColumnIndex(DbTaskTagStructure.Columns.TAG_ID)
+                    );
+                    oldTags.add(tagId);
+                }while(c.moveToNext());
+            }
+
+        }
+
+        for(Integer oldTag:oldTags){
+            if(!newTagsHaveOldTag(oldTag, tagIds)){
+                undoneVinculations.add(oldTag);
+            }
+        }
+
+        return new ArrayList<>(undoneVinculations);
+    }
+
+    private boolean newTagsHaveOldTag(Integer tagId, ArrayList<Integer> newTagIds){
+        for(Integer id : newTagIds){
+            if(id == tagId){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

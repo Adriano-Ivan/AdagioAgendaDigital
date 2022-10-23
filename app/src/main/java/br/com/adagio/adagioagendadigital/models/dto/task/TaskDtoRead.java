@@ -4,31 +4,35 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDtoRead implements Serializable {
 
 
     public TaskDtoRead(int id, String description, LocalDateTime initialMoment,
-                         LocalDateTime limitMoment,
-                         boolean isFinished,int priority_id){
+                       LocalDateTime limitMoment,
+                       boolean isFinished, int priority_id, ArrayList<Integer> tagIds){
         this.id = id;
-        setAttributesExceptId(description,initialMoment,limitMoment,isFinished,priority_id);
+        setAttributesExceptId(description,initialMoment,limitMoment,isFinished,priority_id,
+                tagIds);
     }
 
     public TaskDtoRead(String description, LocalDateTime initialMoment,
                          LocalDateTime limitMoment,
-                         boolean isFinished){
-        setAttributesExceptId(description,initialMoment,limitMoment,isFinished,null);
+                         boolean isFinished,ArrayList<Integer> tagIds){
+        setAttributesExceptId(description,initialMoment,limitMoment,isFinished,null,tagIds);
     }
 
     private void setAttributesExceptId(String description, LocalDateTime initialMoment,
                                        LocalDateTime limitMoment,
-                                       boolean isFinished,Integer priority_id){
+                                       boolean isFinished,Integer priority_id,
+                                       ArrayList<Integer> tagIds){
         this.description=description;
         this.initialMoment=initialMoment;
         this.limitMoment=limitMoment;
         this.isFinished=isFinished;
+        this.tags = new ArrayList<>(tagIds);
 
         Log.i("priority é isso", priority_id+"");
         if(priority_id !=null){
@@ -49,7 +53,7 @@ public class TaskDtoRead implements Serializable {
 
     private boolean isFinished;
 
-    private List<Integer> tags;
+    private ArrayList<Integer> tags;
 
     public int getPriority_id() {
         return priority_id;
@@ -75,7 +79,7 @@ public class TaskDtoRead implements Serializable {
         isFinished = finished;
     }
 
-    public void setTags(List<Integer> tags) {
+    public void setTags(ArrayList<Integer> tags) {
         this.tags = tags;
     }
 
@@ -95,7 +99,7 @@ public class TaskDtoRead implements Serializable {
         return isFinished;
     }
 
-    public List<Integer> getTags() {
+    public ArrayList<Integer> getTags() {
         return tags;
     }
 

@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
@@ -33,7 +35,8 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagsFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.ListTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.MainStaticValues;
 
@@ -43,8 +46,9 @@ public  class MainActivity extends AppCompatActivity implements
         FormTaskFragment.OnFragmentTaskFormCreateInteractionListener,
         FormTagFragment.OnFragmentTagFormCreateInteractionListener,
         TagsFragment.OnFragmentTagFormInteractionListener,
+        AddTagToTaskDialog.OnFragmentTaskAddTagInteractionListener,
         DeleteTagConfirmationModal.OnFragmentTagDeleteInteractionListener,
-        View.OnClickListener, DeleteTaskConfirmationModal.OnFragmentTaskDeleteInteractionListener  {
+        View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener  {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -285,6 +289,11 @@ public  class MainActivity extends AppCompatActivity implements
     public void onFragmentTagFormEditInteraction(Tag tag, Tag tagToEdit) {
         listTagBridgeView.update(tag, tagToEdit.getId());
         goToTaskOrTagManagement(GoTo.TAG);
+    }
+
+    @Override
+    public void onFragmentTaskAddInteraction(ArrayList<Integer> ids) {
+        formTaskFragment.defineTagIds(ids);
     }
 
     private enum GoTo{

@@ -22,13 +22,12 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.com.adagio.adagioagendadigital.R;
-import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
 
 
 public class TaskManagementFragment extends Fragment
-        implements View.OnClickListener, DeleteTaskConfirmationModal.OnFragmentTaskDeleteInteractionListener {
+        implements View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener {
 
     private LinearLayout containerOptions;
     private Button buttonHideContainerOptions;
@@ -38,7 +37,7 @@ public class TaskManagementFragment extends Fragment
     private View rootView;
     private ListTaskBridgeView listTaskBridgeView;
     private OnFragmentTaskFormInteractionListener mListener;
-    private DeleteTaskConfirmationModal deleteTaskConfirmationModal;
+    private DeleteTaskConfirmationDialog deleteTaskConfirmationModal;
 
     public TaskManagementFragment() {
 
@@ -135,7 +134,7 @@ public class TaskManagementFragment extends Fragment
         if(item.getItemId() == R.id.menu_task_delete){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                     item.getMenuInfo();
-            deleteTaskConfirmationModal = new DeleteTaskConfirmationModal(info.position);
+            deleteTaskConfirmationModal = new DeleteTaskConfirmationDialog(info.position);
             deleteTaskConfirmationModal.show(getActivity().getSupportFragmentManager(), "dialog");
 
         } else if(item.getItemId() == R.id.menu_task_edit){

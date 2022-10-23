@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import br.com.adagio.adagioagendadigital.R;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationModal;
 
 public class DeleteTagConfirmationModal extends DialogFragment {
 

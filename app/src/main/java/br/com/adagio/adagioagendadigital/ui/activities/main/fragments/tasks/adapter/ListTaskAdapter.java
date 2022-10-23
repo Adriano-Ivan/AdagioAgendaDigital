@@ -54,17 +54,6 @@ public class ListTaskAdapter extends BaseAdapter {
         View genereatedView = returnTaskView(viewGroup);
         defineTaskInformation(task, genereatedView);
 
-        TextView teste = genereatedView.findViewById(R.id.item_task_finish_task);
-
-
-        teste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("FINISH", "onClick: ");
-                parentFragment.setTaskAsFinished(task);
-            }
-        });
-
         return genereatedView;
     }
 
@@ -77,6 +66,21 @@ public class ListTaskAdapter extends BaseAdapter {
 
         TextView limitMoment =generatedView.findViewById(R.id.item_task_limit_moment);
         limitMoment.setText(task.getLimitMoment().toString());
+
+        TextView finishTaskShortcut = generatedView.findViewById(R.id.item_task_finish_task);
+
+        if(task.isFinished()){
+            finishTaskShortcut.setVisibility(View.GONE);
+        } else
+        {
+            finishTaskShortcut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("FINISH TASK", "onClick: "+task.getDescription());
+                    parentFragment.setTaskAsFinished(task);
+                }
+            });
+        }
     }
 
     private View returnTaskView(ViewGroup viewGroup){
