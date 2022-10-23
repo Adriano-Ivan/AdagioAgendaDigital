@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishTaskConfirmationDialog;
 
 
 public class TaskManagementFragment extends Fragment
@@ -38,6 +39,7 @@ public class TaskManagementFragment extends Fragment
     private ListTaskBridgeView listTaskBridgeView;
     private OnFragmentTaskFormInteractionListener mListener;
     private DeleteTaskConfirmationDialog deleteTaskConfirmationModal;
+    private FinishTaskConfirmationDialog finishTaskConfirmationDialog;
 
     public TaskManagementFragment() {
 
@@ -188,6 +190,11 @@ public class TaskManagementFragment extends Fragment
     @Override
     public void onFragmentTaskDeleteInteraction(int position) {
        listTaskBridgeView.delete(position);
+    }
+
+    public void openDialogToFinishTask(TaskDtoRead task) {
+        finishTaskConfirmationDialog = new FinishTaskConfirmationDialog(task);
+        finishTaskConfirmationDialog.show(getActivity().getSupportFragmentManager(),"dialog");
     }
 
     public interface OnFragmentTaskFormInteractionListener {

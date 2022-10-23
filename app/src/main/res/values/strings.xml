@@ -109,5 +109,6 @@
     <string name="item_task_finish_task">Concluir</string>
     <string name="form_task_add_tag_title">Selecione tags para vincular à tarefa</string>
     <string name="save">Salvar</string>
+    <string name="task_confirmation_finish">Deseja realmente concluir essa tarefa ?</string>
 
 </resources>

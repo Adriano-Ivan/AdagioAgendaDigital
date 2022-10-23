@@ -21,19 +21,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationModal;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
 
 
 public class TagsFragment extends Fragment
-        implements DeleteTagConfirmationModal.OnFragmentTagDeleteInteractionListener, View.OnClickListener {
+        implements DeleteTagConfirmationDialog.OnFragmentTagDeleteInteractionListener, View.OnClickListener {
 
     private View rootView;
     private ListTagBridgeView listTagBridgeView;
     private ListView listTags;
     private FloatingActionButton fabButtonGoToTags;
     private OnFragmentTagFormInteractionListener fListener;
-    private DeleteTagConfirmationModal deleteTagConfirmationModal;
+    private DeleteTagConfirmationDialog deleteTagConfirmationModal;
 
     private Tag possibleTagToEdit;
 
@@ -109,7 +109,7 @@ public class TagsFragment extends Fragment
         if(item.getItemId() == R.id.menu_tag_delete){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                     item.getMenuInfo();
-            deleteTagConfirmationModal = new DeleteTagConfirmationModal(info.position);
+            deleteTagConfirmationModal = new DeleteTagConfirmationDialog(info.position);
             deleteTagConfirmationModal.show(getActivity().getSupportFragmentManager(), "dialog");
 
         } else if(item.getItemId() == R.id.menu_tag_edit){

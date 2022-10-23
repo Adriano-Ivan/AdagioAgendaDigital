@@ -1,4 +1,4 @@
-package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils;
+package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,24 +9,25 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 
-public class DeleteTagConfirmationModal extends DialogFragment {
+public class FinishTaskConfirmationDialog  extends DialogFragment {
 
-    private OnFragmentTagDeleteInteractionListener dListener;
+    private OnFragmentTaskFinishInteractionListener fListener;
 
-    private int positionOfTagToDelete;
+    private TaskDtoRead taskToFinish;
 
-    public DeleteTagConfirmationModal(int position){
-        positionOfTagToDelete=position;
+    public FinishTaskConfirmationDialog(TaskDtoRead taskToFinish){
+        this.taskToFinish = taskToFinish;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.tag_confirmation_delete)
+        builder.setMessage(R.string.task_confirmation_finish)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dListener.onFragmentTagDeleteInteraction(positionOfTagToDelete);
+                        fListener.onFragmentTaskFinishInteraction(taskToFinish);
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -41,23 +42,22 @@ public class DeleteTagConfirmationModal extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentTagDeleteInteractionListener) {
-            dListener = (OnFragmentTagDeleteInteractionListener) context;
+        if (context instanceof OnFragmentTaskFinishInteractionListener) {
+            fListener = (OnFragmentTaskFinishInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement onFragmentTagDeleteInteraction");
+                    + " must implement onFragmentTaskDeleteInteraction");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        dListener = null;
+        fListener = null;
     }
 
-    public interface OnFragmentTagDeleteInteractionListener {
+    public interface OnFragmentTaskFinishInteractionListener {
 
-        void onFragmentTagDeleteInteraction(int position);
+        void onFragmentTaskFinishInteraction(TaskDtoRead taskToFinish);
     }
 }
-

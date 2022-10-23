@@ -25,7 +25,7 @@ import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.FormTagFragment;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationModal;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
@@ -35,6 +35,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagsFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.ListTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishTaskConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
@@ -47,7 +48,8 @@ public  class MainActivity extends AppCompatActivity implements
         FormTagFragment.OnFragmentTagFormCreateInteractionListener,
         TagsFragment.OnFragmentTagFormInteractionListener,
         AddTagToTaskDialog.OnFragmentTaskAddTagInteractionListener,
-        DeleteTagConfirmationModal.OnFragmentTagDeleteInteractionListener,
+        FinishTaskConfirmationDialog.OnFragmentTaskFinishInteractionListener,
+        DeleteTagConfirmationDialog.OnFragmentTagDeleteInteractionListener,
         View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener  {
 
     private BottomNavigationView bottomNavigationView;
@@ -294,6 +296,11 @@ public  class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentTaskAddInteraction(ArrayList<Integer> ids) {
         formTaskFragment.defineTagIds(ids);
+    }
+
+    @Override
+    public void onFragmentTaskFinishInteraction(TaskDtoRead taskToFinish) {
+        taskFragment.setTaskAsFinished(taskToFinish);
     }
 
     private enum GoTo{

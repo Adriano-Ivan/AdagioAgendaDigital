@@ -77,7 +77,7 @@ public class ListTaskAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     Log.i("FINISH TASK", "onClick: "+task.getDescription());
-                    parentFragment.setTaskAsFinished(task);
+                    parentFragment.openDialogToFinishTask(task);
                 }
             });
         }
