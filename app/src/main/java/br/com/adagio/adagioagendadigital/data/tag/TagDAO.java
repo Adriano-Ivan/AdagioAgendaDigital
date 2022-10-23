@@ -12,6 +12,7 @@ import java.util.List;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
 import br.com.adagio.adagioagendadigital.data.task.DbTaskStructure;
+import br.com.adagio.adagioagendadigital.data.task_tag.DbTaskTagStructure;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
@@ -91,10 +92,18 @@ public class TagDAO {
     }
 
     public void delete(long id){
+        deleteAssociations(id);
         db.delete(DbTagStructure.TABLE_NAME,String.format(
                 "%s = %s", DbTagStructure.Columns.ID,
                 id
         ) ,null);
+    }
+
+    public void deleteAssociations(long id){
+        db.delete(DbTaskTagStructure.TABLE_NAME, String.format(
+                "%s = %s", DbTaskTagStructure.Columns.TAG_ID,
+                id
+        ),null);
     }
 
     public void update(int id, Tag tag) {

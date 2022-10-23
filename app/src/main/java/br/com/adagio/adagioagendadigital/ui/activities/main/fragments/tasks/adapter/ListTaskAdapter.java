@@ -68,11 +68,20 @@ public class ListTaskAdapter extends BaseAdapter {
         limitMoment.setText(task.getLimitMoment().toString());
 
         TextView finishTaskShortcut = generatedView.findViewById(R.id.item_task_finish_task);
+        TextView notFinishTaskShortcut = generatedView.findViewById(R.id.item_task_not_finish_task);
 
         if(task.isFinished()){
             finishTaskShortcut.setVisibility(View.GONE);
+            notFinishTaskShortcut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("NOT FINISH TASK", "onClick: "+task.getDescription());
+                    parentFragment.openDialogToNotFinishTask(task);
+                }
+            });
         } else
         {
+            notFinishTaskShortcut.setVisibility(View.GONE);
             finishTaskShortcut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

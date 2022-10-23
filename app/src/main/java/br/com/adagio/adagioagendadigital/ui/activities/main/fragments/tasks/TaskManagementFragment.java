@@ -24,7 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishTaskConfirmationDialog;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishOrNotTaskConfirmationDialog;
 
 
 public class TaskManagementFragment extends Fragment
@@ -39,7 +39,7 @@ public class TaskManagementFragment extends Fragment
     private ListTaskBridgeView listTaskBridgeView;
     private OnFragmentTaskFormInteractionListener mListener;
     private DeleteTaskConfirmationDialog deleteTaskConfirmationModal;
-    private FinishTaskConfirmationDialog finishTaskConfirmationDialog;
+    private FinishOrNotTaskConfirmationDialog finishTaskConfirmationDialog;
 
     public TaskManagementFragment() {
 
@@ -170,6 +170,10 @@ public class TaskManagementFragment extends Fragment
         listTaskBridgeView.setTaskAsFinished(task);
     }
 
+    public void setTaskAsUnfinished(TaskDtoRead task){
+        listTaskBridgeView.setTaskAsUnfinished(task);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -193,7 +197,12 @@ public class TaskManagementFragment extends Fragment
     }
 
     public void openDialogToFinishTask(TaskDtoRead task) {
-        finishTaskConfirmationDialog = new FinishTaskConfirmationDialog(task);
+        finishTaskConfirmationDialog = new FinishOrNotTaskConfirmationDialog(task, FinishOrNotTaskConfirmationDialog.ActionToConfirm.FINISH);
+        finishTaskConfirmationDialog.show(getActivity().getSupportFragmentManager(),"dialog");
+    }
+
+    public void openDialogToNotFinishTask(TaskDtoRead task) {
+        finishTaskConfirmationDialog = new FinishOrNotTaskConfirmationDialog(task, FinishOrNotTaskConfirmationDialog.ActionToConfirm.NOT_FINISH);
         finishTaskConfirmationDialog.show(getActivity().getSupportFragmentManager(),"dialog");
     }
 

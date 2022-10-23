@@ -64,4 +64,18 @@
         android:text="@string/item_task_finish_task"
         />
 
+    <TextView
+        android:id="@+id/item_task_not_finish_task"
+        android:clickable="true"
+        android:backgroundTint="@color/blue"
+        android:background="@color/blue"
+        android:padding="9dp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:layout_margin="8dp"
+        android:text="@string/item_task_not_finish_task"
+        />
+
 </LinearLayout>

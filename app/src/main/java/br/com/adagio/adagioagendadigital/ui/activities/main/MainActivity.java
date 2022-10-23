@@ -35,7 +35,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagsFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.ListTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishTaskConfirmationDialog;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishOrNotTaskConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
@@ -48,7 +48,7 @@ public  class MainActivity extends AppCompatActivity implements
         FormTagFragment.OnFragmentTagFormCreateInteractionListener,
         TagsFragment.OnFragmentTagFormInteractionListener,
         AddTagToTaskDialog.OnFragmentTaskAddTagInteractionListener,
-        FinishTaskConfirmationDialog.OnFragmentTaskFinishInteractionListener,
+        FinishOrNotTaskConfirmationDialog.OnFragmentTaskFinishOrNotInteractionListener,
         DeleteTagConfirmationDialog.OnFragmentTagDeleteInteractionListener,
         View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener  {
 
@@ -299,8 +299,13 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentTaskFinishInteraction(TaskDtoRead taskToFinish) {
-        taskFragment.setTaskAsFinished(taskToFinish);
+    public void onFragmentTaskFinishOrNotInteraction(TaskDtoRead taskToFinish, FinishOrNotTaskConfirmationDialog.ActionToConfirm action) {
+        if(action == FinishOrNotTaskConfirmationDialog.ActionToConfirm.FINISH){
+            taskFragment.setTaskAsFinished(taskToFinish);
+        } else {
+            taskFragment.setTaskAsUnfinished(taskToFinish);
+        }
+
     }
 
     private enum GoTo{

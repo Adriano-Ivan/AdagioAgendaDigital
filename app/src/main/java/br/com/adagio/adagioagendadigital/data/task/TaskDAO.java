@@ -205,15 +205,6 @@ public class TaskDAO {
         deleteUndoneVinculation(id, undoneVinculations);
     }
 
-    public void updateToFinished(TaskDtoRead task){
-        ContentValues values = new ContentValues();
-        values.put(DbTaskStructure.Columns.IS_FINISHED, 1);
-
-        db.update(DbTaskStructure.TABLE_NAME, values,
-                DbTaskStructure.Columns.ID + " = ?",
-                new String[] {String.valueOf(task.getId())});
-    }
-
     private ArrayList<Integer> returnUndoneVinculation(Integer id, ArrayList<Integer> tagIds){
         ArrayList<Integer> undoneVinculations = new ArrayList<>();
 
@@ -251,6 +242,23 @@ public class TaskDAO {
             }
         }
         return false;
+    }
+
+    public void updateToFinished(TaskDtoRead task){
+        finishOrNot(task, 1);
+    }
+
+    public void updateToUnfinished(TaskDtoRead task) {
+        finishOrNot(task, 0);
+    }
+
+    private void finishOrNot(TaskDtoRead task, int opr){
+        ContentValues values = new ContentValues();
+        values.put(DbTaskStructure.Columns.IS_FINISHED, opr);
+
+        db.update(DbTaskStructure.TABLE_NAME, values,
+                DbTaskStructure.Columns.ID + " = ?",
+                new String[] {String.valueOf(task.getId())});
     }
 }
 

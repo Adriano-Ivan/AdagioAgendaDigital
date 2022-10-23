@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ListView;
 
-import androidx.fragment.app.Fragment;
-
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
@@ -37,11 +35,6 @@ public class ListTaskBridgeView {
         updateListAux();
     }
 
-    public void setTaskAsFinished(TaskDtoRead task){
-        taskDAO.updateToFinished(task);
-        updateListAux();
-    }
-
     public TaskDtoRead get(int position){
         return listTaskAdapter.getItem(position);
     }
@@ -64,21 +57,13 @@ public class ListTaskBridgeView {
         listTaskAdapter.setFragment(fragment);
     }
 
-    private void testValues(){
-        if(taskDAO.list(5,0).size() == 0){
-            auxTeste();
-        } else {
-            taskDAO.delete(8);
-        }
+    public void setTaskAsFinished(TaskDtoRead task){
+        taskDAO.updateToFinished(task);
+        updateListAux();
     }
 
-    private void auxTeste(){
-//        TaskDtoCreate task = new TaskDtoCreate("TESTE", "2022-08-09T14:30:32",
-//                "2022-08-11T15:43:38", 0);
-//        TaskDtoCreate task2 = new TaskDtoCreate("TESTE 2", "2022-09-09T14:30:32",
-//                "2022-10-11T15:43:38", 0);
-//
-//        taskDAO.save(task);
-//        taskDAO.save(task2);
+    public void setTaskAsUnfinished(TaskDtoRead task) {
+        taskDAO.updateToUnfinished(task);
+        updateListAux();
     }
 }
