@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.adagio.adagioagendadigital.data.notification.DbNotificationStructure;
 import br.com.adagio.adagioagendadigital.data.priority.DbPriorityStructure;
 import br.com.adagio.adagioagendadigital.data.tag.DbTagStructure;
 import br.com.adagio.adagioagendadigital.data.task.DbTaskStructure;
@@ -82,6 +83,26 @@ public class DbLayer extends SQLiteOpenHelper
             DbTagStructure.TABLE_NAME, DbTagStructure.Columns.ID
     );
 
+    private static final String SQL_DROP_NOTIFICATIONS_TB = String.format(
+            "DROP TABLE IF EXISTS %s", DbNotificationStructure.TABLE_NAME
+    );
+
+    private static final String SQL_CREATE_NOTIFICATIONS_TB = String.format(
+        "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, "+
+        "%s INTEGER NOT NULL, "+
+        "%s VARCHAR(30) NOT NULL, "+
+        "%s TEXT NOT NULL, "+
+        "%s TEXT NOT NULL, "+
+        "CONSTRAINT fk_task_priority "+
+        "FOREIGN KEY (%s) "+
+        "REFERENCES %s(%s)) ",
+        DbNotificationStructure.TABLE_NAME, DbNotificationStructure.Columns.ID,
+            DbNotificationStructure.Columns.TASK_ID, DbNotificationStructure.Columns.EMITTED_AT,
+            DbNotificationStructure.Columns.MESSAGE, DbNotificationStructure.Columns.PRIORITY_NAME,
+            DbNotificationStructure.Columns.TASK_ID, DbTaskStructure.TABLE_NAME,
+            DbTaskStructure.Columns.ID
+    );
+
     public static DbLayer getInstance(Context context){
         if(instance == null){
             instance = new DbLayer(context,DB_NAME,null,DB_VERSION);
@@ -122,6 +143,9 @@ public class DbLayer extends SQLiteOpenHelper
 
         sqLiteDatabase.execSQL(SQL_DROP_TASKS_TAGS_TB);
         sqLiteDatabase.execSQL(SQL_CREATE_TASKS_TAGS_TB);
+
+        sqLiteDatabase.execSQL(SQL_DROP_NOTIFICATIONS_TB);
+        sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TB);
     }
 
     @Override
