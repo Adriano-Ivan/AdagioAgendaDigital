@@ -26,6 +26,7 @@ import java.util.Calendar;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.HomeTodayDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.NumberPickerDialogToChooseYear;
 
 public class HomeFragment extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener
@@ -149,6 +150,9 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         Log.i("PERIOD: ", "onSelectedDayChange: "+year+" "+month+" "+dayOfMonth);
+
+        HomeTodayDialog todayDialog = new HomeTodayDialog();
+        todayDialog.show(getActivity().getSupportFragmentManager(),"dialog");
         HomeStaticValues.setPickedDayMemo(dayOfMonth);
     }
 
