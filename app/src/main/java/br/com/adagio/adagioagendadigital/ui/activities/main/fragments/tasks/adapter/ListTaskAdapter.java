@@ -75,7 +75,6 @@ public class ListTaskAdapter extends BaseAdapter {
             notFinishTaskShortcut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("NOT FINISH TASK", "onClick: "+task.getDescription());
                     parentFragment.openDialogToNotFinishTask(task);
                 }
             });
@@ -85,7 +84,6 @@ public class ListTaskAdapter extends BaseAdapter {
             finishTaskShortcut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("FINISH TASK", "onClick: "+task.getDescription());
                     parentFragment.openDialogToFinishTask(task);
                 }
             });

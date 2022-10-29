@@ -47,45 +47,36 @@
                     android:text="@string/fragment_task_order_by_date"/>
 
                 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                   android:id="@+id/fragment_task_order_datetime_options"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
                         <RadioButton android:id="@+id/fragment_task_order_by_initial_moment_asc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:text="@string/fragment_task_initial_moment_asc"
-                            android:onClick="onRadioButtonClicked"/>
+                      />
                         <RadioButton android:id="@+id/fragment_task_order_by_limit_moment_asc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:text="@string/fragment_task_limit_moment_asc"
-                            android:onClick="onRadioButtonClicked"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                       />
+
                         <RadioButton android:id="@+id/fragment_task_order_by_initial_moment_desc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:text="@string/fragment_task_initial_moment_desc"
-                            android:onClick="onRadioButtonClicked"/>
+                         />
                         <RadioButton android:id="@+id/fragment_task_order_by_limit_moment_desc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:text="@string/fragment_task_limit_moment_desc"
-                            android:onClick="onRadioButtonClicked"/>
-                    </LinearLayout>
-
+                         />
                 </RadioGroup>
             </LinearLayout>
 
@@ -102,9 +93,9 @@
                     android:text="@string/fragment_task_order_by_priority"/>
 
                 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/fragment_task_order_by_priority_options"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:orientation="horizontal">
                     <RadioButton android:id="@+id/fragment_task_order_by_priority_asc"
                         android:layout_width="wrap_content"
@@ -112,13 +103,13 @@
                         android:textColor="@color/white"
                         android:layout_marginRight="8dp"
                         android:text="@string/fragment_task_order_by_priority_asc"
-                        android:onClick="onRadioButtonClicked"/>
+                        />
                     <RadioButton android:id="@+id/fragment_task_order_by_priority_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:text="@string/fragment_task_order_by_priority_desc"
-                        android:onClick="onRadioButtonClicked"/>
+                      />
                 </RadioGroup>
             </LinearLayout>
 
@@ -152,7 +143,7 @@
 
         <Button
             android:id="@+id/fragment_task_hide_options"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:outlineAmbientShadowColor="@android:color/transparent"
@@ -164,9 +155,56 @@
             android:text="@string/fragment_task_hide_options"
             />
 
+        <LinearLayout
+            android:id="@+id/fragment_task_container_pagination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+                <ImageButton
+                    android:id="@+id/fragment_task_management_previous_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_baseline_navigate_before_24"
+                    android:layout_marginRight="4dp"
+                    android:backgroundTint="@android:color/transparent"
+                    />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/fragment_task_management_text_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:layout_gravity="center_vertical"
+                    />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                        android:id="@+id/fragment_task_management_next_page"
+                        android:layout_width="wrap_content"
+                        android:tooltipText="@string/task_next_page"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_baseline_navigate_next_24"
+                        android:layout_marginRight="4dp"
+                        android:backgroundTint="@android:color/transparent"
+                        />
+        </LinearLayout>
+
         <ListView
             android:id="@+id/fragment_task_list_tasks"
             android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/listViewMarginBottom"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
@@ -181,6 +219,7 @@
         android:src="@drawable/ic_baseline_add_24"
         android:contentDescription="@string/fragment_task_user_wants_to_create_task"
         android:layout_margin="10dp" />
+
 </RelativeLayout>
 
 </ScrollView>

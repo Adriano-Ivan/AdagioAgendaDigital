@@ -116,6 +116,18 @@ public class TaskDAO {
         return new ArrayList<>(ids);
     }
 
+    public int getQuantityOfTasks(){
+        Cursor count = db.rawQuery(String.format(
+                "SELECT COUNT(*) FROM %s", DbTaskStructure.TABLE_NAME),null);
+
+        count.moveToFirst();
+        int quantity = count.getInt(0);
+
+        count.close();
+
+        return quantity;
+    }
+
     private boolean tagAndTaskVinculationAlreadyExists(long task, int tag){
         String query = String.format("SELECT * FROM %s WHERE %s = %s and %s = %s;",
                 DbTaskTagStructure.TABLE_NAME,DbTaskTagStructure.Columns.TASK_ID, task,

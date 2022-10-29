@@ -1,6 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -16,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,6 +45,16 @@ public class TaskManagementFragment extends Fragment
     private OnFragmentTaskFormInteractionListener mListener;
     private DeleteTaskConfirmationDialog deleteTaskConfirmationModal;
     private FinishOrNotTaskConfirmationDialog finishTaskConfirmationDialog;
+
+    private RadioGroup radioGroupOrderDatetimeOptions;
+    private RadioGroup radioGroupOrderPriorityOptions;
+
+    private LinearLayout linearLayoutContainerPagination;
+
+    private ImageButton imageButtonNextPage;
+    private ImageButton imageButtonPreviousPage;
+
+    private TextView textViewCurrentPage;
 
     public TaskManagementFragment() {
 
@@ -74,7 +89,7 @@ public class TaskManagementFragment extends Fragment
 
         configureAdapter();
         updateTasksList();
-
+        updatePaginationVisibility();
     }
 
     private void defineViews(){
@@ -83,12 +98,34 @@ public class TaskManagementFragment extends Fragment
         listTasks = rootView.findViewById(R.id.fragment_task_list_tasks);
         fabButtonGoToTasks = rootView.findViewById(R.id.fragment_task_fab_button_tasks);
         buttonGoToFormTasks = rootView.findViewById((R.id.fragment_task_user_wants_to_create_task));
+        radioGroupOrderDatetimeOptions = rootView.findViewById(R.id.fragment_task_order_datetime_options);
+        radioGroupOrderPriorityOptions=rootView.findViewById(R.id.fragment_task_order_by_priority_options);
+        linearLayoutContainerPagination = rootView.findViewById(R.id.fragment_task_container_pagination);
+        imageButtonNextPage = rootView.findViewById(R.id.fragment_task_management_next_page);
+        imageButtonPreviousPage = rootView.findViewById(R.id.fragment_task_management_previous_page);
+        textViewCurrentPage = rootView.findViewById(R.id.fragment_task_management_text_page);
     }
 
     private void defineListeners(){
         buttonHideContainerOptions.setOnClickListener(this);
         buttonGoToFormTasks.setOnClickListener(this);
         fabButtonGoToTasks.setOnClickListener(this);
+        imageButtonNextPage.setOnClickListener(this);
+        imageButtonPreviousPage.setOnClickListener(this);
+
+        radioGroupOrderDatetimeOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                Log.i("datetime order", "onCheckedChanged: "+i);
+            }
+        });
+
+        radioGroupOrderPriorityOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                Log.i("priority order", "onCheckedChanged: "+i);
+            }
+        });
     }
 
     private void  setContainerOptionsIsGone (){
@@ -110,6 +147,34 @@ public class TaskManagementFragment extends Fragment
         } else {
            setContainerOptionsIsGone();
         }
+        hideOrShowFabAndPaginationContainer();
+    }
+
+    private void hideOrShowFabAndPaginationContainer(){
+        ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) listTasks.getLayoutParams();
+        int bottomMargin = getMarginValue(getActivity(),getActivity().getResources().getDimension(R.dimen.listViewMarginBottom));
+        if(TaskStaticValues.CONTAINER_OPTIONS_IS_GONE){
+            marginParams.setMargins(marginParams.leftMargin,
+                    marginParams.topMargin,marginParams.rightMargin,
+                    bottomMargin);
+            fabButtonGoToTasks.setVisibility(View.VISIBLE);
+            linearLayoutContainerPagination.setVisibility(View.VISIBLE);
+        } else {
+            marginParams.setMargins(marginParams.leftMargin,
+                    marginParams.topMargin,marginParams.rightMargin,
+                    0);
+            fabButtonGoToTasks.setVisibility(View.GONE);
+            linearLayoutContainerPagination.setVisibility(View.GONE);
+        }
+    }
+
+    public  int getMarginValue(Context context,float dimenId) {
+        Resources resources = context.getResources();
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dimenId,
+                resources.getDisplayMetrics()
+        );
     }
 
     private void configureAdapter() {
@@ -131,7 +196,6 @@ public class TaskManagementFragment extends Fragment
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        Log.i("SELECTED", "onContextItemSelected: ");
 
         if(item.getItemId() == R.id.menu_task_delete){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
@@ -156,14 +220,42 @@ public class TaskManagementFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.fragment_task_hide_options){
+        if(view.getId() == buttonHideContainerOptions.getId()){
 
            setConfigurationVisibilitity(false);
-        } else if(view.getId() == R.id.fragment_task_user_wants_to_create_task){
+        } else if(view.getId() == buttonGoToFormTasks.getId()){
             mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
-        }else if(view.getId() == R.id.fragment_task_fab_button_tasks){
+        }else if(view.getId() == fabButtonGoToTasks.getId()){
             mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
+        } else if(view.getId() == imageButtonNextPage.getId()){
+            listTaskBridgeView.updateList(TaskStaticValues.LIMIT_LIST,
+                    TaskStaticValues.OFFSET_LIST + TaskStaticValues.LIMIT_LIST);
+            updatePaginationVisibility();
+        } else if(view.getId() == imageButtonPreviousPage.getId()){
+            listTaskBridgeView.updateList(TaskStaticValues.LIMIT_LIST,
+                    TaskStaticValues.OFFSET_LIST - TaskStaticValues.LIMIT_LIST);
+            updatePaginationVisibility();
         }
+    }
+
+    private void updatePaginationVisibility(){
+        if (!listTaskBridgeView.thereArePreviousOrNextPage()) {
+            linearLayoutContainerPagination.setVisibility(View.GONE);
+        } else {
+            if(!listTaskBridgeView.thereIsNextPage()){
+                imageButtonNextPage.setVisibility(View.GONE);
+            } else {
+                imageButtonNextPage.setVisibility(View.VISIBLE);
+            }
+
+            if(!listTaskBridgeView.thereIsPreviousPage()){
+                imageButtonPreviousPage.setVisibility(View.GONE);
+            } else {
+                imageButtonPreviousPage.setVisibility(View.VISIBLE);
+            }
+        }
+
+        textViewCurrentPage.setText(Integer.toString(TaskStaticValues.CURRENT_PAGE));
     }
 
     public void setTaskAsFinished(TaskDtoRead task){

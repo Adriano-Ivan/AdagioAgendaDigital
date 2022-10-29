@@ -34,7 +34,6 @@ public class TaskDtoRead implements Serializable {
         this.isFinished=isFinished;
         this.tags = new ArrayList<>(tagIds);
 
-        Log.i("priority é isso", priority_id+"");
         if(priority_id !=null){
             this.priority_id = priority_id;
         }

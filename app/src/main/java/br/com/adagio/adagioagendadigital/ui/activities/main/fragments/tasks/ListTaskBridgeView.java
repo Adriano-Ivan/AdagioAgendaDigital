@@ -22,7 +22,14 @@ public class ListTaskBridgeView {
     }
 
     public void updateList(int limit,int offset){
-        listTaskAdapter.update(taskDAO.list(limit,offset));
+        Log.i("quantity of tasks", "quantity: "+taskDAO.getQuantityOfTasks());
+        Log.i("offset", "value: "+offset);
+        Log.i("Next quantity", "value: "+(offset+TaskStaticValues.LIMIT_LIST));
+
+        if(offset >= 0){
+            listTaskAdapter.update(taskDAO.list(limit,offset));
+            TaskStaticValues.setOffsetList(offset);
+        }
     }
 
     public void insert(TaskDtoCreate t){
@@ -41,7 +48,7 @@ public class ListTaskBridgeView {
 
     public void delete(int position){
         long id = listTaskAdapter.getItemId(position);
-        Log.i("DELETE", "delete: "+id);
+
         taskDAO.delete(id);
         updateListAux();
     }
@@ -52,7 +59,6 @@ public class ListTaskBridgeView {
     }
 
     public void configureAdapter(ListView tasksList, TaskManagementFragment fragment){
-
         tasksList.setAdapter(listTaskAdapter);
         listTaskAdapter.setFragment(fragment);
     }
@@ -65,5 +71,27 @@ public class ListTaskBridgeView {
     public void setTaskAsUnfinished(TaskDtoRead task) {
         taskDAO.updateToUnfinished(task);
         updateListAux();
+    }
+
+    public boolean thereArePreviousOrNextPage() {
+
+        return thereIsPreviousPage() || thereIsNextPage();
+    }
+
+    public boolean thereIsNextPage() {
+        if(taskDAO.getQuantityOfTasks() >
+               TaskStaticValues.NEXT_POSSIBLE_QUANTITY ){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean thereIsPreviousPage() {
+        if(TaskStaticValues.OFFSET_LIST == 0){
+            return false;
+        }
+
+        return true;
     }
 }
