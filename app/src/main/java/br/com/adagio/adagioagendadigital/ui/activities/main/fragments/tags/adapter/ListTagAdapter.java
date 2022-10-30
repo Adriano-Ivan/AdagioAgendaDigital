@@ -51,7 +51,7 @@ public class ListTagAdapter extends BaseAdapter {
 
     private void defineTaskInformation(Tag tag, View generatedView){
         TextView name = generatedView.findViewById(R.id.item_tag_name);
-        name.setText(tag.getName());
+        name.setText(String.format("# %s",tag.getName()));
 
     }
 

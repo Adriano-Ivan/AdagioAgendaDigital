@@ -11,6 +11,7 @@ import br.com.adagio.adagioagendadigital.models.entities.Tag;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.adapter.ListTagAdapter;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.TagsToTaskStaticValues;
 
 public class ListTagBridgeView {
     private final TagDAO tagDAO ;
@@ -24,7 +25,10 @@ public class ListTagBridgeView {
     }
 
     public void updateList(int limit,int offset){
-        listTagAdapter.update(tagDAO.list(limit,offset));
+        if(offset >= 0){
+            listTagAdapter.update(tagDAO.list(limit,offset));
+            TagStaticValues.setOffsetList(offset);
+        }
     }
 
     public void insert(Tag t){
@@ -55,5 +59,27 @@ public class ListTagBridgeView {
     public void update(Tag tag, int id) {
         tagDAO.update(id, tag);
         updateListAux();
+    }
+
+    public boolean thereArePreviousOrNextPage() {
+
+        return thereIsPreviousPage() || thereIsNextPage();
+    }
+
+    public boolean thereIsNextPage() {
+        if(tagDAO.getQuantityOfTags() >
+                TagStaticValues.NEXT_POSSIBLE_QUANTITY ){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean thereIsPreviousPage() {
+        if(TagStaticValues.OFFSET_LIST == 0){
+            return false;
+        }
+
+        return true;
     }
 }

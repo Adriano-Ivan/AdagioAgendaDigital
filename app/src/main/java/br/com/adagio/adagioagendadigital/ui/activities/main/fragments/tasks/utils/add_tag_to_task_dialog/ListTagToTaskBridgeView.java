@@ -8,6 +8,7 @@ import br.com.adagio.adagioagendadigital.data.tag.TagDAO;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.adapter.ListTagAdapter;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
 
 public class ListTagToTaskBridgeView{
     private final TagDAO tagDAO ;
@@ -21,7 +22,10 @@ public class ListTagToTaskBridgeView{
     }
 
     public void updateList(int limit,int offset){
-        listTagToTaskAdapter.update(tagDAO.list(limit,offset));
+        if(offset >= 0){
+            listTagToTaskAdapter.update(tagDAO.list(limit,offset));
+            TagsToTaskStaticValues.setOffsetList(offset);
+        }
     }
 
     public void insert(Tag t){
@@ -35,7 +39,7 @@ public class ListTagToTaskBridgeView{
 
     public void delete(int position){
         long id = listTagToTaskAdapter.getItemId(position);
-        Log.i("DELETE", "delete: "+id);
+
         tagDAO.delete(id);
         updateListAux();
     }
@@ -53,5 +57,27 @@ public class ListTagToTaskBridgeView{
     public void update(Tag tag, int id) {
         tagDAO.update(id, tag);
         updateListAux();
+    }
+
+    public boolean thereArePreviousOrNextPage() {
+
+        return thereIsPreviousPage() || thereIsNextPage();
+    }
+
+    public boolean thereIsNextPage() {
+        if(tagDAO.getQuantityOfTags() >
+                TagsToTaskStaticValues.NEXT_POSSIBLE_QUANTITY ){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean thereIsPreviousPage() {
+        if(TagsToTaskStaticValues.OFFSET_LIST == 0){
+            return false;
+        }
+
+        return true;
     }
 }

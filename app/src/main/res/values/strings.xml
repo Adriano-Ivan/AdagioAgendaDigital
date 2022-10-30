@@ -114,4 +114,5 @@
     <string name="task_confirmation_undone_finish">Deseja realmente desfazer a conclusão dessa tarefa ?</string>
     <string name="task_next_page">Próxima página</string>
     <string name="task_previous_page">Próxima anterior</string>
+    <string name="task_next_page_disabled">Próxima página não existente</string>
 </resources>

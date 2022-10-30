@@ -114,4 +114,16 @@ public class TagDAO {
                 DbTagStructure.Columns.ID + " = ?",
                 new String[] {String.valueOf(id)});
     }
+
+    public int getQuantityOfTags(){
+        Cursor count = db.rawQuery(String.format(
+                "SELECT COUNT(*) FROM %s", DbTagStructure.TABLE_NAME),null);
+
+        count.moveToFirst();
+        int quantity = count.getInt(0);
+
+        count.close();
+
+        return quantity;
+    }
 }

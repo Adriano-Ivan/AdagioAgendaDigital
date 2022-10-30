@@ -54,6 +54,9 @@ public class TaskManagementFragment extends Fragment
     private ImageButton imageButtonNextPage;
     private ImageButton imageButtonPreviousPage;
 
+    private ImageButton imageButtonNextPageDisabled;
+    private ImageButton imageButtonPreviousPageDisabled;
+
     private TextView textViewCurrentPage;
 
     public TaskManagementFragment() {
@@ -104,6 +107,9 @@ public class TaskManagementFragment extends Fragment
         imageButtonNextPage = rootView.findViewById(R.id.fragment_task_management_next_page);
         imageButtonPreviousPage = rootView.findViewById(R.id.fragment_task_management_previous_page);
         textViewCurrentPage = rootView.findViewById(R.id.fragment_task_management_text_page);
+
+        imageButtonNextPageDisabled = rootView.findViewById(R.id.fragment_task_management_next_page_disabled);
+        imageButtonPreviousPageDisabled =  rootView.findViewById(R.id.fragment_task_management_previous_page_disabled);
     }
 
     private void defineListeners(){
@@ -244,14 +250,18 @@ public class TaskManagementFragment extends Fragment
         } else {
             if(!listTaskBridgeView.thereIsNextPage()){
                 imageButtonNextPage.setVisibility(View.GONE);
+                imageButtonNextPageDisabled.setVisibility(View.VISIBLE);
             } else {
                 imageButtonNextPage.setVisibility(View.VISIBLE);
+                imageButtonNextPageDisabled.setVisibility(View.GONE);
             }
 
             if(!listTaskBridgeView.thereIsPreviousPage()){
                 imageButtonPreviousPage.setVisibility(View.GONE);
+                imageButtonPreviousPageDisabled.setVisibility(View.VISIBLE);
             } else {
                 imageButtonPreviousPage.setVisibility(View.VISIBLE);
+                imageButtonPreviousPageDisabled.setVisibility(View.GONE);
             }
         }
 

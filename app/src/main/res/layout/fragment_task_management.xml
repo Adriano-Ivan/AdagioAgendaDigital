@@ -170,6 +170,16 @@
                     android:backgroundTint="@android:color/transparent"
                     />
 
+                <ImageButton
+                    android:id="@+id/fragment_task_management_previous_page_disabled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_baseline_navigate_before_gray_24"
+                    android:layout_marginRight="4dp"
+                    android:backgroundTint="@android:color/transparent"
+                />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -188,6 +198,17 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/fragment_task_management_next_page_disabled"
+                    android:layout_width="wrap_content"
+                    android:tooltipText="@string/task_next_page"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_baseline_navigate_next_gray_24"
+                    android:layout_marginRight="4dp"
+                    android:backgroundTint="@android:color/transparent"
+                />
 
                 <ImageButton
                         android:id="@+id/fragment_task_management_next_page"
