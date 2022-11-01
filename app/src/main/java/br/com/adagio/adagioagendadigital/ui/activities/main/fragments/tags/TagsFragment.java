@@ -116,7 +116,7 @@ public class TagsFragment extends Fragment
     }
 
     private void updateTagsList(){
-        listTagBridgeView.updateList(TaskStaticValues.LIMIT_LIST, TaskStaticValues.OFFSET_LIST);
+        listTagBridgeView.updateList(TagStaticValues.LIMIT_LIST, TagStaticValues.OFFSET_LIST);
     }
 
     @Override

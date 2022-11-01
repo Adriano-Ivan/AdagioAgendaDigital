@@ -11,15 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
+import br.com.adagio.adagioagendadigital.data.priority.PriorityDAO;
 import br.com.adagio.adagioagendadigital.data.tag.DbTagStructure;
 import br.com.adagio.adagioagendadigital.data.task_tag.DbTaskTagStructure;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
+import br.com.adagio.adagioagendadigital.models.entities.Priority;
 
 public class TaskDAO {
 
     private static TaskDAO instance;
-
+    private static PriorityDAO priorityDAO;
     private SQLiteDatabase db;
 
     private TaskDAO(Context context){
@@ -29,8 +31,9 @@ public class TaskDAO {
     }
 
     public static TaskDAO getInstance(Context context){
-        if(instance ==null){
+        if(instance ==null && priorityDAO == null){
             instance = new TaskDAO(context);
+            priorityDAO = PriorityDAO.getInstance(context);
         }
 
         return instance;
@@ -74,11 +77,24 @@ public class TaskDAO {
         }
 
         ArrayList<Integer> tagIds = returnTagIds(id);
+        String priorityName = returnPriorityName(priority_id);
 
         boolean isFinishedBoolean = isFinished == 0 ? false : true;
 
         return new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean,priority_id,
-                tagIds);
+                tagIds,priorityName);
+    }
+
+    private String returnPriorityName(int id){
+        List<Priority> priorities = priorityDAO.list();
+        String name = "";
+
+        for(Priority priority : priorities){
+            if(priority.getId() == id){
+                name = priority.getName();
+            }
+        }
+        return name;
     }
 
     public void save(TaskDtoCreate task) {

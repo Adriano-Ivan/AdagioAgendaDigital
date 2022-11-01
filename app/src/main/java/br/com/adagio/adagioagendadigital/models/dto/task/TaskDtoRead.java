@@ -12,27 +12,28 @@ public class TaskDtoRead implements Serializable {
 
     public TaskDtoRead(int id, String description, LocalDateTime initialMoment,
                        LocalDateTime limitMoment,
-                       boolean isFinished, int priority_id, ArrayList<Integer> tagIds){
+                       boolean isFinished, int priority_id, ArrayList<Integer> tagIds,String priorityName){
         this.id = id;
         setAttributesExceptId(description,initialMoment,limitMoment,isFinished,priority_id,
-                tagIds);
+                tagIds,priorityName);
     }
 
     public TaskDtoRead(String description, LocalDateTime initialMoment,
                          LocalDateTime limitMoment,
-                         boolean isFinished,ArrayList<Integer> tagIds){
-        setAttributesExceptId(description,initialMoment,limitMoment,isFinished,null,tagIds);
+                         boolean isFinished,ArrayList<Integer> tagIds,String priorityName){
+        setAttributesExceptId(description,initialMoment,limitMoment,isFinished,null,tagIds,priorityName);
     }
 
     private void setAttributesExceptId(String description, LocalDateTime initialMoment,
                                        LocalDateTime limitMoment,
                                        boolean isFinished,Integer priority_id,
-                                       ArrayList<Integer> tagIds){
+                                       ArrayList<Integer> tagIds,String priorityName){
         this.description=description;
         this.initialMoment=initialMoment;
         this.limitMoment=limitMoment;
         this.isFinished=isFinished;
         this.tags = new ArrayList<>(tagIds);
+        this.priorityName = priorityName;
 
         if(priority_id !=null){
             this.priority_id = priority_id;
@@ -43,6 +44,8 @@ public class TaskDtoRead implements Serializable {
     private int id;
 
     private String description;
+
+    private String priorityName;
 
     private int priority_id;
 
@@ -110,4 +113,11 @@ public class TaskDtoRead implements Serializable {
         return id;
     }
 
+    public String getPriorityName() {
+        return priorityName;
+    }
+
+    public void setPriorityName(String priorityName) {
+        this.priorityName = priorityName;
+    }
 }

@@ -70,6 +70,9 @@ public class ListTaskAdapter extends BaseAdapter {
         TextView finishTaskShortcut = generatedView.findViewById(R.id.item_task_finish_task);
         TextView notFinishTaskShortcut = generatedView.findViewById(R.id.item_task_not_finish_task);
 
+        TextView priorityName =generatedView.findViewById(R.id.item_task_priority_name);
+        priorityName.setText(task.getPriorityName());
+
         if(task.isFinished()){
             finishTaskShortcut.setVisibility(View.GONE);
             notFinishTaskShortcut.setOnClickListener(new View.OnClickListener() {
