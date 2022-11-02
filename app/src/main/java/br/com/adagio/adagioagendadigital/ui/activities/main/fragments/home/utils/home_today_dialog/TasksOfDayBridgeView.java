@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ListView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import br.com.adagio.adagioagendadigital.data.tag.TagDAO;
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
@@ -75,4 +76,5 @@ public class TasksOfDayBridgeView {
 
         return true;
     }
+
 }

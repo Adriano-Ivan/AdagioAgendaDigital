@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.ListTagToTaskBridgeView;
@@ -24,6 +25,9 @@ public class HomeTodayDialog extends DialogFragment {
     private ListView tasksList;
     private TasksOfDayBridgeView taskOfDayBridgeView;
     private LocalDateTime day;
+
+    private ArrayList<Integer> tasksToFinishIds  = new ArrayList<>();
+    private ArrayList<Integer> tasksToStartAgainIds=new ArrayList<>();
 
     public HomeTodayDialog(LocalDateTime pickedDate){
         day = pickedDate;
@@ -57,9 +61,47 @@ public class HomeTodayDialog extends DialogFragment {
     private void updateTasksList(){
         taskOfDayBridgeView.updateList(TasksOfDayStaticValues.LIMIT_LIST,TasksOfDayStaticValues.OFFSET_LIST,
                 day);
+
     }
 
     private void defineDefaultVisualizations(){
 
+    }
+
+    public void includeTaskToFinish(int id) {
+        if(!tasksToFinishIds.contains(id)){
+            tasksToFinishIds.add(id);
+        }
+
+        if(tasksToStartAgainIds.contains(id)){
+            tasksToStartAgainIds.remove(tasksToStartAgainIds.indexOf(id));
+        }
+
+        printToFinish();
+    }
+
+    public void includeTaskToRestart(int id) {
+        if(!tasksToStartAgainIds.contains(id)){
+            tasksToStartAgainIds.add(id);
+        }
+
+        if(tasksToFinishIds.contains(id)){
+            tasksToFinishIds.remove(tasksToFinishIds.indexOf(id));
+        }
+
+        printToRestart();
+    }
+
+    private void printToFinish(){
+        Log.i("FINISH", "are:");
+        for(Integer id: tasksToFinishIds){
+            Log.i("to finish", ""+id);
+        }
+    }
+    private void printToRestart(){
+        Log.i("RESTART", "are: ");
+        for(Integer id: tasksToStartAgainIds){
+            Log.i("to restart", ""+id);
+        }
     }
 }

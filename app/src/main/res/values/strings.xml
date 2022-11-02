@@ -118,4 +118,5 @@
     <string name="tag_edit_option">Editar tag</string>
     <string name="tag_delete_option">Deletar tag</string>
     <string name="tasks_of_today_title">Tarefas de hoje</string>
+    <string name="tasks_of_day_submit_finished">Salvar alterações</string>
 </resources>

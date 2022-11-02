@@ -18,4 +18,18 @@
         android:layout_height="match_parent"
 
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/tasks_of_day_save_finished_or_not_tasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tasks_of_day_submit_finished"
+            />
+
+    </LinearLayout>
 </LinearLayout>

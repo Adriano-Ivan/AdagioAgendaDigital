@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
@@ -62,6 +63,19 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
 
         CardView cardViewIndicator = generatedView.findViewById(R.id.task_of_day_priority_indicator);
         cardViewIndicator.setCardBackgroundColor(returnColor(task));
+
+        SwitchCompat switchFinishedOrNot = generatedView.findViewById(R.id.task_of_day_mark_as_finished_or_not);
+
+        switchFinishedOrNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    parentFragment.includeTaskToFinish(task.getId());
+                } else {
+                    parentFragment.includeTaskToRestart(task.getId());
+                }
+            }
+        });
     }
 
     private int returnColor(TaskDtoRead task){
