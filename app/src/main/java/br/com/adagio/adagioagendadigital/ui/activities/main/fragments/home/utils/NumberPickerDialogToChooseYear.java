@@ -1,4 +1,4 @@
-package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views;
+package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

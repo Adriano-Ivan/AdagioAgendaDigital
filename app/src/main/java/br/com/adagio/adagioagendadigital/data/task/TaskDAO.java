@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.util.Log;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,16 +41,35 @@ public class TaskDAO {
         return instance;
     }
 
-    public List<TaskDtoRead> list(int limit, int offset){
+    public List<TaskDtoRead> list(int limit, int offset,LocalDateTime day){
 
         List<TaskDtoRead> tasks = new ArrayList<>();
+        String query = "";
 
-        String query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
-                DbTaskStructure.TABLE_NAME, limit, offset);
+        if(day == null){
+            query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
+                    DbTaskStructure.TABLE_NAME, limit, offset);
+        } else {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.i("searched date", day.toLocalDate().toString());
+                String dateToSearch = day.toLocalDate().toString();
+
+                query = String.format("SELECT * FROM %s WHERE " +
+                                "date(%s) = date('%s') " +
+                                "LIMIT %s OFFSET %s"
+                        ,DbTaskStructure.TABLE_NAME,
+                        DbTaskStructure.Columns.INITIAL_MOMENT,
+                        dateToSearch, limit,offset
+                        );
+
+            }
+        }
 
         try(Cursor c = db.rawQuery(query, null)){
 
             if(c.moveToFirst()){
+
                 do {
                     TaskDtoRead task = fromCursor(c);
                     tasks.add(task);

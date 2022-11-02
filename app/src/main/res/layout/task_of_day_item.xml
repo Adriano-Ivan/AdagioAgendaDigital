@@ -6,16 +6,9 @@
     >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:textSize="18dp"
-        android:layout_height="wrap_content"
-        android:text="@string/tasks_of_today_title"
-        />
-
-    <ListView
-        android:id="@+id/tasks_of_day_task_body_list"
+        android:id="@+id/task_of_day_item_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
+        android:layout_height="wrap_content"
         />
+
 </LinearLayout>

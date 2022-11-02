@@ -29,7 +29,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeStaticValues;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.NumberPickerDialogToChooseYear;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.NumberPickerDialogToChooseYear;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.notifications.NotificationsFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories.RelatoriesFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.TagsFragment;

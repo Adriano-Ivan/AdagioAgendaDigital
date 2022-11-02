@@ -26,8 +26,8 @@ import java.util.Calendar;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.HomeTodayDialog;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.views.NumberPickerDialogToChooseYear;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeTodayDialog;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.NumberPickerDialogToChooseYear;
 
 public class HomeFragment extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener
        {
@@ -36,6 +36,8 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     private CalendarView calendarView;
     private Button buttonToChooseYear;
     private TextView textViewTodayDate;
+
+    private LocalDateTime pickedDate;
 
     public HomeFragment(){
 
@@ -151,7 +153,8 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         Log.i("PERIOD: ", "onSelectedDayChange: "+year+" "+month+" "+dayOfMonth);
 
-        HomeTodayDialog todayDialog = new HomeTodayDialog();
+        pickedDate = LocalDateTime.of(year,month+1,dayOfMonth,0,0,0);
+        HomeTodayDialog todayDialog = new HomeTodayDialog(pickedDate);
         todayDialog.show(getActivity().getSupportFragmentManager(),"dialog");
         HomeStaticValues.setPickedDayMemo(dayOfMonth);
     }
@@ -172,11 +175,19 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         }
     }
 
+    private LocalDateTime getAuxLocalDateTime(LocalDateTime now){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+           return LocalDateTime.of(HomeStaticValues.PICKED_YEAR_MEMO,  HomeStaticValues.PICKED_MONTH_MEMO,
+                    HomeStaticValues.PICKED_DAY_MEMO,now.getHour(),now.getMinute());
+        }
+        return null;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void auxSetNewStateOfCalendar(){
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime newDate =  LocalDateTime.of(HomeStaticValues.PICKED_YEAR_MEMO,  HomeStaticValues.PICKED_MONTH_MEMO,
-                HomeStaticValues.PICKED_DAY_MEMO,now.getHour(),now.getMinute());
+        LocalDateTime newDate =  getAuxLocalDateTime(now);
+        pickedDate = getAuxLocalDateTime(now);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(HomeStaticValues.PICKED_YEAR_MEMO,newDate.getMonth().getValue()-1,newDate.getDayOfMonth());

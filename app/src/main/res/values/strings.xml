@@ -115,4 +115,7 @@
     <string name="task_next_page">Próxima página</string>
     <string name="task_previous_page">Próxima anterior</string>
     <string name="task_next_page_disabled">Próxima página não existente</string>
+    <string name="tag_edit_option">Editar tag</string>
+    <string name="tag_delete_option">Deletar tag</string>
+    <string name="tasks_of_today_title">Tarefas de hoje</string>
 </resources>

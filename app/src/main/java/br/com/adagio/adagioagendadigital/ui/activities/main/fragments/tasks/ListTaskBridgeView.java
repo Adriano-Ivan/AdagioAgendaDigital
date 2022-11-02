@@ -27,7 +27,7 @@ public class ListTaskBridgeView {
         Log.i("Next quantity", "value: "+(offset+TaskStaticValues.LIMIT_LIST));
 
         if(offset >= 0){
-            listTaskAdapter.update(taskDAO.list(limit,offset));
+            listTaskAdapter.update(taskDAO.list(limit,offset,null));
             TaskStaticValues.setOffsetList(offset);
         }
     }

@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/menu_tag_edit"
-        android:title="@string/task_edit_option"/>
+        android:title="@string/tag_edit_option"/>
 
     <item android:id="@+id/menu_tag_delete"
-        android:title="@string/task_delete_option"/>
+        android:title="@string/tag_delete_option"/>
 </menu>
