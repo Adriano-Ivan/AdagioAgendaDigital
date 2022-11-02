@@ -128,7 +128,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         textViewTodayDate.setText(String.format(
                 "%s %s/%s/%s",
                 getResources().getString(R.string.today_text),
-                day,month,year));
+                returnDayOrMonth(day),returnDayOrMonth(month),year));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -207,4 +207,11 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
     }
 
+   private String returnDayOrMonth(int dayOrMonth) {
+       if(Integer.toString(dayOrMonth).length() ==1 ){
+           return "0"+dayOrMonth;
+       }
+
+       return Integer.toString(dayOrMonth);
+   }
 }
