@@ -9,12 +9,15 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
+import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 
 public class TasksOfDayDialogAdapter  extends BaseAdapter {
@@ -57,8 +60,21 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
         TextView name = generatedView.findViewById(R.id.task_of_day_item_text);
         name.setText(task.getDescription());
 
+        CardView cardViewIndicator = generatedView.findViewById(R.id.task_of_day_priority_indicator);
+        cardViewIndicator.setCardBackgroundColor(returnColor(task));
     }
 
+    private int returnColor(TaskDtoRead task){
+        if(task.getPriorityName().equals(Priorities.HIGH.getValue())){
+            return parentFragment.getContext().getColor(R.color.yellow);
+        } else if(task.getPriorityName().equals(Priorities.LOW.getValue())){
+            return parentFragment.getContext().getColor(R.color.gray);
+        } else if(task.getPriorityName().equals(Priorities.CRITICAL.getValue())){
+            return parentFragment.getContext().getColor(R.color.red);
+        }
+
+        return parentFragment.getContext().getColor(R.color.blue);
+    }
     private View returnTaskView(ViewGroup viewGroup){
         return LayoutInflater.from(context)
                 .inflate(R.layout.task_of_day_item,viewGroup,false);

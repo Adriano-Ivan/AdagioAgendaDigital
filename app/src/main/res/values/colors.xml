@@ -11,4 +11,7 @@
     <color name="adagio_purple">#3A4289</color>
     <color name="green">#1DA605</color>
     <color name="blue">#0001FF</color>
+    <color name="yellow">#ECEC25</color>
+    <color name="red">#FF0000</color>
+    <color name="gray">#cccccc</color>
 </resources>
