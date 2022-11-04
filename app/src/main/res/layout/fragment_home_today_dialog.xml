@@ -15,6 +15,73 @@
         android:text="@string/tasks_of_today_title"
         />
 
+    <LinearLayout
+        android:id="@+id/fragment_today_dialog_container_pagination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/fragment_today_dialog_previous_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_baseline_navigate_before_24"
+            android:layout_marginRight="4dp"
+            android:backgroundTint="@android:color/transparent"
+            />
+
+        <ImageButton
+            android:id="@+id/fragment_today_dialog_previous_page_disabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_baseline_navigate_before_gray_24"
+            android:layout_marginRight="4dp"
+            android:backgroundTint="@android:color/transparent"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/fragment_today_dialog_text_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/fragment_today_dialog_next_page_disabled"
+            android:layout_width="wrap_content"
+            android:tooltipText="@string/task_next_page_disabled"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_baseline_navigate_next_gray_24"
+            android:layout_marginRight="4dp"
+            android:backgroundTint="@android:color/transparent"
+            />
+        <ImageButton
+            android:id="@+id/fragment_today_dialog_next_page"
+            android:layout_width="wrap_content"
+            android:tooltipText="@string/task_next_page"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_baseline_navigate_next_24"
+            android:layout_marginRight="4dp"
+            android:backgroundTint="@android:color/transparent"
+            />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/tasks_of_day_task_body_list"
         android:layout_width="match_parent"
@@ -32,6 +99,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tasks_of_day_submit_finished"
+            />
+        <Button
+            android:id="@+id/tasks_of_day_close_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tasks_of_day_close_dialog"
             />
 
     </LinearLayout>

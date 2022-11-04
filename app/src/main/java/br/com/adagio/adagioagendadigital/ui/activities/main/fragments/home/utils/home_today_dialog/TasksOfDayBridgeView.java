@@ -1,6 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ListView;
 
 import java.time.LocalDateTime;
@@ -21,11 +22,13 @@ public class TasksOfDayBridgeView {
     private final TaskDAO taskDAO ;
     private final TasksOfDayDialogAdapter tasksOfDayDialogAdapter;
     private final Context context;
+    private LocalDateTime day;
 
-    public TasksOfDayBridgeView(Context context){
+    public TasksOfDayBridgeView(Context context,LocalDateTime day){
         this.context = context;
         this.taskDAO = TaskDAO.getInstance(context);
         this.tasksOfDayDialogAdapter = new TasksOfDayDialogAdapter(context);
+        this.day = day;
     }
 
     public void updateList(int limit, int offset, LocalDateTime day){
@@ -61,7 +64,8 @@ public class TasksOfDayBridgeView {
     }
 
     public boolean thereIsNextPage() {
-        if(taskDAO.getQuantityOfTasks() >
+        Log.i("quantity", taskDAO.getQuantityOfTasksOfTheDay(day)+"");
+        if(taskDAO.getQuantityOfTasksOfTheDay(day) >
                 TasksOfDayStaticValues.NEXT_POSSIBLE_QUANTITY ){
             return true;
         }
@@ -77,4 +81,15 @@ public class TasksOfDayBridgeView {
         return true;
     }
 
+    public void finishTasksByIds(ArrayList<Integer> tasksToFinishIds) {
+        for(Integer id:tasksToFinishIds){
+            taskDAO.updateToFinishedById(id);
+        }
+    }
+
+    public void restartTasksByIds(ArrayList<Integer> tasksToRestartIds){
+        for(Integer id: tasksToRestartIds){
+            taskDAO.updateToUnfinishedById(id);
+        }
+    }
 }

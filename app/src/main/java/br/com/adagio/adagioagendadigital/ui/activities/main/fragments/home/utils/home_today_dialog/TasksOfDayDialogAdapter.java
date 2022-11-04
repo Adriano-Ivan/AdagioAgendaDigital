@@ -66,6 +66,16 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
 
         SwitchCompat switchFinishedOrNot = generatedView.findViewById(R.id.task_of_day_mark_as_finished_or_not);
 
+        if(parentFragment.isAmongToFinish(task.getId())
+          || task.isFinished()
+        ){
+            switchFinishedOrNot.setChecked(true);
+        } else if(parentFragment.isAmongToRestart(task.getId())
+                || !task.isFinished()
+        ){
+            switchFinishedOrNot.setChecked(false);
+        }
+
         switchFinishedOrNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

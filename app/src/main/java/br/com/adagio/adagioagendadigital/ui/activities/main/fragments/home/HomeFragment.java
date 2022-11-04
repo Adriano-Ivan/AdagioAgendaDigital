@@ -1,5 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +40,8 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     private TextView textViewTodayDate;
 
     private LocalDateTime pickedDate;
+    private HomeTodayDialog todayDialog;
+    private boolean dialogIsShown;
 
     public HomeFragment(){
 
@@ -154,10 +158,23 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         Log.i("PERIOD: ", "onSelectedDayChange: "+year+" "+month+" "+dayOfMonth);
 
         pickedDate = LocalDateTime.of(year,month+1,dayOfMonth,0,0,0);
-        HomeTodayDialog todayDialog = new HomeTodayDialog(pickedDate);
-        todayDialog.show(getActivity().getSupportFragmentManager(),"dialog");
+
+        todayDialog = new HomeTodayDialog(pickedDate);
+        todayDialog.setParentFragment(this);
+
+        if(!dialogIsShown){
+            todayDialog.show(getActivity().getSupportFragmentManager(),"dialog");
+            dialogIsShown = true;
+        }
+
+
         HomeStaticValues.setPickedDayMemo(dayOfMonth);
     }
+
+    public void defineDialogIsNotShown(){
+        dialogIsShown = false;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override

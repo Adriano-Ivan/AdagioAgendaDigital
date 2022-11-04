@@ -154,8 +154,30 @@ public class TaskDAO {
     }
 
     public int getQuantityOfTasks(){
-        Cursor count = db.rawQuery(String.format(
-                "SELECT COUNT(*) FROM %s", DbTaskStructure.TABLE_NAME),null);
+        return returnQuantityOfTasks(String.format(
+                "SELECT COUNT(*) FROM %s", DbTaskStructure.TABLE_NAME));
+    }
+
+    public int getQuantityOfTasksOfTheDay(LocalDateTime day) {
+        String dateToSearch = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            dateToSearch = day.toLocalDate().toString();
+
+            String query = String.format("SELECT count(*) FROM %s WHERE " +
+                            "date(%s) = date('%s') "
+                    ,DbTaskStructure.TABLE_NAME,
+                    DbTaskStructure.Columns.INITIAL_MOMENT,
+                    dateToSearch
+            );
+
+            return returnQuantityOfTasks(query);
+        }
+
+        return 0;
+    }
+
+    private int returnQuantityOfTasks(String sql){
+        Cursor count = db.rawQuery(sql,null);
 
         count.moveToFirst();
         int quantity = count.getInt(0);
@@ -294,21 +316,30 @@ public class TaskDAO {
     }
 
     public void updateToFinished(TaskDtoRead task){
-        finishOrNot(task, 1);
+        finishOrNot(task.getId(), 1);
     }
 
     public void updateToUnfinished(TaskDtoRead task) {
-        finishOrNot(task, 0);
+        finishOrNot(task.getId(), 0);
     }
 
-    private void finishOrNot(TaskDtoRead task, int opr){
+    public void updateToFinishedById(Integer id){
+        finishOrNot(id, 1);
+    }
+
+    public void updateToUnfinishedById(Integer id){
+        finishOrNot(id, 0);
+    }
+
+    private void finishOrNot(Integer id, int opr){
         ContentValues values = new ContentValues();
         values.put(DbTaskStructure.Columns.IS_FINISHED, opr);
 
         db.update(DbTaskStructure.TABLE_NAME, values,
                 DbTaskStructure.Columns.ID + " = ?",
-                new String[] {String.valueOf(task.getId())});
+                new String[] {String.valueOf(id)});
     }
+
 }
 
 

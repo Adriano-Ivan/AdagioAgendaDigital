@@ -16,4 +16,12 @@ public class TasksOfDayStaticValues {
         NEXT_POSSIBLE_QUANTITY = OFFSET_LIST + LIMIT_LIST;
         CURRENT_PAGE = NEXT_POSSIBLE_QUANTITY / LIMIT_LIST;
     }
+
+    public static void goBackToDefaultValue(){
+        LIMIT_LIST = 6;
+        OFFSET_LIST = 0;
+        NEXT_POSSIBLE_QUANTITY = LIMIT_LIST;
+        CURRENT_PAGE = 1;
+    }
 }
+
