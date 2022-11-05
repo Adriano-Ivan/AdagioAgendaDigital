@@ -88,6 +88,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
        defineViews();
        defineListeners();
        defineDefaultValues();
+
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
            setNewStateOfCalendar();
        }
@@ -134,26 +135,9 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     private void defineListeners(){
         calendarView.setOnDateChangeListener(this);
 
-
         buttonToChooseYear.setOnClickListener(this);
 
-        setMonthDateColor(new Date(), 1);
     }
-
-   public void setMonthDateColor(Date date, int color) {
-
-       final int childCount =calendarView.getChildCount();
-       for (int i = 0; i < childCount; i++) {
-           ViewGroup view = (ViewGroup) calendarView.getChildAt(i);
-           Log.i("teste", "setMonthDateColor: "+view.getTransitionName());
-           for(int j = 0; j < 1; j++){
-               View v = view.getChildAt(j);
-
-               Log.i("teste"+j, "setMonthDateColor: "+v.getId());
-               v.setBackgroundColor(Color.parseColor("#FF0000"));
-           }
-       }
-   }
 
     private void defineDefaultValues(){
         Calendar calendar = Calendar.getInstance();
