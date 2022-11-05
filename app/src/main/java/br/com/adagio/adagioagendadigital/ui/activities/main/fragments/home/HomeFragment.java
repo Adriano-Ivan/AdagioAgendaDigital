@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.android.material.datepicker.MaterialCalendar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -41,6 +42,8 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
     private View rootView;
     private CalendarView calendarView;
+    private CompactCalendarView compatCalendarView;
+
     private Button buttonToChooseYear;
     private TextView textViewTodayDate;
 
@@ -133,19 +136,24 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
 
         buttonToChooseYear.setOnClickListener(this);
+
+        setMonthDateColor(new Date(), 1);
     }
 
-//   public void setMonthDateColor(Date date, int color) {
-//       final int childCount = mListView.getChildCount();
-//       for (int i = 0; i < childCount; i++) {
-//           WeekView weekView = (WeekView) mListView.getChildAt(i);
-//           if (weekView.isDateInWeek(date)) {
-//               //this method adds the date and colour to a
-//               //Map collection in weekView Object
-//               weekView.setDateColour(date, color);
-//           }
-//       }
-//   }
+   public void setMonthDateColor(Date date, int color) {
+
+       final int childCount =calendarView.getChildCount();
+       for (int i = 0; i < childCount; i++) {
+           ViewGroup view = (ViewGroup) calendarView.getChildAt(i);
+           Log.i("teste", "setMonthDateColor: "+view.getTransitionName());
+           for(int j = 0; j < 1; j++){
+               View v = view.getChildAt(j);
+
+               Log.i("teste"+j, "setMonthDateColor: "+v.getId());
+               v.setBackgroundColor(Color.parseColor("#FF0000"));
+           }
+       }
+   }
 
     private void defineDefaultValues(){
         Calendar calendar = Calendar.getInstance();
