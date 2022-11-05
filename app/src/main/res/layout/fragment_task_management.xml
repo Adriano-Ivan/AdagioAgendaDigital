@@ -52,6 +52,12 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:orientation="vertical">
+                    <RadioButton android:id="@+id/fragment_task_order_by_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/fragment_task_order_by_today"
+                        />
                         <RadioButton android:id="@+id/fragment_task_order_by_initial_moment_asc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -154,7 +160,7 @@
             android:layout_gravity="right"
             android:text="@string/fragment_task_hide_options"
             />
-
+        
         <LinearLayout
             android:id="@+id/fragment_task_container_pagination"
             android:layout_width="match_parent"
@@ -239,7 +245,7 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_baseline_add_24"
         android:contentDescription="@string/fragment_task_user_wants_to_create_task"
-        android:layout_margin="10dp" />
+        android:layout_margin="5dp" />
 
 </RelativeLayout>
 

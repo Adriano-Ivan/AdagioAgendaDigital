@@ -49,7 +49,12 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
 
     private HomeFragment parentFragment;
 
-    public HomeTodayDialog(LocalDateTime pickedDate){
+    public HomeTodayDialog(LocalDateTime pickedDate,
+                           ArrayList<Integer> finishedTasks,
+                           ArrayList<Integer> tasksToStartIds
+                           ){
+        this.tasksToStartAgainIds = new ArrayList<>(tasksToStartIds);
+        this.tasksToFinishIds=new ArrayList<>(finishedTasks);
         day = pickedDate;
     }
 

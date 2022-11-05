@@ -24,9 +24,11 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeTodayDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.NumberPickerDialogToChooseYear;
@@ -42,6 +44,12 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     private LocalDateTime pickedDate;
     private HomeTodayDialog todayDialog;
     private boolean dialogIsShown;
+
+    private ArrayList<Integer> finishedTasksIds  = new ArrayList<>();
+    private ArrayList<Integer> tasksToStartIds=new ArrayList<>();
+
+
+    private TaskDAO taskDAO ;
 
     public HomeFragment(){
 
@@ -70,6 +78,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
    }
 
    private void setAttributes(){
+        taskDAO = TaskDAO.getInstance(getContext());
        defineViews();
        defineListeners();
        defineDefaultValues();
@@ -159,7 +168,14 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
         pickedDate = LocalDateTime.of(year,month+1,dayOfMonth,0,0,0);
 
-        todayDialog = new HomeTodayDialog(pickedDate);
+        todayDialog = new HomeTodayDialog(pickedDate,
+                taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
+                        true
+                        ),
+                taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
+                        false
+                        )
+                );
         todayDialog.setParentFragment(this);
 
         if(!dialogIsShown){

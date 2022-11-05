@@ -33,11 +33,10 @@ public class TasksOfDayBridgeView {
 
     public void updateList(int limit, int offset, LocalDateTime day){
         if(offset >= 0){
-            tasksOfDayDialogAdapter.update(taskDAO.list(limit,offset,day));
+            tasksOfDayDialogAdapter.update(taskDAO.list(limit,offset,day,null,false));
             TasksOfDayStaticValues.setOffsetList(offset);
         }
     }
-
 
     public TaskDtoRead get(int position){
         return tasksOfDayDialogAdapter.getItem(position);

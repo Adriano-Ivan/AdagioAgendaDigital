@@ -1,19 +1,20 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ListView;
 
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrder;
 
 public class ListTaskBridgeView {
 
     private final TaskDAO taskDAO ;
     private final ListTaskAdapter listTaskAdapter;
     private final Context context;
+    private TypeListTaskManagementOrder typeListTaskOrder  = null;
 
     public ListTaskBridgeView(Context context){
         this.context = context;
@@ -21,14 +22,15 @@ public class ListTaskBridgeView {
         this.listTaskAdapter = new ListTaskAdapter(context);
     }
 
-    public void updateList(int limit,int offset){
-        Log.i("quantity of tasks", "quantity: "+taskDAO.getQuantityOfTasks());
-        Log.i("offset", "value: "+offset);
-        Log.i("Next quantity", "value: "+(offset+TaskStaticValues.LIMIT_LIST));
+    public void updateList(int limit, int offset, boolean isToAddIfTodayIsPriority){
 
         if(offset >= 0){
-            listTaskAdapter.update(taskDAO.list(limit,offset,null));
             TaskStaticValues.setOffsetList(offset);
+            if(typeListTaskOrder == null){
+                listTaskAdapter.update(taskDAO.list(limit,offset,null,null,false));
+            } else {
+                listTaskAdapter.update(taskDAO.list(limit,offset,null, typeListTaskOrder,isToAddIfTodayIsPriority));
+            }
         }
     }
 
@@ -53,9 +55,9 @@ public class ListTaskBridgeView {
         updateListAux();
     }
 
-    private void updateListAux(){
+    public void updateListAux(){
         updateList(TaskStaticValues.LIMIT_LIST,
-                TaskStaticValues.OFFSET_LIST);
+                TaskStaticValues.OFFSET_LIST,typeListTaskOrder== TypeListTaskManagementOrder.TODAY);
     }
 
     public void configureAdapter(ListView tasksList, TaskManagementFragment fragment){
@@ -93,5 +95,9 @@ public class ListTaskBridgeView {
         }
 
         return true;
+    }
+
+    public void setOrderDateType(TypeListTaskManagementOrder typeListTaskOrder) {
+        this.typeListTaskOrder = typeListTaskOrder;
     }
 }

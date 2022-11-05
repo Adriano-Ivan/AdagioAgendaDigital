@@ -224,7 +224,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private void defineDescriptionAndIsFinishedAndPriorityAndTagIds(){
         if(possibleTaskToEdit == null){
             isFinished = 0;
-            priority_id = priorities.get(1).getId();
+
+            priority_id = priorities.get(0).getId();
             descriptionEditText.setText("");
             radioGroupToChoosePriority.check(radioButtonPriorityLow.getId());
             textTopCreateOrEdit.setText(getResources().getString(R.string.create_your_task));

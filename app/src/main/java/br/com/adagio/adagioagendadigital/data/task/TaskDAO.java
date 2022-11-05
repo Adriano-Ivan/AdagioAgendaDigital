@@ -6,7 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
-import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,11 +15,12 @@ import java.util.List;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
 import br.com.adagio.adagioagendadigital.data.priority.PriorityDAO;
-import br.com.adagio.adagioagendadigital.data.tag.DbTagStructure;
 import br.com.adagio.adagioagendadigital.data.task_tag.DbTaskTagStructure;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrder;
 
 public class TaskDAO {
 
@@ -41,18 +43,30 @@ public class TaskDAO {
         return instance;
     }
 
-    public List<TaskDtoRead> list(int limit, int offset,LocalDateTime day){
+    public List<TaskDtoRead> list(int limit, int offset, LocalDateTime day,
+                                  TypeListTaskManagementOrder typeListTaskManagementOrder,
+                                  boolean isToAddIfTodayIsPriority){
 
         List<TaskDtoRead> tasks = new ArrayList<>();
         String query = "";
+        String queryTodayManagementScreen = "";
 
         if(day == null){
-            query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
-                    DbTaskStructure.TABLE_NAME, limit, offset);
+            if(typeListTaskManagementOrder == TypeListTaskManagementOrder.TODAY){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    queryTodayManagementScreen = String.format("SELECT * FROM %s WHERE " +
+                                    "date(%s) = date('%s') " +
+                                    "LIMIT %s OFFSET %s"
+                            ,DbTaskStructure.TABLE_NAME,
+                            DbTaskStructure.Columns.INITIAL_MOMENT,
+                            LocalDateTime.now().toLocalDate().toString(),
+                            limit,offset
+                    );
+                }
+            }
         } else {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Log.i("searched date", day.toLocalDate().toString());
                 String dateToSearch = day.toLocalDate().toString();
 
                 query = String.format("SELECT * FROM %s WHERE " +
@@ -66,7 +80,41 @@ public class TaskDAO {
             }
         }
 
+        if(day == null){
+            int quantityOfToday = 0;
+
+            if(typeListTaskManagementOrder == TypeListTaskManagementOrder.TODAY){
+                try(Cursor c = db.rawQuery(queryTodayManagementScreen, null)){
+                    quantityOfToday = c.getCount();
+                    if(c.moveToFirst()){
+
+                        do {
+                            TaskDtoRead task = fromCursor(c);
+                            tasks.add(task);
+                        }while(c.moveToNext());
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    int offsetToRest = returnOffsetOfRest(offset,isToAddIfTodayIsPriority);
+
+                    query = String.format("SELECT * FROM %s WHERE date(%s) != date('%s') ORDER BY datetime(%s) LIMIT %s OFFSET %s;",
+                            DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
+                            LocalDateTime.now().toLocalDate().toString(),
+                            DbTaskStructure.Columns.INITIAL_MOMENT,
+                            limit - quantityOfToday, offsetToRest);
+
+                }
+            } else {
+                query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
+                        DbTaskStructure.TABLE_NAME, limit, offset);
+            }
+
+        }
+
+
         try(Cursor c = db.rawQuery(query, null)){
+            int quantityOfTasks = c.getCount();
 
             if(c.moveToFirst()){
 
@@ -76,9 +124,56 @@ public class TaskDAO {
                 }while(c.moveToNext());
             }
 
+            if(day == null && typeListTaskManagementOrder== TypeListTaskManagementOrder.TODAY && isToAddIfTodayIsPriority){
+                TaskStaticValues.addToAuxOfRestAfterTodayMemo(quantityOfTasks);
+            }
+
             return tasks;
         }
 
+    }
+
+    private int returnOffsetOfRest(int offset,boolean isToAddIfTodayIsPriority){
+        if(offset ==0){
+            return offset;
+        } else {
+            if(!isToAddIfTodayIsPriority){
+                return TaskStaticValues.returnPreviousMemberOfLastFromAuxOffsetOfRestAfterTodayMemo(
+                        TaskStaticValues.AUX_OFFSET_OF_REST_AFTER_TODAY
+                );
+            }
+
+            return TaskStaticValues.AUX_OFFSET_OF_REST_AFTER_TODAY;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public ArrayList<Integer> returnFinishedOrUnfinishedTasksIds(LocalDateTime date,boolean finishedOrNot){
+        String dateToSearch = date.toLocalDate().toString();
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        String query = String.format("SELECT * FROM %s WHERE " +
+                        "date(%s) = date('%s') AND %s = %s"
+                ,DbTaskStructure.TABLE_NAME,
+                DbTaskStructure.Columns.INITIAL_MOMENT,
+                dateToSearch, DbTaskStructure.Columns.IS_FINISHED,
+                finishedOrNot ? 1 : 0
+        );
+
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    @SuppressLint("Range") int id = c.getInt(
+                            c.getColumnIndex(DbTaskStructure.Columns.ID)
+                    );
+                    ids.add(id);
+                }while(c.moveToNext());
+            }
+
+        }
+
+        return ids;
     }
 
     private  TaskDtoRead fromCursor(Cursor c){
