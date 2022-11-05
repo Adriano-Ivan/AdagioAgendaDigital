@@ -31,7 +31,8 @@ import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.DeleteTaskConfirmationDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.FinishOrNotTaskConfirmationDialog;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrder;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderPriority;
 
 
 public class TaskManagementFragment extends Fragment
@@ -59,7 +60,11 @@ public class TaskManagementFragment extends Fragment
     private RadioButton radioButtonOrderByInitialMomentAsc;
     private RadioButton radioButtonOrderByInitialMomentDesc;
 
-    private TypeListTaskManagementOrder typeListTaskOrder= TypeListTaskManagementOrder.TODAY;
+    private RadioButton radioButtonOrderByPriorityAsc;
+    private RadioButton radioButtonOrderByPriorityDesc;
+
+    private TypeListTaskManagementOrderDate typeListTaskOrderDate = TypeListTaskManagementOrderDate.TODAY;
+    private TypeListTaskManagementOrderPriority typeListTaskOrderPriority = TypeListTaskManagementOrderPriority.PRIORITY_DESC;
 
     private LinearLayout linearLayoutContainerPagination;
 
@@ -97,6 +102,7 @@ public class TaskManagementFragment extends Fragment
         setAttributes();
     }
 
+    // Chamada de métodos para definição
     private void setAttributes(){
         defineViews();
         setConfigurationVisibilitity(true);
@@ -107,19 +113,26 @@ public class TaskManagementFragment extends Fragment
         updatePaginationVisibility();
     }
 
+    // Definição dos elementos da tela
     private void defineViews(){
         containerOptions = rootView.findViewById(R.id.fragment_task_container_options);
+
         buttonHideContainerOptions = rootView.findViewById(R.id.fragment_task_hide_options);
         listTasks = rootView.findViewById(R.id.fragment_task_list_tasks);
         fabButtonGoToTasks = rootView.findViewById(R.id.fragment_task_fab_button_tasks);
         buttonGoToFormTasks = rootView.findViewById((R.id.fragment_task_user_wants_to_create_task));
+
+        // Radio Groups
         radioGroupOrderDatetimeOptions = rootView.findViewById(R.id.fragment_task_order_datetime_options);
         radioGroupOrderPriorityOptions=rootView.findViewById(R.id.fragment_task_order_by_priority_options);
+
+        // Elementos de paginação
         linearLayoutContainerPagination = rootView.findViewById(R.id.fragment_task_container_pagination);
         imageButtonNextPage = rootView.findViewById(R.id.fragment_task_management_next_page);
         imageButtonPreviousPage = rootView.findViewById(R.id.fragment_task_management_previous_page);
         textViewCurrentPage = rootView.findViewById(R.id.fragment_task_management_text_page);
 
+        // RadioButtons de ordenação de data
         radioButtonOrderByToday = rootView.findViewById(R.id.fragment_task_order_by_today);
         radioButtonOrderByInitialMomentAsc =rootView.findViewById(R.id.fragment_task_order_by_initial_moment_asc);
         radioButtonOrderByLimitMomentAsc=rootView.findViewById(R.id.fragment_task_order_by_limit_moment_asc);
@@ -128,11 +141,17 @@ public class TaskManagementFragment extends Fragment
 
         radioGroupOrderDatetimeOptions.check(radioButtonOrderByToday.getId());
 
+        radioButtonOrderByPriorityAsc = rootView.findViewById(R.id.fragment_task_order_by_priority_asc);
+        radioButtonOrderByPriorityDesc = rootView.findViewById(R.id.fragment_task_order_by_priority_desc);
+
+        radioGroupOrderPriorityOptions.check(radioButtonOrderByPriorityAsc.getId());
+
         updateListButton = rootView.findViewById(R.id.fragment_task_update_list);
         imageButtonNextPageDisabled = rootView.findViewById(R.id.fragment_task_management_next_page_disabled);
         imageButtonPreviousPageDisabled =  rootView.findViewById(R.id.fragment_task_management_previous_page_disabled);
     }
 
+    // Definição de listeners
     private void defineListeners(){
         buttonHideContainerOptions.setOnClickListener(this);
         buttonGoToFormTasks.setOnClickListener(this);
@@ -141,23 +160,41 @@ public class TaskManagementFragment extends Fragment
         imageButtonPreviousPage.setOnClickListener(this);
         updateListButton.setOnClickListener(this);
 
+        // Listeners dos radioGroups
+
+        // Data
         radioGroupOrderDatetimeOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(radioButtonOrderByToday.getId() == i){
-                    typeListTaskOrder= TypeListTaskManagementOrder.TODAY;
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+                if(radioButtonOrderByToday.getId() == id){
+                    typeListTaskOrderDate = TypeListTaskManagementOrderDate.TODAY;
+                } else if(radioButtonOrderByInitialMomentAsc.getId() == id){
+                    typeListTaskOrderDate = TypeListTaskManagementOrderDate.INITIAL_MOMENT_ASC;
+                } else if(radioButtonOrderByInitialMomentDesc.getId() == id){
+                    typeListTaskOrderDate=TypeListTaskManagementOrderDate.INITIAL_MOMENT_DESC;
+                } else if(radioButtonOrderByLimitMomentAsc.getId() == id){
+                    typeListTaskOrderDate=TypeListTaskManagementOrderDate.LIMIT_MOMENT_ASC;
+                } else if(radioButtonOrderByLimitMomentDesc.getId() ==id){
+                    typeListTaskOrderDate=TypeListTaskManagementOrderDate.LIMIT_MOMENT_DESC;
                 }
             }
         });
 
+        // Prioridade
         radioGroupOrderPriorityOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                Log.i("priority order", "onCheckedChanged: "+i);
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+                Log.i("priority order", "onCheckedChanged: "+id);
+                if(radioButtonOrderByPriorityAsc.getId() == id){
+                    typeListTaskOrderPriority=TypeListTaskManagementOrderPriority.PRIORITY_ASC;
+                } else if(radioButtonOrderByPriorityDesc.getId() == id){
+                    typeListTaskOrderPriority=TypeListTaskManagementOrderPriority.PRIORITY_DESC;
+                }
             }
         });
     }
 
+    // Esconder container de configuração de tipos de ordenação
     private void  setContainerOptionsIsGone (){
         containerOptions.setVisibility(View.GONE);
         TaskStaticValues.setContainerOptionsIsGone(true);
@@ -209,6 +246,7 @@ public class TaskManagementFragment extends Fragment
         );
     }
 
+    // Chamadas para configuração do adapter que contém da lista de tasks
     private void configureAdapter() {
         listTaskBridgeView = new ListTaskBridgeView(getActivity());
 
@@ -226,6 +264,7 @@ public class TaskManagementFragment extends Fragment
         inflater.inflate(R.menu.menu_task_item, menu);
     }
 
+    // Após long-press no item de task, é aberto o menu com opções de edição e deleção
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
@@ -248,9 +287,9 @@ public class TaskManagementFragment extends Fragment
 
     private void updateTasksList(){
         TaskStaticValues.goBackToDefaultValue();
-        listTaskBridgeView.setOrderDateType(typeListTaskOrder);
+        listTaskBridgeView.setOrderDateType(typeListTaskOrderDate);
         listTaskBridgeView.updateList(TaskStaticValues.LIMIT_LIST, TaskStaticValues.OFFSET_LIST,
-                typeListTaskOrder == TypeListTaskManagementOrder.TODAY);
+                typeListTaskOrderDate == TypeListTaskManagementOrderDate.TODAY);
     }
 
     @Override
@@ -275,7 +314,8 @@ public class TaskManagementFragment extends Fragment
                     );
             updatePaginationVisibility();
         } else if(view.getId() == updateListButton.getId()){
-            listTaskBridgeView.setOrderDateType(typeListTaskOrder);
+            TaskStaticValues.goBackToDefaultValue();
+            listTaskBridgeView.setOrderDateType(typeListTaskOrderDate);
             listTaskBridgeView.updateListAux();
             updatePaginationVisibility();
             setConfigurationVisibilitity(false);

@@ -2,6 +2,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +22,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.datepicker.MaterialCalendar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
@@ -78,7 +81,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
    }
 
    private void setAttributes(){
-        taskDAO = TaskDAO.getInstance(getContext());
+       taskDAO = TaskDAO.getInstance(getContext());
        defineViews();
        defineListeners();
        defineDefaultValues();
@@ -106,7 +109,6 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
         monthsOptions.setAdapter(adapter);
 
-
         monthsOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -129,8 +131,21 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
     private void defineListeners(){
         calendarView.setOnDateChangeListener(this);
 
+
         buttonToChooseYear.setOnClickListener(this);
     }
+
+//   public void setMonthDateColor(Date date, int color) {
+//       final int childCount = mListView.getChildCount();
+//       for (int i = 0; i < childCount; i++) {
+//           WeekView weekView = (WeekView) mListView.getChildAt(i);
+//           if (weekView.isDateInWeek(date)) {
+//               //this method adds the date and colour to a
+//               //Map collection in weekView Object
+//               weekView.setDateColour(date, color);
+//           }
+//       }
+//   }
 
     private void defineDefaultValues(){
         Calendar calendar = Calendar.getInstance();

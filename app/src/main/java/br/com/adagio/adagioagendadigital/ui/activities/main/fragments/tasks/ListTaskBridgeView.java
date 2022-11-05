@@ -7,14 +7,14 @@ import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrder;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
 
 public class ListTaskBridgeView {
 
     private final TaskDAO taskDAO ;
     private final ListTaskAdapter listTaskAdapter;
     private final Context context;
-    private TypeListTaskManagementOrder typeListTaskOrder  = null;
+    private TypeListTaskManagementOrderDate typeListTaskOrder  = null;
 
     public ListTaskBridgeView(Context context){
         this.context = context;
@@ -57,7 +57,7 @@ public class ListTaskBridgeView {
 
     public void updateListAux(){
         updateList(TaskStaticValues.LIMIT_LIST,
-                TaskStaticValues.OFFSET_LIST,typeListTaskOrder== TypeListTaskManagementOrder.TODAY);
+                TaskStaticValues.OFFSET_LIST,typeListTaskOrder== TypeListTaskManagementOrderDate.TODAY);
     }
 
     public void configureAdapter(ListView tasksList, TaskManagementFragment fragment){
@@ -97,7 +97,7 @@ public class ListTaskBridgeView {
         return true;
     }
 
-    public void setOrderDateType(TypeListTaskManagementOrder typeListTaskOrder) {
+    public void setOrderDateType(TypeListTaskManagementOrderDate typeListTaskOrder) {
         this.typeListTaskOrder = typeListTaskOrder;
     }
 }

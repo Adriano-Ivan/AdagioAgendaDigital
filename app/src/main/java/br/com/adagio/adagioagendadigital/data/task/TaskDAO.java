@@ -20,7 +20,7 @@ import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrder;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
 
 public class TaskDAO {
 
@@ -43,16 +43,19 @@ public class TaskDAO {
         return instance;
     }
 
+    // Encapsula as listagens de tasks, recebendo parâmetros para guiar a construção do retorno
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<TaskDtoRead> list(int limit, int offset, LocalDateTime day,
-                                  TypeListTaskManagementOrder typeListTaskManagementOrder,
+                                  TypeListTaskManagementOrderDate typeListTaskManagementOrder,
                                   boolean isToAddIfTodayIsPriority){
 
         List<TaskDtoRead> tasks = new ArrayList<>();
         String query = "";
         String queryTodayManagementScreen = "";
 
+        // Se for diferente de nulo, é porque o retorno se destina para o dialog do dia exibido na home
         if(day == null){
-            if(typeListTaskManagementOrder == TypeListTaskManagementOrder.TODAY){
+            if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     queryTodayManagementScreen = String.format("SELECT * FROM %s WHERE " +
                                     "date(%s) = date('%s') " +
@@ -83,29 +86,41 @@ public class TaskDAO {
         if(day == null){
             int quantityOfToday = 0;
 
-            if(typeListTaskManagementOrder == TypeListTaskManagementOrder.TODAY){
-                try(Cursor c = db.rawQuery(queryTodayManagementScreen, null)){
-                    quantityOfToday = c.getCount();
-                    if(c.moveToFirst()){
+            if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
+                quantityOfToday = insertInTasksArray(tasks, queryTodayManagementScreen);
 
-                        do {
-                            TaskDtoRead task = fromCursor(c);
-                            tasks.add(task);
-                        }while(c.moveToNext());
-                    }
-                }
+                int offsetToRest = returnOffsetOfRest(offset,isToAddIfTodayIsPriority);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    int offsetToRest = returnOffsetOfRest(offset,isToAddIfTodayIsPriority);
+                query = String.format("SELECT * FROM %s WHERE date(%s) != date('%s') ORDER BY datetime(%s) ASC," +
+                                "datetime(%s) ASC LIMIT %s OFFSET %s;",
+                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        LocalDateTime.now().toLocalDate().toString(),
+                        DbTaskStructure.Columns.INITIAL_MOMENT,
+                        DbTaskStructure.Columns.LIMIT_MOMENT,
+                        limit - quantityOfToday, offsetToRest);
 
-                    query = String.format("SELECT * FROM %s WHERE date(%s) != date('%s') ORDER BY datetime(%s) LIMIT %s OFFSET %s;",
-                            DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
-                            LocalDateTime.now().toLocalDate().toString(),
-                            DbTaskStructure.Columns.INITIAL_MOMENT,
-                            limit - quantityOfToday, offsetToRest);
-
-                }
-            } else {
+            } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.INITIAL_MOMENT_ASC){
+                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) ASC" +
+                                " LIMIT %s OFFSET %s;",
+                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        limit , offset);
+            } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.INITIAL_MOMENT_DESC){
+                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) DESC" +
+                                " LIMIT %s OFFSET %s;",
+                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        limit , offset);
+            } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.LIMIT_MOMENT_ASC){
+                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) ASC" +
+                                " LIMIT %s OFFSET %s;",
+                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.LIMIT_MOMENT,
+                        limit , offset);
+            } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.LIMIT_MOMENT_DESC){
+                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) DESC" +
+                                " LIMIT %s OFFSET %s;",
+                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.LIMIT_MOMENT,
+                        limit , offset);
+            }
+            else {
                 query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
                         DbTaskStructure.TABLE_NAME, limit, offset);
             }
@@ -124,13 +139,28 @@ public class TaskDAO {
                 }while(c.moveToNext());
             }
 
-            if(day == null && typeListTaskManagementOrder== TypeListTaskManagementOrder.TODAY && isToAddIfTodayIsPriority){
+            if(day == null && typeListTaskManagementOrder== TypeListTaskManagementOrderDate.TODAY && isToAddIfTodayIsPriority){
                 TaskStaticValues.addToAuxOfRestAfterTodayMemo(quantityOfTasks);
             }
 
             return tasks;
         }
 
+    }
+
+    private int insertInTasksArray(List<TaskDtoRead> tasks, String queryTodayManagementScreen) {
+        int quantityOfToday;
+        try(Cursor c = db.rawQuery(queryTodayManagementScreen, null)){
+            quantityOfToday = c.getCount();
+            if(c.moveToFirst()){
+
+                do {
+                    TaskDtoRead task = fromCursor(c);
+                    tasks.add(task);
+                }while(c.moveToNext());
+            }
+        }
+        return quantityOfToday;
     }
 
     private int returnOffsetOfRest(int offset,boolean isToAddIfTodayIsPriority){

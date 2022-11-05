@@ -1,6 +1,6 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils;
 
-public enum TypeListTaskManagementOrder {
+public enum TypeListTaskManagementOrderDate {
     TODAY("TODAY"),
     LIMIT_MOMENT_DESC("LIMIT_MOMENT_DESC"),
     LIMIT_MOMENT_ASC("LIMIT_MOMENT_ASC"),
@@ -9,7 +9,7 @@ public enum TypeListTaskManagementOrder {
 
     private final String value;
 
-    TypeListTaskManagementOrder(String value){this.value = value;}
+    TypeListTaskManagementOrderDate(String value){this.value = value;}
 
     private String getValue(){
         return value;
