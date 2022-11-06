@@ -21,14 +21,23 @@
     <string name="choose_the_month">Escolha o mês</string>
 
     <string name="january">Janeiro</string>
+    <string name="february">Fevereiro</string>
+    <string name="march">Março</string>
+    <string name="april">Abril</string>
+    <string name="may">Maio</string>
+    <string name="june">Junho</string>
+    <string name="july">Julho</string>
+    <string name="august">Agosto</string>
+    <string name="september">Setembro</string>
+    <string name="october">Outubro</string>
+    <string name="november">Novembro</string>
+    <string name="december">Dezembro</string>
     <string name="activity_home_mode_slide_text">Slide</string>
     <string name="activity_home_mode_mosaic_text">Mosaico</string>
     <string name="home">Home</string>
     <string name="create_task">Criar tarefa</string>
     <string name="tasks">Tarefas</string>
     <string name="logout">Sair</string>
-    <string name="name_temporary_example">Adriano Ivan</string>
-    <string name="email_temporary_example">adrianoivandepaulacampos@gmail.com</string>
     <string name="open">Abrir</string>
     <string name="close">Fechar</string>
     <string name="button_to_sidebar">Atalho para abrir sidebar</string>
@@ -38,20 +47,20 @@
     <string name="tags_button">Tags</string>
     <string name="adagio">Adagio</string>
     <string-array name="months">
-        <item>Janeiro</item>
-        <item>Fevereiro</item>
-        <item>Março</item>
-        <item>Abril</item>
-        <item>Maio</item>
-        <item>Junho</item>
-        <item>Julho</item>
-        <item>Agosto</item>
-        <item>Setembro</item>
-        <item>Outubro</item>
-        <item>Novembro</item>
-        <item>Dezembro</item>
+        <item name="jan">@string/january</item>
+        <item name="feb">@string/february</item>
+        <item name="march">@string/march</item>
+        <item name="apr">@string/april</item>
+        <item name="month_may">@string/may</item>
+        <item name="month_june">@string/june</item>
+        <item name="month_july">@string/july</item>
+        <item name="month_august">@string/august</item>
+        <item name="month_september">@string/september</item>
+        <item name="month_october">@string/october</item>
+        <item name="month_november">@string/november</item>
+        <item name="month_december">@string/december</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tags">Tags</string>
     <string name="relatories">Relatórios</string>

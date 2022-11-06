@@ -1,8 +1,5 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,27 +18,33 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.github.sundeepk.compactcalendarview.CompactCalendarView;
-import com.google.android.material.datepicker.MaterialCalendar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayAverageDecorator;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayCriticalDecorator;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayDecorator;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayHighDecorator;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayLowDecorator;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeTodayDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.NumberPickerDialogToChooseYear;
 
-public class HomeFragment extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener
+@RequiresApi(api = Build.VERSION_CODES.O)
+public class HomeFragment extends Fragment implements /*CalendarView.OnDateChangeListener,*/ View.OnClickListener
        {
 
     private View rootView;
-    private CalendarView calendarView;
-    private CompactCalendarView compatCalendarView;
+    private MaterialCalendarView materialCalendarView;
 
     private Button buttonToChooseYear;
     private TextView textViewTodayDate;
@@ -53,7 +55,6 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
     private ArrayList<Integer> finishedTasksIds  = new ArrayList<>();
     private ArrayList<Integer> tasksToStartIds=new ArrayList<>();
-
 
     private TaskDAO taskDAO ;
 
@@ -89,19 +90,10 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
        defineListeners();
        defineDefaultValues();
 
-       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-           setNewStateOfCalendar();
-       }
-       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-           setMonthsDropdownProperties();
-       }
-
-       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-           setMaxAndMinDateOfCalendar();
-       }
+       setNewStateOfCalendar();
+       setMonthsDropdownProperties();
    }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setMonthsDropdownProperties (){
         String[] months = getResources().getStringArray(R.array.months);
 
@@ -126,15 +118,45 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
 
     }
 
+
     private void defineViews(){
-        calendarView = rootView.findViewById(R.id.fragment_home_calendar);
+//        calendarView = rootView.findViewById(R.id.fragment_home_calendar);
+        materialCalendarView=rootView.findViewById(R.id.fragment_home_calendar);
         buttonToChooseYear = rootView.findViewById(R.id.fragment_home_button_choose_year);
         textViewTodayDate = rootView.findViewById(R.id.fragment_home_indicative_date);
+
+        LocalDateTime minDate = LocalDateTime.of(LimitsYearValues.MIN_YEAR.getValue(), 1,1,0,0, 0);
+        LocalDateTime maxDate = LocalDateTime.of(LimitsYearValues.MAX_YEAR.getValue(), 12, 31, 23, 59, 59);
+
+        materialCalendarView.state().edit()
+                .setMaximumDate(
+                        CalendarDay.from(maxDate.getYear(),
+                                maxDate.getMonthValue(),
+                                maxDate.getDayOfMonth())
+                )
+                .setMinimumDate(
+                        CalendarDay.from(minDate.getYear(),
+                                minDate.getMonthValue(),
+                                minDate.getDayOfMonth())
+                )
+                .commit();
+
+        defineDayColors();
+
     }
 
     private void defineListeners(){
-        calendarView.setOnDateChangeListener(this);
+//        calendarView.setOnDateChangeListener(this);
+        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
+                Log.i("choose month", ""+date.toString());
+                onSelectedDayChange(date.getYear(),
+                        date.getMonth(),
+                        date.getDay());
+            }
+        });
         buttonToChooseYear.setOnClickListener(this);
 
     }
@@ -151,55 +173,73 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
                 returnDayOrMonth(day),returnDayOrMonth(month),year));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setMaxAndMinDateOfCalendar(){
-        LocalDateTime minDate = LocalDateTime.of(LimitsYearValues.MIN_YEAR.getValue(), 1,1,0,0, 0);
-        LocalDateTime maxDate = LocalDateTime.of(LimitsYearValues.MAX_YEAR.getValue(), 12, 31, 23, 59, 59);
+  // Método chamado após uma data ser clicada
+   public void onSelectedDayChange( int year, int month, int dayOfMonth) {
+       Log.i("PERIOD: ", "onSelectedDayChange: "+year+" "+month+" "+dayOfMonth);
 
-        Calendar calendarForMin = Calendar.getInstance();
-        Calendar calendarForMax = Calendar.getInstance();
+       pickedDate = LocalDateTime.of(year,month,dayOfMonth,0,0,0);
 
-        calendarForMin.set(minDate.getYear(), minDate.getMonth().getValue() -1,
-                            minDate.getDayOfMonth());
-        calendarForMax.set(maxDate.getYear(), maxDate.getMonth().getValue() - 1,
-                maxDate.getDayOfMonth());
+       todayDialog = new HomeTodayDialog(pickedDate,
+               taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
+                       true
+               ),
+               taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
+                       false
+               )
+       );
+       todayDialog.setParentFragment(this);
 
-        calendarView.setMinDate(calendarForMin.getTimeInMillis());
-        calendarView.setMaxDate(calendarForMax.getTimeInMillis());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-        Log.i("PERIOD: ", "onSelectedDayChange: "+year+" "+month+" "+dayOfMonth);
-
-        pickedDate = LocalDateTime.of(year,month+1,dayOfMonth,0,0,0);
-
-        todayDialog = new HomeTodayDialog(pickedDate,
-                taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
-                        true
-                        ),
-                taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
-                        false
-                        )
-                );
-        todayDialog.setParentFragment(this);
-
-        if(!dialogIsShown){
-            todayDialog.show(getActivity().getSupportFragmentManager(),"dialog");
-            dialogIsShown = true;
-        }
+       if(!dialogIsShown){
+           todayDialog.show(getActivity().getSupportFragmentManager(),"dialog");
+           dialogIsShown = true;
+       }
 
 
-        HomeStaticValues.setPickedDayMemo(dayOfMonth);
-    }
+       HomeStaticValues.setPickedDayMemo(dayOfMonth);
 
+   }
+
+   private void defineDayColors(){
+        ArrayList<LocalDateTime> criticals = new ArrayList<>(
+                Arrays.asList(
+                        LocalDateTime.of(2022, 11, 02, 23,33),
+                        LocalDateTime.of(2022, 11, 8, 22,33),
+                        LocalDateTime.of(2022, 11, 9, 19,33)
+                )
+        );
+       ArrayList<LocalDateTime> low = new ArrayList<>(
+               Arrays.asList(
+                       LocalDateTime.of(2022, 11, 18, 14,33),
+                       LocalDateTime.of(2022, 11, 16, 14,33),
+                       LocalDateTime.of(2022, 11, 6, 18,33)
+                       )
+       );
+       ArrayList<LocalDateTime> average = new ArrayList<>(
+               Arrays.asList(
+                       LocalDateTime.of(2022, 11, 28, 14,33),
+                       LocalDateTime.of(2022, 11, 21, 14,33),
+                       LocalDateTime.of(2022, 11, 29, 14,33)
+                       )
+       );
+       ArrayList<LocalDateTime> high = new ArrayList<>(
+               Arrays.asList(
+                       LocalDateTime.of(2022, 11, 23, 22,33),
+                       LocalDateTime.of(2022, 11, 24, 21,33),
+                       LocalDateTime.of(2022, 11, 22, 22,33)
+                       )
+       );
+
+       materialCalendarView.addDecorator(new AdagioDayLowDecorator(low));
+        materialCalendarView.addDecorator(new AdagioDayCriticalDecorator(criticals));
+       materialCalendarView.addDecorator(new AdagioDayHighDecorator(high));
+       materialCalendarView.addDecorator(new AdagioDayAverageDecorator(average));
+   }
+
+   // Auxilia o tratamento do cenário onde o usuário faz um duplo clique no dia (evita abrir dois dialogs sobrepostos)
     public void defineDialogIsNotShown(){
         dialogIsShown = false;
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.fragment_home_button_choose_year){
@@ -215,6 +255,7 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         }
     }
 
+    //
     private LocalDateTime getAuxLocalDateTime(LocalDateTime now){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
            return LocalDateTime.of(HomeStaticValues.PICKED_YEAR_MEMO,  HomeStaticValues.PICKED_MONTH_MEMO,
@@ -223,19 +264,22 @@ public class HomeFragment extends Fragment implements CalendarView.OnDateChangeL
         return null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    // Após um mês ou ano ser modificado, define a visualização atual do calendário
     private void auxSetNewStateOfCalendar(){
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime newDate =  getAuxLocalDateTime(now);
         pickedDate = getAuxLocalDateTime(now);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(HomeStaticValues.PICKED_YEAR_MEMO,newDate.getMonth().getValue()-1,newDate.getDayOfMonth());
-
-        calendarView.setDate(calendar.getTimeInMillis());
+        materialCalendarView.setCurrentDate(
+                CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
+                        pickedDate.getDayOfMonth())
+        );
+        materialCalendarView.setSelectedDate(
+                CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
+                        pickedDate.getDayOfMonth())
+        );
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    // Chama o método que faz a modificação da visualização do calendário, e define o dia como 1 caso o usuário vá para fevereiro, tendo antes escolhido um dia maior de outro mês (gerando exception)
     public void setNewStateOfCalendar(){
 
         try {
