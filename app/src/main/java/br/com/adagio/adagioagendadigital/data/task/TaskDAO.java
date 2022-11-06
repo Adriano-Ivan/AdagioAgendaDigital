@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.renderscript.RenderScript;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -14,14 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
+import br.com.adagio.adagioagendadigital.data.priority.DbPriorityStructure;
 import br.com.adagio.adagioagendadigital.data.priority.PriorityDAO;
 import br.com.adagio.adagioagendadigital.data.task_tag.DbTaskTagStructure;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
+import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class TaskDAO {
 
     private static TaskDAO instance;
@@ -148,6 +153,54 @@ public class TaskDAO {
 
     }
 
+    public ArrayList<LocalDateTime> returnMonthLocalDateTimesOfGreatestPriorityDay(
+            int month, int year, Priorities priority ){
+        ArrayList<LocalDateTime> localDateTimes = new ArrayList<>();
+        Log.i("MONTH AND YEAR", month+" "+year);
+        String query = String.format(
+                "SELECT %s.%s FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
+                        " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
+                        " strftime('MONTH',%s) LIKE '%s' AND %s.%s LIKE '%s';" ,
+                't', DbTaskStructure.Columns.INITIAL_MOMENT, DbTaskStructure.TABLE_NAME,
+                't', DbPriorityStructure.TABLE_NAME,'p', 'p',DbPriorityStructure.Columns.ID,
+                't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT, year, DbTaskStructure.Columns.INITIAL_MOMENT,
+                month, 'p', DbPriorityStructure.Columns.NAME,priority.getValue()
+        ).replaceAll("YEAR", "%Y").replaceAll("MONTH","%m");
+
+        Log.i("sql", query);
+        try (Cursor c = db.rawQuery(query, null)){
+            Log.i("QUANTITY", c.getCount()+"");
+            if(c.moveToFirst()){
+                do{
+                    LocalDateTime localDateTimeFromQuery = getLocalDateTimeFromQuery(c);
+
+                    if(!arrayListContainsLocalDateTimeWithYearAndMonth(localDateTimes,
+                            localDateTimeFromQuery)){
+                        localDateTimes.add(localDateTimeFromQuery);
+                    }
+                } while(c.moveToNext());
+            }
+        }
+
+        return localDateTimes;
+    }
+
+    private boolean arrayListContainsLocalDateTimeWithYearAndMonth(ArrayList<LocalDateTime> arrayList,LocalDateTime localDateTimeFromQuery) {
+        for(LocalDateTime ldt : arrayList){
+            if(ldt.getMonth() == localDateTimeFromQuery.getMonth() && ldt.getYear() == localDateTimeFromQuery.getYear()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private LocalDateTime getLocalDateTimeFromQuery(Cursor c) {
+        @SuppressLint("Range") String initialMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.INITIAL_MOMENT));
+
+        LocalDateTime value = LocalDateTime.parse(initialMoment);
+        return value;
+    }
+
     private int insertInTasksArray(List<TaskDtoRead> tasks, String queryTodayManagementScreen) {
         int quantityOfToday;
         try(Cursor c = db.rawQuery(queryTodayManagementScreen, null)){
@@ -217,10 +270,8 @@ public class TaskDAO {
         LocalDateTime initialMomentDateTime=null;
         LocalDateTime limitMomentDateTime=null;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-              initialMomentDateTime = LocalDateTime.parse(initialMoment);
-              limitMomentDateTime = LocalDateTime.parse(limitMoment);
-        }
+        initialMomentDateTime = LocalDateTime.parse(initialMoment);
+        limitMomentDateTime = LocalDateTime.parse(limitMoment);
 
         ArrayList<Integer> tagIds = returnTagIds(id);
         String priorityName = returnPriorityName(priority_id);

@@ -1,5 +1,6 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator;
 
+import android.graphics.Color;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -11,5 +12,6 @@ import java.util.ArrayList;
 public class AdagioDayAverageDecorator extends AdagioDayDecorator{
     public AdagioDayAverageDecorator(ArrayList<LocalDateTime> dates) {
         super(dates);
+        this.color = Color.parseColor("#0000FF");
     }
 }
