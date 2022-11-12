@@ -59,6 +59,44 @@ public class NotificationDAO {
         db.execSQL(DbNotificationStructure.returnSqlToCreate());
     }
 
+    public Notification get(int id){
+        String query = String.format("SELECT * FROM %s WHERE %s = %s;",
+                DbNotificationStructure.TABLE_NAME,DbNotificationStructure.Columns.ID, id);
+
+        Notification notification = null;
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    notification = fromCursor(c);
+
+                }while(c.moveToNext());
+            }
+
+        }
+
+        return notification;
+    }
+
+    public ArrayList<Notification> list(){
+        String query = String.format("SELECT * FROM %s ",
+                DbNotificationStructure.TABLE_NAME);
+
+        ArrayList<Notification> notifications = new ArrayList<>();
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    Notification notification = fromCursor(c);
+                    notifications.add(notification);
+                }while(c.moveToNext());
+            }
+
+        }
+
+        return notifications;
+    }
+
     private Notification fromCursor(Cursor c){
         @SuppressLint("Range") int id = c.getInt(c.getColumnIndex(DbNotificationStructure.Columns.ID));
         @SuppressLint("Range") int task_id = c.getInt(c.getColumnIndex(DbNotificationStructure.Columns.TASK_ID));
