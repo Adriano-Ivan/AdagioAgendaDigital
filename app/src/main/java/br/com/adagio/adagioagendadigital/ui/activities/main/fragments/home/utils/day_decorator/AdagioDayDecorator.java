@@ -1,6 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
@@ -18,10 +19,17 @@ import java.util.ArrayList;
 public abstract class AdagioDayDecorator implements DayViewDecorator {
 
     private ArrayList<LocalDateTime> dates;
+
+    private Drawable drawable = null;
     protected int color;
 
     public AdagioDayDecorator(ArrayList<LocalDateTime> dates){
         this.dates = new ArrayList<>(dates);
+    }
+
+    public AdagioDayDecorator(ArrayList<LocalDateTime> dates, Drawable drawable){
+        this.dates = new ArrayList<>(dates);
+        this.drawable = drawable;
     }
 
     @Override
@@ -42,7 +50,6 @@ public abstract class AdagioDayDecorator implements DayViewDecorator {
                  d.getMonth().getValue() == day.getMonth()
             )
             {
-                Log.i("contains", "yes");
                 contains = true;
                 break;
             }
@@ -53,7 +60,11 @@ public abstract class AdagioDayDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
-
-        view.addSpan(new BackgroundColorSpan(color));
+        if(this.drawable == null){
+            view.addSpan(new BackgroundColorSpan(color));
+        } else {
+            view.setBackgroundDrawable(this.drawable);
+            view.setSelectionDrawable(this.drawable);
+        }
     }
 }

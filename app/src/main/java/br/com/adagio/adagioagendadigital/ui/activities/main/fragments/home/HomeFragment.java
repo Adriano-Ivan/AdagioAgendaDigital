@@ -1,5 +1,6 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home;
 
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,9 +37,10 @@ import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayAverageDecorator;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayCriticalDecorator;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayDecorator;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayHighDecorator;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayLowDecorator;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.DefaultDayWithoutDefaultSystemPriority;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.DefaultTodayDecorator;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeTodayDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.NumberPickerDialogToChooseYear;
 
@@ -59,6 +62,13 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
     private ArrayList<Integer> tasksToStartIds=new ArrayList<>();
 
     private TaskDAO taskDAO ;
+
+    private ArrayList<LocalDateTime> criticals = new ArrayList<>();
+    private ArrayList<LocalDateTime> high = new ArrayList<>();
+    private ArrayList<LocalDateTime> average = new ArrayList<>();
+    private ArrayList<LocalDateTime> low = new ArrayList<>();
+
+    private DefaultDayWithoutDefaultSystemPriority defaultDayWithoutDefaultSystemPriority = null;
 
     public HomeFragment(){
 
@@ -94,7 +104,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
 
        setNewStateOfCalendar();
        setMonthsDropdownProperties();
-//       defineDayColors();
+       defineDayColors();
    }
 
     private void setMonthsDropdownProperties (){
@@ -150,6 +160,18 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
+                if(!oneOfSetOfTaskMomentsContainsTasksWithDefaultDefinedPriorities(date.getYear(),
+                        date.getMonth(),date.getDay())) {
+                    
+                    Drawable drawable = ContextCompat.getDrawable(getContext(),
+                            R.drawable.default_day_without_default_system_priority_container);
+
+                    materialCalendarView.addDecorator(new DefaultDayWithoutDefaultSystemPriority(
+                            LocalDateTime.of(date.getYear(),date.getMonth(),date.getDay(),
+                                    0,0,0), drawable
+                    ));
+                }
+
                 Log.i("choose month", ""+date.toString());
                 onSelectedDayChange(date.getYear(),
                         date.getMonth(),
@@ -160,7 +182,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
                 updatePickedDate();
-//                defineDayColors();
+                defineDayColors();
             }
         });
         buttonToChooseYear.setOnClickListener(this);
@@ -173,7 +195,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
         int month = calendar.get(Calendar.MONTH)+1;
         int year = calendar.get(Calendar.YEAR);
 
-//        updatePickedDate();
+        updatePickedDate();
         textViewTodayDate.setText(String.format(
                 "%s %s/%s/%s",
                 getResources().getString(R.string.today_text),
@@ -216,23 +238,36 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
 
    private void defineDayColors(){
        materialCalendarView.removeDecorators();
-       ArrayList<LocalDateTime> criticals = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
+
+       criticals = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
                 pickedDate.getMonthValue(), pickedDate.getYear(), Priorities.CRITICAL
         );
-       ArrayList<LocalDateTime> high =taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
+       high =taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
                pickedDate.getMonthValue(),pickedDate.getYear(),Priorities.HIGH
        );
-       ArrayList<LocalDateTime> average = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
+       average = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
                pickedDate.getMonthValue(),pickedDate.getYear(),Priorities.AVERAGE
        );
-       ArrayList<LocalDateTime> low = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
+       low = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
                pickedDate.getMonthValue(),pickedDate.getYear(),Priorities.LOW
        );
 
-       materialCalendarView.addDecorator(new AdagioDayLowDecorator(low));
-       materialCalendarView.addDecorator(new AdagioDayAverageDecorator(average));
-       materialCalendarView.addDecorator(new AdagioDayHighDecorator(high));
-       materialCalendarView.addDecorator(new AdagioDayCriticalDecorator(criticals));
+       Drawable lowDrawable = ContextCompat.getDrawable(getContext(),R.drawable.low_day_container);
+       materialCalendarView.addDecorator(new AdagioDayLowDecorator(low,lowDrawable));
+
+       Drawable averageDrawable = ContextCompat.getDrawable(getContext(),R.drawable.medium_day_container);
+       materialCalendarView.addDecorator(new AdagioDayAverageDecorator(average,averageDrawable));
+
+       Drawable highDrawable = ContextCompat.getDrawable(getContext(),R.drawable.high_day_container);
+       materialCalendarView.addDecorator(new AdagioDayHighDecorator(high,highDrawable));
+
+       Drawable criticalDrawable = ContextCompat.getDrawable(getContext(),R.drawable.critical_day_container);
+       materialCalendarView.addDecorator(new AdagioDayCriticalDecorator(criticals,criticalDrawable));
+
+       Drawable defaultTodayDrawable = ContextCompat.getDrawable(getContext(),R.drawable.default_today_container);
+       materialCalendarView.addDecorator(new DefaultTodayDecorator(
+               new ArrayList<>(Arrays.asList(LocalDateTime.now())),defaultTodayDrawable
+       ));
    }
 
    // Auxilia o tratamento do cenário onde o usuário faz um duplo clique no dia (evita abrir dois dialogs sobrepostos)
@@ -297,5 +332,48 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
        }
 
        return Integer.toString(dayOrMonth);
+   }
+
+   // Itera sobre todos os conjuntos de localDateTimes categorizados por prioridade, comparando os elementos para verificar se algum coincide com a data especificada
+   private boolean oneOfSetOfTaskMomentsContainsTasksWithDefaultDefinedPriorities(
+           int year, int month,int day
+   ){
+        boolean contains =false;
+
+        contains = setOfMomentsTasksWithPriorityContainsDate(year,month,day, low);
+
+        if(!contains){
+            contains = setOfMomentsTasksWithPriorityContainsDate(year,month, day, average);
+        }
+
+       if(!contains){
+           contains = setOfMomentsTasksWithPriorityContainsDate(year,month,day, high);
+       }
+
+       if(!contains){
+           contains = setOfMomentsTasksWithPriorityContainsDate(year,month, day, criticals);
+       }
+
+       return contains;
+   }
+
+   private boolean setOfMomentsTasksWithPriorityContainsDate(int year, int month, int day,
+                                                             ArrayList<LocalDateTime> dates){
+       boolean contains = false;
+       for(LocalDateTime d: dates){
+           if(parametersCoincideWithDate(year, month, day, d)){
+               contains = true;
+               break;
+           }
+       }
+       return contains;
+   }
+   private boolean parametersCoincideWithDate(int year, int month, int day, LocalDateTime dateTime){
+        if(dateTime.getYear() == year &&
+                dateTime.getMonth().getValue() == month && dateTime.getDayOfMonth() == day){
+            return true;
+        }
+
+        return false;
    }
 }

@@ -41,6 +41,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.util
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.CurrentFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.utils.MainStaticValues;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public  class MainActivity extends AppCompatActivity implements
         NumberPickerDialogToChooseYear.onSaveYearListener,
         TaskManagementFragment.OnFragmentTaskFormInteractionListener,

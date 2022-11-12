@@ -156,24 +156,25 @@ public class TaskDAO {
     public ArrayList<LocalDateTime> returnMonthLocalDateTimesOfGreatestPriorityDay(
             int month, int year, Priorities priority ){
         ArrayList<LocalDateTime> localDateTimes = new ArrayList<>();
-        Log.i("MONTH AND YEAR", month+" "+year);
+
         String query = String.format(
                 "SELECT %s.%s FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
                         " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
                         " strftime('MONTH',%s) LIKE '%s' AND %s.%s LIKE '%s';" ,
                 't', DbTaskStructure.Columns.INITIAL_MOMENT, DbTaskStructure.TABLE_NAME,
                 't', DbPriorityStructure.TABLE_NAME,'p', 'p',DbPriorityStructure.Columns.ID,
-                't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT, year, DbTaskStructure.Columns.INITIAL_MOMENT,
+                't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT,
+                year, DbTaskStructure.Columns.INITIAL_MOMENT,
                 month, 'p', DbPriorityStructure.Columns.NAME,priority.getValue()
         ).replaceAll("YEAR", "%Y").replaceAll("MONTH","%m");
 
-        Log.i("sql", query);
+
         try (Cursor c = db.rawQuery(query, null)){
             Log.i("QUANTITY", c.getCount()+"");
             if(c.moveToFirst()){
                 do{
                     LocalDateTime localDateTimeFromQuery = getLocalDateTimeFromQuery(c);
-
+                    Log.i("query result in", localDateTimeFromQuery.toString());
                     if(!arrayListContainsLocalDateTimeWithYearAndMonth(localDateTimes,
                             localDateTimeFromQuery)){
                         localDateTimes.add(localDateTimeFromQuery);
@@ -187,7 +188,9 @@ public class TaskDAO {
 
     private boolean arrayListContainsLocalDateTimeWithYearAndMonth(ArrayList<LocalDateTime> arrayList,LocalDateTime localDateTimeFromQuery) {
         for(LocalDateTime ldt : arrayList){
-            if(ldt.getMonth() == localDateTimeFromQuery.getMonth() && ldt.getYear() == localDateTimeFromQuery.getYear()){
+
+            if(ldt.getMonth() == localDateTimeFromQuery.getMonth() && ldt.getYear() == localDateTimeFromQuery.getYear()
+            && ldt.getDayOfMonth() == localDateTimeFromQuery.getDayOfMonth()){
                 return true;
             }
         }

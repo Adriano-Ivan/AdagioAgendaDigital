@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -17,9 +16,7 @@ import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
-import br.com.adagio.adagioagendadigital.models.entities.Tag;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 
 public class TasksOfDayDialogAdapter  extends BaseAdapter {
 
@@ -90,7 +87,7 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
         if(task.getPriorityName().equals(Priorities.HIGH.getValue())){
             return parentFragment.getContext().getColor(R.color.yellow);
         } else if(task.getPriorityName().equals(Priorities.LOW.getValue())){
-            return parentFragment.getContext().getColor(R.color.gray);
+            return parentFragment.getContext().getColor(R.color.light_gray);
         } else if(task.getPriorityName().equals(Priorities.CRITICAL.getValue())){
             return parentFragment.getContext().getColor(R.color.red);
         }
