@@ -68,7 +68,10 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
     private ArrayList<LocalDateTime> average = new ArrayList<>();
     private ArrayList<LocalDateTime> low = new ArrayList<>();
 
-    private DefaultDayWithoutDefaultSystemPriority defaultDayWithoutDefaultSystemPriority = null;
+    Drawable drawable = null;
+
+    private DefaultDayWithoutDefaultSystemPriority defaultDayWithoutDefaultSystemPriority =
+            new DefaultDayWithoutDefaultSystemPriority( );
 
     public HomeFragment(){
 
@@ -162,17 +165,22 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
 
                 if(!oneOfSetOfTaskMomentsContainsTasksWithDefaultDefinedPriorities(date.getYear(),
                         date.getMonth(),date.getDay())) {
-                    
-                    Drawable drawable = ContextCompat.getDrawable(getContext(),
+
+                    materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
+
+                    drawable=ContextCompat.getDrawable(getContext(),
                             R.drawable.default_day_without_default_system_priority_container);
 
-                    materialCalendarView.addDecorator(new DefaultDayWithoutDefaultSystemPriority(
-                            LocalDateTime.of(date.getYear(),date.getMonth(),date.getDay(),
-                                    0,0,0), drawable
-                    ));
+                    defaultDayWithoutDefaultSystemPriority.defineDrawable(drawable);
+                    defaultDayWithoutDefaultSystemPriority.defineDate(
+                            LocalDateTime.of(date.getYear(),date.getMonth(),date.getDay(),0,0,0)
+                    );
+
+                    materialCalendarView.addDecorator(defaultDayWithoutDefaultSystemPriority);
+                } else {
+                    materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
                 }
 
-                Log.i("choose month", ""+date.toString());
                 onSelectedDayChange(date.getYear(),
                         date.getMonth(),
                         date.getDay());
@@ -214,8 +222,6 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
 
   // Método chamado após uma data ser clicada
    public void onSelectedDayChange( int year, int month, int dayOfMonth) {
-       Log.i("PERIOD: ", "onSelectedDayChange: "+year+" "+month+" "+dayOfMonth);
-
        pickedDate = LocalDateTime.of(year,month,dayOfMonth,0,0,0);
 
        todayDialog = new HomeTodayDialog(pickedDate,

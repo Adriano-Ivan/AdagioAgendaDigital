@@ -47,6 +47,18 @@ public class NotificationDAO {
 
     }
 
+    public void delete(long id){
+        db.delete(DbNotificationStructure.TABLE_NAME,String.format(
+                "%s = %s", DbNotificationStructure.Columns.ID,
+                id
+        ) ,null);
+    }
+
+    public void deleteAll(){
+        db.execSQL(DbNotificationStructure.returnSqlToDrop());
+        db.execSQL(DbNotificationStructure.returnSqlToCreate());
+    }
+
     private Notification fromCursor(Cursor c){
         @SuppressLint("Range") int id = c.getInt(c.getColumnIndex(DbNotificationStructure.Columns.ID));
         @SuppressLint("Range") int task_id = c.getInt(c.getColumnIndex(DbNotificationStructure.Columns.TASK_ID));

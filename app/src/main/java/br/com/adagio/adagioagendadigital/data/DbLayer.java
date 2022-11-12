@@ -83,25 +83,9 @@ public class DbLayer extends SQLiteOpenHelper
             DbTagStructure.TABLE_NAME, DbTagStructure.Columns.ID
     );
 
-    private static final String SQL_DROP_NOTIFICATIONS_TB = String.format(
-            "DROP TABLE IF EXISTS %s", DbNotificationStructure.TABLE_NAME
-    );
+    private static final String SQL_DROP_NOTIFICATIONS_TB = DbNotificationStructure.returnSqlToDrop();
 
-    private static final String SQL_CREATE_NOTIFICATIONS_TB = String.format(
-        "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, "+
-        "%s INTEGER NOT NULL, "+
-        "%s VARCHAR(30) NOT NULL, "+
-        "%s TEXT NOT NULL, "+
-        "%s TEXT NOT NULL, "+
-        "CONSTRAINT fk_task_priority "+
-        "FOREIGN KEY (%s) "+
-        "REFERENCES %s(%s)) ",
-        DbNotificationStructure.TABLE_NAME, DbNotificationStructure.Columns.ID,
-            DbNotificationStructure.Columns.TASK_ID, DbNotificationStructure.Columns.EMITTED_AT,
-            DbNotificationStructure.Columns.MESSAGE, DbNotificationStructure.Columns.PRIORITY_NAME,
-            DbNotificationStructure.Columns.TASK_ID, DbTaskStructure.TABLE_NAME,
-            DbTaskStructure.Columns.ID
-    );
+    private static final String SQL_CREATE_NOTIFICATIONS_TB = DbNotificationStructure.returnSqlToCreate();
 
     public static DbLayer getInstance(Context context){
         if(instance == null){

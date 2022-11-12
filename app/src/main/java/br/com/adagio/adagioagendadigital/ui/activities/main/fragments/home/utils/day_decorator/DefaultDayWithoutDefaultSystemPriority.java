@@ -18,9 +18,16 @@ public class DefaultDayWithoutDefaultSystemPriority implements DayViewDecorator 
     private Drawable drawable;
     private LocalDateTime date;
 
-    public DefaultDayWithoutDefaultSystemPriority(LocalDateTime date, Drawable drawable) {
-        this.date = date;
+    public DefaultDayWithoutDefaultSystemPriority() {
+
+    }
+
+    public void defineDrawable(Drawable drawable){
         this.drawable = drawable;
+    }
+
+    public void defineDate(LocalDateTime date){
+        this.date = date;
     }
 
     @Override
