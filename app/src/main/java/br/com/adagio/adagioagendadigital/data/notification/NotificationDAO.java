@@ -59,6 +59,28 @@ public class NotificationDAO {
         db.execSQL(DbNotificationStructure.returnSqlToCreate());
     }
 
+    public void deleteFirst(){
+        String query = String.format(
+                "SELECT * FROM %s LIMIT 1", DbNotificationStructure.TABLE_NAME
+        );
+
+        Notification notification=null;
+        try(Cursor c = db.rawQuery(query, null)){
+
+            if(c.moveToFirst()){
+                do {
+                    notification = fromCursor(c);
+
+                }while(c.moveToNext());
+            }
+
+        }
+
+        if(notification !=null){
+            delete(notification.getId());
+        }
+    }
+
     public Notification get(int id){
         String query = String.format("SELECT * FROM %s WHERE %s = %s;",
                 DbNotificationStructure.TABLE_NAME,DbNotificationStructure.Columns.ID, id);
@@ -106,6 +128,6 @@ public class NotificationDAO {
 
         LocalDateTime emitted_at_date = LocalDateTime.parse(emitted_at);
 
-        return new Notification(task_id, emitted_at_date,message,priority_name);
+        return new Notification(id,task_id, emitted_at_date,message,priority_name);
     }
 }

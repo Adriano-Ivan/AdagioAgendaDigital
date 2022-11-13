@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
@@ -35,6 +36,7 @@ import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     private View rootView;
@@ -182,43 +184,41 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void defineDefaultValues(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            final LocalDateTime today = LocalDateTime.now();
+        final LocalDateTime today = LocalDateTime.now();
 
-            defineMomentProperties(today);
+        defineMomentProperties(today);
 
-            textViewInitialDate.setText(String.format("%s/%s/%s", returnDayOrMonthOrHourOrMinute(day),
-                    returnDayOrMonthOrHourOrMinute(month),year));
-            textViewFinalDate.setText(String.format("%s/%s/%s",returnDayOrMonthOrHourOrMinute(finalDay),
-                    returnDayOrMonthOrHourOrMinute(finalMonth),finalYear));
+        textViewInitialDate.setText(String.format("%s/%s/%s", returnDayOrMonthOrHourOrMinute(day),
+                returnDayOrMonthOrHourOrMinute(month),year));
+        textViewFinalDate.setText(String.format("%s/%s/%s",returnDayOrMonthOrHourOrMinute(finalDay),
+                returnDayOrMonthOrHourOrMinute(finalMonth),finalYear));
 
-            textViewInitialTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(hour),
-                    returnDayOrMonthOrHourOrMinute(minute)));
-            textViewFinalTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(finalHour),
-                    returnDayOrMonthOrHourOrMinute(finalMinute)));
+        textViewInitialTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(hour),
+                returnDayOrMonthOrHourOrMinute(minute)));
+        textViewFinalTime.setText(String.format("%s:%s",returnDayOrMonthOrHourOrMinute(finalHour),
+                returnDayOrMonthOrHourOrMinute(finalMinute)));
 
-            initialMomentDate = String.format("%s-%s-%s",
-                    year,
-                    returnDayOrMonthOrHourOrMinute(month),
-                    returnDayOrMonthOrHourOrMinute(day)
-                    );
-            limitMomentDate = String.format("%s-%s-%s",
-                    year,
-                    returnDayOrMonthOrHourOrMinute(finalMonth),
-                    returnDayOrMonthOrHourOrMinute(finalDay)
-            );
+        initialMomentDate = String.format("%s-%s-%s",
+                year,
+                returnDayOrMonthOrHourOrMinute(month),
+                returnDayOrMonthOrHourOrMinute(day)
+                );
+        limitMomentDate = String.format("%s-%s-%s",
+                year,
+                returnDayOrMonthOrHourOrMinute(finalMonth),
+                returnDayOrMonthOrHourOrMinute(finalDay)
+        );
 
-            initialMomentTime = String.format("%s:%s:%s",
-                    returnDayOrMonthOrHourOrMinute(hour),
-                    returnDayOrMonthOrHourOrMinute(minute),
-                    "00");
-            limitMomentTime = String.format("%s:%s:%s",
-                    returnDayOrMonthOrHourOrMinute(finalHour),
-                    returnDayOrMonthOrHourOrMinute(finalMinute),
-                    "00");
+        initialMomentTime = String.format("%s:%s:%s",
+                returnDayOrMonthOrHourOrMinute(hour),
+                returnDayOrMonthOrHourOrMinute(minute),
+                "00");
+        limitMomentTime = String.format("%s:%s:%s",
+                returnDayOrMonthOrHourOrMinute(finalHour),
+                returnDayOrMonthOrHourOrMinute(finalMinute),
+                "00");
 
-            defineDescriptionAndIsFinishedAndPriorityAndTagIds();
-        }
+        defineDescriptionAndIsFinishedAndPriorityAndTagIds();
     }
 
     private void defineDescriptionAndIsFinishedAndPriorityAndTagIds(){
@@ -262,38 +262,36 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void defineMomentProperties(LocalDateTime today) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            if(possibleTaskToEdit == null){
-                day = today.getDayOfMonth();
-                finalDay = today.getDayOfMonth();
+        if(possibleTaskToEdit == null){
+            day = today.getDayOfMonth();
+            finalDay = today.getDayOfMonth();
 
-                month = today.getMonthValue();
-                finalMonth = today.getMonthValue();
+            month = today.getMonthValue();
+            finalMonth = today.getMonthValue();
 
-                year = today.getYear();
-                finalYear =today.getYear();
+            year = today.getYear();
+            finalYear =today.getYear();
 
-                hour = today.getHour();
-                finalHour  = 23;
+            hour = today.getHour();
+            finalHour  = 23;
 
-                minute = today.getMinute();
-                finalMinute=59;
-            }else {
-                day = possibleTaskToEdit.getInitialMoment().getDayOfMonth();
-                finalDay = possibleTaskToEdit.getLimitMoment().getDayOfMonth();
+            minute = today.getMinute();
+            finalMinute=59;
+        }else {
+            day = possibleTaskToEdit.getInitialMoment().getDayOfMonth();
+            finalDay = possibleTaskToEdit.getLimitMoment().getDayOfMonth();
 
-                month = possibleTaskToEdit.getInitialMoment().getMonthValue();
-                finalMonth = possibleTaskToEdit.getLimitMoment().getMonthValue();
+            month = possibleTaskToEdit.getInitialMoment().getMonthValue();
+            finalMonth = possibleTaskToEdit.getLimitMoment().getMonthValue();
 
-                year = possibleTaskToEdit.getInitialMoment().getYear();
-                finalYear = possibleTaskToEdit.getLimitMoment().getYear();
+            year = possibleTaskToEdit.getInitialMoment().getYear();
+            finalYear = possibleTaskToEdit.getLimitMoment().getYear();
 
-                hour = possibleTaskToEdit.getInitialMoment().getHour();
-                finalHour =possibleTaskToEdit.getLimitMoment().getHour();
+            hour = possibleTaskToEdit.getInitialMoment().getHour();
+            finalHour =possibleTaskToEdit.getLimitMoment().getHour();
 
-                minute = possibleTaskToEdit.getInitialMoment().getMinute();
-                finalMinute = possibleTaskToEdit.getLimitMoment().getMinute();
-            }
+            minute = possibleTaskToEdit.getInitialMoment().getMinute();
+            finalMinute = possibleTaskToEdit.getLimitMoment().getMinute();
         }
     }
 
@@ -384,102 +382,90 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showInitialDateDialog(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        initialDateDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
+                        day=dayL;month=monthL+1;year=yearL;
+                        initialMomentDate = String.format("%s-%s-%s",
+                                year,
+                                returnDayOrMonthOrHourOrMinute(month),
+                                returnDayOrMonthOrHourOrMinute(day)
+                                );
+                        textViewInitialDate.setText(String.format("%s/%s/%s",
+                                returnDayOrMonthOrHourOrMinute(day),
+                                returnDayOrMonthOrHourOrMinute(month),
+                                year
+                                ));
+                    }
+                },year,month-1,day);
 
-            initialDateDialog = new DatePickerDialog(getActivity(),
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
-                            day=dayL;month=monthL+1;year=yearL;
-                            initialMomentDate = String.format("%s-%s-%s",
-                                    year,
-                                    returnDayOrMonthOrHourOrMinute(month),
-                                    returnDayOrMonthOrHourOrMinute(day)
-                                    );
-                            textViewInitialDate.setText(String.format("%s/%s/%s",
-                                    returnDayOrMonthOrHourOrMinute(day),
-                                    returnDayOrMonthOrHourOrMinute(month),
-                                    year
-                                    ));
-                        }
-                    },year,month-1,day);
-
-            initialDateDialog.show();
-        }
+        initialDateDialog.show();
     }
 
     private void showInitialHourDialog(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        initialTimeDialog = new TimePickerDialog(getActivity(),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
+                        hour=hourL; minute=minuteL;
+                        initialMomentTime=String.format("%s:%s:%s",
+                                returnDayOrMonthOrHourOrMinute(hour),
+                                returnDayOrMonthOrHourOrMinute(minute),
+                                "00"
+                                );
 
-            initialTimeDialog = new TimePickerDialog(getActivity(),
-                    new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
-                            hour=hourL; minute=minuteL;
-                            initialMomentTime=String.format("%s:%s:%s",
-                                    returnDayOrMonthOrHourOrMinute(hour),
-                                    returnDayOrMonthOrHourOrMinute(minute),
-                                    "00"
-                                    );
+                        textViewInitialTime.setText(String.format("%s:%s",
+                                returnDayOrMonthOrHourOrMinute(hour),
+                                returnDayOrMonthOrHourOrMinute(minute)));
+                    }
+                }, hour, minute,true
+        );
 
-                            textViewInitialTime.setText(String.format("%s:%s",
-                                    returnDayOrMonthOrHourOrMinute(hour),
-                                    returnDayOrMonthOrHourOrMinute(minute)));
-                        }
-                    }, hour, minute,true
-            );
-
-            initialTimeDialog.show();
-        }
+        initialTimeDialog.show();
     }
 
     private void showFinalDateDialog(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        finalDateDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
+                        finalDay=dayL;finalMonth=monthL+1;finalYear=yearL;
+                        limitMomentDate = String.format("%s-%s-%s",
+                                year,
+                                returnDayOrMonthOrHourOrMinute(finalMonth),
+                                returnDayOrMonthOrHourOrMinute(finalDay)
+                                );
+                        textViewFinalDate.setText(String.format("%s/%s/%s",
+                                returnDayOrMonthOrHourOrMinute(finalDay),
+                                        returnDayOrMonthOrHourOrMinute(finalMonth),
+                                        finalYear));
+                    }
+                },finalYear,finalMonth-1,finalDay);
 
-            finalDateDialog = new DatePickerDialog(getActivity(),
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
-                            finalDay=dayL;finalMonth=monthL+1;finalYear=yearL;
-                            limitMomentDate = String.format("%s-%s-%s",
-                                    year,
-                                    returnDayOrMonthOrHourOrMinute(finalMonth),
-                                    returnDayOrMonthOrHourOrMinute(finalDay)
-                                    );
-                            textViewFinalDate.setText(String.format("%s/%s/%s",
-                                    returnDayOrMonthOrHourOrMinute(finalDay),
-                                            returnDayOrMonthOrHourOrMinute(finalMonth),
-                                            finalYear));
-                        }
-                    },finalYear,finalMonth-1,finalDay);
-
-            finalDateDialog.show();
-        }
+        finalDateDialog.show();
     }
 
     private void showFinalTimeDialog(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        finalTimeDialog = new TimePickerDialog(getActivity(),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
+                        finalHour = hourL; finalMinute=minuteL;
+                        limitMomentTime = String.format("%s:%s:%s",
+                                returnDayOrMonthOrHourOrMinute(finalHour),
+                                returnDayOrMonthOrHourOrMinute(finalMinute),
+                                "00"
+                                );
 
-            finalTimeDialog = new TimePickerDialog(getActivity(),
-                    new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
-                            finalHour = hourL; finalMinute=minuteL;
-                            limitMomentTime = String.format("%s:%s:%s",
-                                    returnDayOrMonthOrHourOrMinute(finalHour),
-                                    returnDayOrMonthOrHourOrMinute(finalMinute),
-                                    "00"
-                                    );
+                        textViewFinalTime.setText(String.format("%s:%s",
+                                returnDayOrMonthOrHourOrMinute(finalHour),
+                                        returnDayOrMonthOrHourOrMinute(finalMinute)));
+                    }
+                }, finalHour, finalMinute,true
+        );
 
-                            textViewFinalTime.setText(String.format("%s:%s",
-                                    returnDayOrMonthOrHourOrMinute(finalHour),
-                                            returnDayOrMonthOrHourOrMinute(finalMinute)));
-                        }
-                    }, finalHour, finalMinute,true
-            );
-
-            finalTimeDialog.show();
-        }
+        finalTimeDialog.show();
     }
 
     private String returnDayOrMonthOrHourOrMinute(int dayOrMonthOrHourOrMinute) {
@@ -495,7 +481,6 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void submitTask(){
-        Log.i("priority", "submitTask: "+priority_id);
         TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
                 returnInitialMoment(),
                 returnLimitMoment(),
@@ -503,8 +488,6 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
                 isFinished,
                 acumulatedIdTags
         );
-        Log.i("priority", "submitTask: "+tCreate.getPriority_id());
-
         if(possibleTaskToEdit == null){
             tListener.onFragmentTaskFormSubmitInteraction(tCreate,null);
         } else {
