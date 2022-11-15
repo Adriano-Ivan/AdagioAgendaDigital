@@ -25,6 +25,7 @@ import br.com.adagio.adagioagendadigital.models.entities.Priority;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderPriority;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class TaskDAO {
@@ -52,6 +53,7 @@ public class TaskDAO {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<TaskDtoRead> list(int limit, int offset, LocalDateTime day,
                                   TypeListTaskManagementOrderDate typeListTaskManagementOrder,
+                                  TypeListTaskManagementOrderPriority typeListTaskManagementOrderPriority,
                                   boolean isToAddIfTodayIsPriority){
 
         List<TaskDtoRead> tasks = new ArrayList<>();

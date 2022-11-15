@@ -1,8 +1,11 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.widget.ListView;
+
+import androidx.annotation.RequiresApi;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.util
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.ListTagToTaskAdapter;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.TagsToTaskStaticValues;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class TasksOfDayBridgeView {
 
     private final TaskDAO taskDAO ;
@@ -33,7 +37,7 @@ public class TasksOfDayBridgeView {
 
     public void updateList(int limit, int offset, LocalDateTime day){
         if(offset >= 0){
-            tasksOfDayDialogAdapter.update(taskDAO.list(limit,offset,day,null,false));
+            tasksOfDayDialogAdapter.update(taskDAO.list(limit,offset,day,null,null,false));
             TasksOfDayStaticValues.setOffsetList(offset);
         }
     }

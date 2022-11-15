@@ -2,10 +2,12 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -34,7 +36,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.util
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderPriority;
 
-
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class TaskManagementFragment extends Fragment
         implements View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener {
 
@@ -316,6 +318,7 @@ public class TaskManagementFragment extends Fragment
         } else if(view.getId() == updateListButton.getId()){
             TaskStaticValues.goBackToDefaultValue();
             listTaskBridgeView.setOrderDateType(typeListTaskOrderDate);
+            listTaskBridgeView.setOrderPriorityType(typeListTaskOrderPriority);
             listTaskBridgeView.updateListAux();
             updatePaginationVisibility();
             setConfigurationVisibilitity(false);

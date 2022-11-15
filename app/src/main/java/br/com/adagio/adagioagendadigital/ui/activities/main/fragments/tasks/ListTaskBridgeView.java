@@ -1,20 +1,26 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.ListView;
+
+import androidx.annotation.RequiresApi;
 
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderPriority;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ListTaskBridgeView {
 
     private final TaskDAO taskDAO ;
     private final ListTaskAdapter listTaskAdapter;
     private final Context context;
     private TypeListTaskManagementOrderDate typeListTaskOrder  = null;
+    private TypeListTaskManagementOrderPriority typeListTaskManagementOrderPriority = null;
 
     public ListTaskBridgeView(Context context){
         this.context = context;
@@ -27,9 +33,9 @@ public class ListTaskBridgeView {
         if(offset >= 0){
             TaskStaticValues.setOffsetList(offset);
             if(typeListTaskOrder == null){
-                listTaskAdapter.update(taskDAO.list(limit,offset,null,null,false));
+                listTaskAdapter.update(taskDAO.list(limit,offset,null,null,null,false));
             } else {
-                listTaskAdapter.update(taskDAO.list(limit,offset,null, typeListTaskOrder,isToAddIfTodayIsPriority));
+                listTaskAdapter.update(taskDAO.list(limit,offset,null, typeListTaskOrder,typeListTaskManagementOrderPriority,isToAddIfTodayIsPriority));
             }
         }
     }
@@ -99,5 +105,9 @@ public class ListTaskBridgeView {
 
     public void setOrderDateType(TypeListTaskManagementOrderDate typeListTaskOrder) {
         this.typeListTaskOrder = typeListTaskOrder;
+    }
+
+    public void setOrderPriorityType(TypeListTaskManagementOrderPriority typeListTaskOrderPriority) {
+        this.typeListTaskManagementOrderPriority = typeListTaskOrderPriority;
     }
 }

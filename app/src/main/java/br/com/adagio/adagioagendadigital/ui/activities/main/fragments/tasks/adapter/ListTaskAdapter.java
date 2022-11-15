@@ -1,6 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ListTaskAdapter extends BaseAdapter {
 
     private final List<TaskDtoRead> tasks = new ArrayList<>();
