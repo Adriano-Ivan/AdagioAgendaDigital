@@ -66,7 +66,7 @@ public class TaskManagementFragment extends Fragment
     private RadioButton radioButtonOrderByPriorityDesc;
 
     private TypeListTaskManagementOrderDate typeListTaskOrderDate = TypeListTaskManagementOrderDate.TODAY;
-    private TypeListTaskManagementOrderPriority typeListTaskOrderPriority = TypeListTaskManagementOrderPriority.PRIORITY_DESC;
+    private TypeListTaskManagementOrderPriority typeListTaskOrderPriority = TypeListTaskManagementOrderPriority.PRIORITY_ASC;
 
     private LinearLayout linearLayoutContainerPagination;
 
@@ -251,6 +251,9 @@ public class TaskManagementFragment extends Fragment
     // Chamadas para configuração do adapter que contém da lista de tasks
     private void configureAdapter() {
         listTaskBridgeView = new ListTaskBridgeView(getActivity());
+
+        listTaskBridgeView.setOrderDateType(typeListTaskOrderDate);
+        listTaskBridgeView.setOrderPriorityType(typeListTaskOrderPriority);
 
         listTaskBridgeView.configureAdapter(listTasks,this);
 

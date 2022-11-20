@@ -63,7 +63,7 @@ public class ListTaskBridgeView {
 
     public void updateListAux(){
         updateList(TaskStaticValues.LIMIT_LIST,
-                TaskStaticValues.OFFSET_LIST,typeListTaskOrder== TypeListTaskManagementOrderDate.TODAY);
+                TaskStaticValues.OFFSET_LIST,typeListTaskOrder == TypeListTaskManagementOrderDate.TODAY);
     }
 
     public void configureAdapter(ListView tasksList, TaskManagementFragment fragment){

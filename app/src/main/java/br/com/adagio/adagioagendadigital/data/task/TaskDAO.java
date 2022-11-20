@@ -56,38 +56,73 @@ public class TaskDAO {
                                   TypeListTaskManagementOrderPriority typeListTaskManagementOrderPriority,
                                   boolean isToAddIfTodayIsPriority){
 
+        String orderPriorityByAscendingOrDescending = "";
+
+        if(typeListTaskManagementOrderPriority != null){
+            orderPriorityByAscendingOrDescending =
+                    typeListTaskManagementOrderPriority.getValue()
+                            == TypeListTaskManagementOrderPriority.PRIORITY_DESC.getValue() ? "DESC" : "ASC";
+        } else {
+            orderPriorityByAscendingOrDescending = "ASC";
+        }
+
+        Log.i("priorirty order", orderPriorityByAscendingOrDescending);
+
         List<TaskDtoRead> tasks = new ArrayList<>();
         String query = "";
         String queryTodayManagementScreen = "";
 
+        String taskTableAlias = "t";
+        String priorityTableAlias = "p";
+
+        String innerJoinPrioritiesToReplace = "INNER_JOIN_PRIORITY_STATEMENT";
+        String innerJoinPrioritiesStatement = String.format(
+                "INNER JOIN %s as %s ON %s.%s = %s.%s",
+                DbPriorityStructure.TABLE_NAME, priorityTableAlias,taskTableAlias,DbTaskStructure.Columns.PRIORITY_ID,
+                priorityTableAlias, DbPriorityStructure.Columns.ID
+        );
+
+        String orderByPrioritiesToReplace = "ORDER_BY_PRIORITTY_STATEMENT";
+        String orderByPrioritiesStatement = String.format(
+                "ORDER BY " +
+                        "CASE %s.%s " +
+                        "WHEN '%s' THEN 0 " +
+                        "WHEN '%s' THEN 1 " +
+                        "WHEN '%s' THEN 2 " +
+                        "WHEN '%s' THEN 3 " +
+                        "ELSE 0 " +
+                        "END %s ", priorityTableAlias,DbPriorityStructure.Columns.NAME,
+                Priorities.LOW.getValue(),Priorities.AVERAGE.getValue(), Priorities.HIGH.getValue(),
+                Priorities.CRITICAL.getValue(), orderPriorityByAscendingOrDescending
+        );
+
         // Se for diferente de nulo, é porque o retorno se destina para o dialog do dia exibido na home
         if(day == null){
             if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    queryTodayManagementScreen = String.format("SELECT * FROM %s WHERE " +
-                                    "date(%s) = date('%s') " +
-                                    "LIMIT %s OFFSET %s"
-                            ,DbTaskStructure.TABLE_NAME,
-                            DbTaskStructure.Columns.INITIAL_MOMENT,
-                            LocalDateTime.now().toLocalDate().toString(),
-                            limit,offset
-                    );
-                }
+
+                queryTodayManagementScreen = String.format("SELECT * FROM %s %s %s WHERE " +
+                                "date(%s.%s) = date('%s') %s" +
+                                "LIMIT %s OFFSET %s"
+                        ,DbTaskStructure.TABLE_NAME,taskTableAlias, innerJoinPrioritiesToReplace,
+                        taskTableAlias,DbTaskStructure.Columns.INITIAL_MOMENT,
+                        LocalDateTime.now().toLocalDate().toString(),orderByPrioritiesToReplace,
+                        limit,offset
+                ).replace(innerJoinPrioritiesToReplace,innerJoinPrioritiesStatement)
+                        .replace(orderByPrioritiesToReplace, orderByPrioritiesStatement);
             }
+
         } else {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                String dateToSearch = day.toLocalDate().toString();
+            String dateToSearch = day.toLocalDate().toString();
 
-                query = String.format("SELECT * FROM %s WHERE " +
-                                "date(%s) = date('%s') " +
-                                "LIMIT %s OFFSET %s"
-                        ,DbTaskStructure.TABLE_NAME,
-                        DbTaskStructure.Columns.INITIAL_MOMENT,
-                        dateToSearch, limit,offset
-                        );
+            query = String.format("SELECT * FROM %s WHERE " +
+                            "date(%s) = date('%s') " +
+                            "LIMIT %s OFFSET %s"
+                    ,DbTaskStructure.TABLE_NAME,
+                    DbTaskStructure.Columns.INITIAL_MOMENT,
+                    dateToSearch, limit,offset
+                    );
 
-            }
         }
 
         if(day == null){
@@ -172,11 +207,10 @@ public class TaskDAO {
 
 
         try (Cursor c = db.rawQuery(query, null)){
-            Log.i("QUANTITY", c.getCount()+"");
             if(c.moveToFirst()){
                 do{
                     LocalDateTime localDateTimeFromQuery = getLocalDateTimeFromQuery(c);
-                    Log.i("query result in", localDateTimeFromQuery.toString());
+
                     if(!arrayListContainsLocalDateTimeWithYearAndMonth(localDateTimes,
                             localDateTimeFromQuery)){
                         localDateTimes.add(localDateTimeFromQuery);
