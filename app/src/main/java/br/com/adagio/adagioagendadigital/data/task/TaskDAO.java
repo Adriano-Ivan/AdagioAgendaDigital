@@ -22,6 +22,7 @@ import br.com.adagio.adagioagendadigital.data.task_tag.DbTaskTagStructure;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
+import br.com.adagio.adagioagendadigital.models.entities.Task;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskStaticValues;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
@@ -537,6 +538,20 @@ public class TaskDAO {
             }
         }
         return false;
+    }
+
+    //queries EXCLUSIVAS para RELATÓRIOS
+    //futuramente substituir por ENUMS para facilitar compreensão
+    public int getQuantityOfTasksBy (/*int dayMonthYear, int recordType, LocalDateTime reference*/ int month, int year, Priorities priority){
+        int quantity = returnQuantityOfTasks(String.format("SELECT COUNT(*) FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
+                        " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
+                        " strftime('MONTH',%s) LIKE '%s' AND %s.%s LIKE '%s';" ,
+                /*'t', DbTaskStructure.Columns.INITIAL_MOMT,*/ DbTaskStructure.TABLE_NAME,
+                't', DbPriorityStructure.TABLE_NAME,'p', 'p',DbPriorityStructure.Columns.ID,
+                't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT,
+                year, DbTaskStructure.Columns.INITIAL_MOMENT,month, 'p', DbPriorityStructure.Columns.NAME, priority.getValue())
+                .replaceAll("YEAR", "%Y").replaceAll("MONTH","%m"));
+        return quantity;
     }
 
     public void updateToFinished(TaskDtoRead task){

@@ -60,7 +60,7 @@ public  class MainActivity extends AppCompatActivity implements
     private TagsFragment tagsFragment = new TagsFragment();
     private FormTaskFragment formTaskFragment = new FormTaskFragment();
     private FormTagFragment formTagFragment = new FormTagFragment();
-    private RelatoriesFragment relatoriesFragment = new RelatoriesFragment();
+    private RelatoriesFragment relatoriesFragment;
     private NotificationsFragment notificationsFragment = new NotificationsFragment();
     private TextView textTop;
     private ImageButton returnScreenButton;
@@ -89,6 +89,7 @@ public  class MainActivity extends AppCompatActivity implements
         textTop.setText(getResources().getString(returnCurrentTitle()));
         listTaskBridgeView = new ListTaskBridgeView(this);
         listTagBridgeView = new ListTagBridgeView(this);
+        relatoriesFragment = new RelatoriesFragment(this);
 
         setViews();
         setListeners();
