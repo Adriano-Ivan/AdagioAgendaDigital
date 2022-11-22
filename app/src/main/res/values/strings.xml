@@ -130,4 +130,5 @@
     <string name="tasks_of_day_submit_finished">Salvar alterações</string>
     <string name="tasks_of_day_close_dialog">Fechar</string>
     <string name="fragment_task_order_by_today">Ordenar por hoje</string>
+    <string name="fragment_relatories_select_type">Selecionar tipo</string>
 </resources>
