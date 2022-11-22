@@ -94,7 +94,7 @@ public class TaskDAO {
                 Priorities.CRITICAL.getValue(), orderPriorityByAscendingOrDescending
         );
 
-        // teste
+        // teste - ii
         // Se for diferente de nulo, é porque o retorno se destina para o dialog do dia exibido na home
         if(day == null){
             if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
