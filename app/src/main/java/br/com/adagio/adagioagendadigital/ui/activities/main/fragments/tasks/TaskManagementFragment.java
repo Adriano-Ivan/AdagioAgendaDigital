@@ -186,7 +186,6 @@ public class TaskManagementFragment extends Fragment
         radioGroupOrderPriorityOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                Log.i("priority order", "onCheckedChanged: "+id);
                 if(radioButtonOrderByPriorityAsc.getId() == id){
                     typeListTaskOrderPriority=TypeListTaskManagementOrderPriority.PRIORITY_ASC;
                 } else if(radioButtonOrderByPriorityDesc.getId() == id){

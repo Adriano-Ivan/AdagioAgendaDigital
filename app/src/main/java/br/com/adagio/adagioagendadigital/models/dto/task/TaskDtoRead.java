@@ -120,4 +120,18 @@ public class TaskDtoRead implements Serializable {
     public void setPriorityName(String priorityName) {
         this.priorityName = priorityName;
     }
+
+    @Override
+    public String toString() {
+        return "TaskDtoRead{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", priorityName='" + priorityName + '\'' +
+                ", priority_id=" + priority_id +
+                ", initialMoment=" + initialMoment +
+                ", limitMoment=" + limitMoment +
+                ", isFinished=" + isFinished +
+                ", tags=" + tags +
+                '}';
+    }
 }

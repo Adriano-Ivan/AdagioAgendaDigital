@@ -66,8 +66,6 @@ public class TaskDAO {
             orderPriorityByAscendingOrDescending = "ASC";
         }
 
-        Log.i("priorirty order", orderPriorityByAscendingOrDescending);
-
         List<TaskDtoRead> tasks = new ArrayList<>();
         String query = "";
         String queryTodayManagementScreen = "";
@@ -84,7 +82,6 @@ public class TaskDAO {
 
         String orderByPrioritiesToReplace = "ORDER_BY_PRIORITTY_STATEMENT";
         String orderByPrioritiesStatement = String.format(
-                "ORDER BY " +
                         "CASE %s.%s " +
                         "WHEN '%s' THEN 0 " +
                         "WHEN '%s' THEN 1 " +
@@ -100,10 +97,11 @@ public class TaskDAO {
         if(day == null){
             if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
 
-                queryTodayManagementScreen = String.format("SELECT * FROM %s %s %s WHERE " +
-                                "date(%s.%s) = date('%s') %s" +
+                queryTodayManagementScreen = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s WHERE " +
+                                "date(%s.%s) = date('%s') ORDER BY %s" +
                                 "LIMIT %s OFFSET %s"
-                        ,DbTaskStructure.TABLE_NAME,taskTableAlias, innerJoinPrioritiesToReplace,
+                        ,taskTableAlias, DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,taskTableAlias,  DbTaskStructure.TABLE_NAME,
+                                taskTableAlias, innerJoinPrioritiesToReplace,
                         taskTableAlias,DbTaskStructure.Columns.INITIAL_MOMENT,
                         LocalDateTime.now().toLocalDate().toString(),orderByPrioritiesToReplace,
                         limit,offset
@@ -176,7 +174,7 @@ public class TaskDAO {
             if(c.moveToFirst()){
 
                 do {
-                    TaskDtoRead task = fromCursor(c);
+                    TaskDtoRead task = fromCursor(c,false);
                     tasks.add(task);
                 }while(c.moveToNext());
             }
@@ -247,10 +245,11 @@ public class TaskDAO {
             if(c.moveToFirst()){
 
                 do {
-                    TaskDtoRead task = fromCursor(c);
+                    TaskDtoRead task = fromCursor(c,true);
                     tasks.add(task);
                 }while(c.moveToNext());
             }
+
         }
         return quantityOfToday;
     }
@@ -298,13 +297,20 @@ public class TaskDAO {
         return ids;
     }
 
-    private  TaskDtoRead fromCursor(Cursor c){
-        @SuppressLint("Range") int id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.ID));
-        @SuppressLint("Range") String description = c.getString(c.getColumnIndex(DbTaskStructure.Columns.DESCRIPTION));
-        @SuppressLint("Range") String initialMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.INITIAL_MOMENT));
-        @SuppressLint("Range") String limitMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.LIMIT_MOMENT));
-        @SuppressLint("Range") int isFinished = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.IS_FINISHED));
-        @SuppressLint("Range") int priority_id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.PRIORITY_ID));
+    @SuppressLint("Range")
+    private  TaskDtoRead fromCursor(Cursor c, boolean letSpecifiedTaskId){
+
+        int id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.ID));
+
+        if(letSpecifiedTaskId){
+            id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.ID_ALIAS));
+        }
+
+        String description = c.getString(c.getColumnIndex(DbTaskStructure.Columns.DESCRIPTION));
+        String initialMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.INITIAL_MOMENT));
+        String limitMoment = c.getString(c.getColumnIndex(DbTaskStructure.Columns.LIMIT_MOMENT));
+        int isFinished = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.IS_FINISHED));
+        int priority_id = c.getInt(c.getColumnIndex(DbTaskStructure.Columns.PRIORITY_ID));
 
         LocalDateTime initialMomentDateTime=null;
         LocalDateTime limitMomentDateTime=null;
@@ -317,8 +323,10 @@ public class TaskDAO {
 
         boolean isFinishedBoolean = isFinished == 0 ? false : true;
 
-        return new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean,priority_id,
+        TaskDtoRead t = new TaskDtoRead(id,description,initialMomentDateTime,limitMomentDateTime,isFinishedBoolean,priority_id,
                 tagIds,priorityName);
+
+        return t;
     }
 
     private String returnPriorityName(int id){
@@ -448,7 +456,7 @@ public class TaskDAO {
 
             if(c.moveToFirst()){
                 do {
-                    task = fromCursor(c);
+                    task = fromCursor(c,false);
 
                 }while(c.moveToNext());
             }
@@ -459,6 +467,7 @@ public class TaskDAO {
     }
 
     public void delete(long id){
+        Log.i("delete", id+"");
       db.delete(DbTaskStructure.TABLE_NAME,String.format(
               "%s = %s", DbTaskStructure.Columns.ID,
               id

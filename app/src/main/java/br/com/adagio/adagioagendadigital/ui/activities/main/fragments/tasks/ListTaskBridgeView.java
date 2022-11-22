@@ -2,6 +2,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.widget.ListView;
 
 import androidx.annotation.RequiresApi;

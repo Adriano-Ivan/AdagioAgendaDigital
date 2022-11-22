@@ -6,6 +6,7 @@ public class DbTaskStructure {
 
     public static final class Columns {
         public static final String ID = "_id";
+        public static final String ID_ALIAS = "id_task";
         public static final String DESCRIPTION = "description";
         public static final String INITIAL_MOMENT = "initial_moment";
         public static final String LIMIT_MOMENT = "limit_moment";
