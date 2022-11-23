@@ -12,13 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.activities.main.fragments.home.HomeFragment"
-        android:layout_margin="16dp">
+        tools:context=".ui.activities.main.fragments.home.HomeFragment">
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/dailyChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,14 +31,64 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_relatories_fab_button_tag"
+            android:id="@+id/fragment_relatories_fab_button_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_baseline_description_24"
+            app:tint="@android:color/white"
+            android:backgroundTint="@color/adagio_purple_grey"
+            android:src="@drawable/icon_a"
             android:contentDescription="@string/fragment_relatories_select_type"
-            android:layout_margin="10dp" />
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="163dp"
+            android:visibility="invisible"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_relatories_fab_button_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="114dp"
+            android:backgroundTint="@color/adagio_purple_grey"
+            android:contentDescription="@string/fragment_relatories_select_type"
+            android:src="@drawable/icon_m"
+            android:visibility="invisible"
+            app:tint="@android:color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_relatories_fab_button_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="65dp"
+            android:backgroundTint="@color/adagio_purple_grey"
+            android:contentDescription="@string/fragment_relatories_select_type"
+            android:src="@drawable/icon_d"
+            android:visibility="invisible"
+            app:tint="@android:color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_relatories_fab_button_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/adagio_purple"
+            android:contentDescription="@string/fragment_relatories_select_type"
+            android:src="@drawable/ic_baseline_description_24"
+            app:tint="@android:color/white" />
     </RelativeLayout>
 </ScrollView>
