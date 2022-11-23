@@ -3,15 +3,43 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable-v24/default_day_without_default_system_priority_bg_color.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable-v24/default_day_without_default_system_priority_container.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable-v24/default_today.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable-v24/default_today_bg_color.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable-v24/default_today_container.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/button.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/container_fragments_login_container.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/critical_day.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/critical_day_bg_color.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/critical_day_container.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/edit_text.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/high_day.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/high_day_bg_color.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/high_day_container.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_assignment_24.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_description_24.xml" value="0.128" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_done_24.xml" value="0.128" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_flag_24.xml" value="0.128" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.128" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.128" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_email.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_eye.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_launcher_background.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/ic_person.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/low_day.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/low_day_bg_color.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/low_day_container.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/medium_day.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/medium_day_bg_color.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/medium_day_container.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/fragment_relatories.xml" value="0.1" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/fragment_tags.xml" value="0.25025641025641027" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.124" />
         <entry key="app/src/main/res/drawable/button.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/container_fragments_login_container.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/edit_text.xml" value="0.169" />
