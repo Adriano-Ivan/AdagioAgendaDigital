@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -23,7 +20,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,36 +31,20 @@ import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class RelatoriesFragment extends Fragment implements View.OnClickListener {
+public class RelatoriesFragment extends Fragment {
 
     private View rootView;
     private PieChart pieChart;
     private final TaskDAO taskDAO;
     private final Context context;
 
-    private FloatingActionButton recordType;
-    private FloatingActionButton dayRecord;
-    private FloatingActionButton monthRecord;
-    private FloatingActionButton yearRecord;
-
-    private final Animation rotateOpen;
-    private final Animation rotateClose;
-    private final Animation fromBottom;
-    private final Animation toBottom;
-    private boolean clicked = false;
-
     public RelatoriesFragment(Context context) {
         this.context = context;
         this.taskDAO = TaskDAO.getInstance(context);
-        this.rotateOpen = AnimationUtils.loadAnimation(this.context, R.anim.rotate_open_anim);
-        this.rotateClose = AnimationUtils.loadAnimation(this.context, R.anim.rotate_close_anim);
-        this.fromBottom = AnimationUtils.loadAnimation(this.context, R.anim.from_bottom_anim);
-        this.toBottom = AnimationUtils.loadAnimation(this.context, R.anim.to_bottom_anim);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
@@ -73,20 +53,9 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_relatories, container, false);
-
-        //FAB buttons
-        recordType = rootView.findViewById(R.id.fragment_relatories_fab_button_tag);
-        dayRecord = rootView.findViewById(R.id.fragment_relatories_fab_button_day);
-        monthRecord = rootView.findViewById(R.id.fragment_relatories_fab_button_month);
-        yearRecord = rootView.findViewById(R.id.fragment_relatories_fab_button_year);
-        recordType.setOnClickListener(this);
-
-        //piechart
         pieChart = rootView.findViewById(R.id.dailyChart);
         setupPieChart();
         loadPieChartData();
-
-
         return rootView;
     }
 
@@ -176,49 +145,5 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
         l.setEnabled(true);
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == recordType.getId()){
-            onTypeButtonClicked();
-        }
-        clicked = !clicked;
-    }
-
-    //controle de animações
-    private void onTypeButtonClicked(){
-        setVisibility(clicked);
-        setAnimation(clicked);
-    }
-
-    private void setAnimation(boolean clicked) {
-
-        if(!clicked){
-            dayRecord.startAnimation(fromBottom);
-            monthRecord.startAnimation(fromBottom);
-            yearRecord.startAnimation(fromBottom);
-            recordType.startAnimation(rotateOpen);
-        }
-        else{
-            dayRecord.startAnimation(toBottom);
-            monthRecord.startAnimation(toBottom);
-            yearRecord.startAnimation(toBottom);
-            recordType.startAnimation(rotateClose);
-        }
-    }
-
-    private void setVisibility(boolean clicked) {
-
-        if(!clicked){
-            dayRecord.setVisibility(View.VISIBLE);
-            monthRecord.setVisibility(View.VISIBLE);
-            yearRecord.setVisibility(View.VISIBLE);
-        }
-        else{
-            dayRecord.setVisibility(View.INVISIBLE);
-            monthRecord.setVisibility(View.INVISIBLE);
-            yearRecord.setVisibility(View.INVISIBLE);
-        }
     }
 }
