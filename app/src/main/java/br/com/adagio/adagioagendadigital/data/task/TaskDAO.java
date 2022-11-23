@@ -57,14 +57,14 @@ public class TaskDAO {
                                   TypeListTaskManagementOrderPriority typeListTaskManagementOrderPriority,
                                   boolean isToAddIfTodayIsPriority){
 
-        String orderPriorityByAscendingOrDescending = "";
+        String orderPriorityByAscendingOrDescending ;
 
         if(typeListTaskManagementOrderPriority != null){
             orderPriorityByAscendingOrDescending =
                     typeListTaskManagementOrderPriority.getValue()
                             == TypeListTaskManagementOrderPriority.PRIORITY_DESC.getValue() ? "DESC" : "ASC";
         } else {
-            orderPriorityByAscendingOrDescending = "ASC";
+            orderPriorityByAscendingOrDescending = null;
         }
 
         List<TaskDtoRead> tasks = new ArrayList<>();
@@ -75,24 +75,35 @@ public class TaskDAO {
         String priorityTableAlias = "p";
 
         String innerJoinPrioritiesToReplace = "INNER_JOIN_PRIORITY_STATEMENT";
-        String innerJoinPrioritiesStatement = String.format(
-                "INNER JOIN %s as %s ON %s.%s = %s.%s",
-                DbPriorityStructure.TABLE_NAME, priorityTableAlias,taskTableAlias,DbTaskStructure.Columns.PRIORITY_ID,
-                priorityTableAlias, DbPriorityStructure.Columns.ID
-        );
+        String innerJoinPrioritiesStatement = "";
+
+        if(orderPriorityByAscendingOrDescending != null){
+            innerJoinPrioritiesStatement = String.format(
+                    "LEFT JOIN %s as %s ON %s.%s = %s.%s",
+                    DbPriorityStructure.TABLE_NAME, priorityTableAlias,taskTableAlias,DbTaskStructure.Columns.PRIORITY_ID,
+                    priorityTableAlias, DbPriorityStructure.Columns.ID
+            );
+        }
 
         String orderByPrioritiesToReplace = "ORDER_BY_PRIORITTY_STATEMENT";
-        String orderByPrioritiesStatement = String.format(
-                        "CASE %s.%s " +
-                        "WHEN '%s' THEN 0 " +
-                        "WHEN '%s' THEN 1 " +
-                        "WHEN '%s' THEN 2 " +
-                        "WHEN '%s' THEN 3 " +
-                        "ELSE 0 " +
-                        "END %s ", priorityTableAlias,DbPriorityStructure.Columns.NAME,
-                Priorities.LOW.getValue(),Priorities.AVERAGE.getValue(), Priorities.HIGH.getValue(),
-                Priorities.CRITICAL.getValue(), orderPriorityByAscendingOrDescending
-        );
+
+        String orderbyCommand ="";
+        String orderByPrioritiesStatement = "";
+
+        if(orderPriorityByAscendingOrDescending != null){
+            orderbyCommand = "ORDER BY";
+            orderByPrioritiesStatement = String.format(
+                    "CASE %s.%s " +
+                            "WHEN '%s' THEN 0 " +
+                            "WHEN '%s' THEN 1 " +
+                            "WHEN '%s' THEN 2 " +
+                            "WHEN '%s' THEN 3 " +
+                            "ELSE 0 " +
+                            "END %s ", priorityTableAlias,DbPriorityStructure.Columns.NAME,
+                    Priorities.LOW.getValue(),Priorities.AVERAGE.getValue(), Priorities.HIGH.getValue(),
+                    Priorities.CRITICAL.getValue(), orderPriorityByAscendingOrDescending
+            );
+        }
 
         // teste - ii
         // Se for diferente de nulo, é porque o retorno se destina para o dialog do dia exibido na home
@@ -100,12 +111,12 @@ public class TaskDAO {
             if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
 
                 queryTodayManagementScreen = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s WHERE " +
-                                "date(%s.%s) = date('%s') ORDER BY %s" +
+                                "date(%s.%s) = date('%s') %s %s" +
                                 "LIMIT %s OFFSET %s"
                         ,taskTableAlias, DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,taskTableAlias,  DbTaskStructure.TABLE_NAME,
                                 taskTableAlias, innerJoinPrioritiesToReplace,
                         taskTableAlias,DbTaskStructure.Columns.INITIAL_MOMENT,
-                        LocalDateTime.now().toLocalDate().toString(),orderByPrioritiesToReplace,
+                        LocalDateTime.now().toLocalDate().toString(),orderbyCommand,orderByPrioritiesToReplace,
                         limit,offset
                 ).replace(innerJoinPrioritiesToReplace,innerJoinPrioritiesStatement)
                         .replace(orderByPrioritiesToReplace, orderByPrioritiesStatement);
@@ -115,13 +126,14 @@ public class TaskDAO {
 
             String dateToSearch = day.toLocalDate().toString();
 
-            query = String.format("SELECT * FROM %s WHERE " +
-                            "date(%s) = date('%s') " +
+            query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s WHERE " +
+                            "date(%s.%s) = date('%s') %s %s " +
                             "LIMIT %s OFFSET %s"
-                    ,DbTaskStructure.TABLE_NAME,
-                    DbTaskStructure.Columns.INITIAL_MOMENT,
-                    dateToSearch, limit,offset
-                    );
+                    ,taskTableAlias, DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,taskTableAlias,
+                    DbTaskStructure.TABLE_NAME,taskTableAlias, innerJoinPrioritiesToReplace,taskTableAlias, DbTaskStructure.Columns.INITIAL_MOMENT,
+                    dateToSearch,orderbyCommand,orderByPrioritiesToReplace, limit,offset
+                    ).replace(innerJoinPrioritiesToReplace,innerJoinPrioritiesStatement)
+                    .replace(orderByPrioritiesToReplace, orderByPrioritiesStatement);
 
         }
 
@@ -133,38 +145,78 @@ public class TaskDAO {
 
                 int offsetToRest = returnOffsetOfRest(offset,isToAddIfTodayIsPriority);
 
-                query = String.format("SELECT * FROM %s WHERE date(%s) != date('%s') ORDER BY datetime(%s) ASC," +
-                                "datetime(%s) ASC LIMIT %s OFFSET %s;",
-                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
-                        LocalDateTime.now().toLocalDate().toString(),
-                        DbTaskStructure.Columns.INITIAL_MOMENT,
-                        DbTaskStructure.Columns.LIMIT_MOMENT,
-                        limit - quantityOfToday, offsetToRest);
+                query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s WHERE date(%s.%s) != date('%s') ORDER BY datetime(%s.%s) ASC," +
+                                "datetime(%s.%s) ASC %s LIMIT %s OFFSET %s;",
+                        taskTableAlias, DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,taskTableAlias,
+                        DbTaskStructure.TABLE_NAME,taskTableAlias,innerJoinPrioritiesToReplace,taskTableAlias, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        LocalDateTime.now().toLocalDate().toString(), taskTableAlias, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        taskTableAlias,DbTaskStructure.Columns.LIMIT_MOMENT,orderByPrioritiesToReplace, limit - quantityOfToday, offsetToRest)
+                        .replace(innerJoinPrioritiesToReplace,innerJoinPrioritiesStatement);
+
+                if(orderByPrioritiesStatement.equals("")){
+                    query = query.replace(orderByPrioritiesToReplace,"");
+                } else{
+                    query = query.replace(orderByPrioritiesToReplace,","+orderByPrioritiesStatement);
+                }
 
             } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.INITIAL_MOMENT_ASC){
-                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) ASC" +
+                query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s ORDER BY datetime(%s.%s) ASC %s" +
                                 " LIMIT %s OFFSET %s;",
-                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        taskTableAlias,DbTaskStructure.Columns.ID,DbTaskStructure.Columns.ID_ALIAS,
+                        taskTableAlias, DbTaskStructure.TABLE_NAME, taskTableAlias, innerJoinPrioritiesStatement,
+                        taskTableAlias,DbTaskStructure.Columns.INITIAL_MOMENT, orderByPrioritiesToReplace,
                         limit , offset);
+
+                if(orderByPrioritiesStatement.equals("")){
+                    query = query.replace(orderByPrioritiesToReplace,"");
+                } else{
+                    query = query.replace(orderByPrioritiesToReplace,","+orderByPrioritiesStatement);
+                }
             } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.INITIAL_MOMENT_DESC){
-                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) DESC" +
+                query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s ORDER BY datetime(%s.%s) DESC %s" +
                                 " LIMIT %s OFFSET %s;",
-                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.INITIAL_MOMENT,
+                        taskTableAlias,DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,
+                        taskTableAlias, DbTaskStructure.TABLE_NAME, taskTableAlias, innerJoinPrioritiesStatement,
+                        taskTableAlias, DbTaskStructure.Columns.INITIAL_MOMENT,orderByPrioritiesToReplace,
                         limit , offset);
+
+                if(orderByPrioritiesStatement.equals("")){
+                    query = query.replace(orderByPrioritiesToReplace,"");
+                } else{
+                    query = query.replace(orderByPrioritiesToReplace,","+orderByPrioritiesStatement);
+                }
             } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.LIMIT_MOMENT_ASC){
-                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) ASC" +
+                query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s ORDER BY datetime(%s.%s) ASC %s" +
                                 " LIMIT %s OFFSET %s;",
-                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.LIMIT_MOMENT,
+                        taskTableAlias,DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,
+                        taskTableAlias, DbTaskStructure.TABLE_NAME,taskTableAlias,innerJoinPrioritiesStatement,
+                        taskTableAlias, DbTaskStructure.Columns.LIMIT_MOMENT,orderByPrioritiesToReplace,
                         limit , offset);
+
+                if(orderByPrioritiesStatement.equals("")){
+                    query = query.replace(orderByPrioritiesToReplace,"");
+                } else{
+                    query = query.replace(orderByPrioritiesToReplace,","+orderByPrioritiesStatement);
+                }
             } else if(typeListTaskManagementOrder==TypeListTaskManagementOrderDate.LIMIT_MOMENT_DESC){
-                query = String.format("SELECT * FROM %s ORDER BY datetime(%s) DESC" +
+                query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s ORDER BY datetime(%s.%s) DESC %s" +
                                 " LIMIT %s OFFSET %s;",
-                        DbTaskStructure.TABLE_NAME, DbTaskStructure.Columns.LIMIT_MOMENT,
+                        taskTableAlias,DbTaskStructure.Columns.ID,DbTaskStructure.Columns.ID_ALIAS,
+                        taskTableAlias, DbTaskStructure.TABLE_NAME, taskTableAlias,innerJoinPrioritiesStatement,
+                        taskTableAlias, DbTaskStructure.Columns.LIMIT_MOMENT,orderByPrioritiesToReplace,
                         limit , offset);
+
+                if(orderByPrioritiesStatement.equals("")){
+                    query = query.replace(orderByPrioritiesToReplace,"");
+                } else{
+                    query = query.replace(orderByPrioritiesToReplace,","+orderByPrioritiesStatement);
+                }
             }
             else {
-                query = String.format("SELECT * FROM %s LIMIT %s OFFSET %s;",
-                        DbTaskStructure.TABLE_NAME, limit, offset);
+                query = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s %s %s LIMIT %s OFFSET %s;",
+                        taskTableAlias,DbTaskStructure.Columns.ID, DbTaskStructure.Columns.ID_ALIAS,
+                        taskTableAlias, DbTaskStructure.TABLE_NAME, taskTableAlias,innerJoinPrioritiesStatement,
+                        orderbyCommand, orderByPrioritiesStatement, limit, offset);
             }
 
         }
