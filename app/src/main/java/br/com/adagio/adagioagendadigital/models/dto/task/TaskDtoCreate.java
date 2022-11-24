@@ -20,7 +20,7 @@ public class TaskDtoCreate {
         this.initialMoment=initialMoment;
         this.limitMoment=limitMoment;
         this.isFinished=isFinished;
-        Log.i("CRIADO COM ISSO : ", ""+priority_id);
+
         this.priority_id = priority_id;
         this.tags = new ArrayList<>(tagIds);
     }

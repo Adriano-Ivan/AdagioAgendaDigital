@@ -67,7 +67,6 @@ public class TasksOfDayBridgeView {
     }
 
     public boolean thereIsNextPage() {
-        Log.i("quantity", taskDAO.getQuantityOfTasksOfTheDay(day)+"");
         if(taskDAO.getQuantityOfTasksOfTheDay(day) >
                 TasksOfDayStaticValues.NEXT_POSSIBLE_QUANTITY ){
             return true;

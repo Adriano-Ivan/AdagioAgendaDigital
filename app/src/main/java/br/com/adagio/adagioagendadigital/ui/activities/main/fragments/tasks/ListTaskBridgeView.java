@@ -11,6 +11,7 @@ import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.OperationAux;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderDate;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.TypeListTaskManagementOrderPriority;
 
@@ -59,7 +60,11 @@ public class ListTaskBridgeView {
         long id = listTaskAdapter.getItemId(position);
 
         taskDAO.delete(id);
-        updateListAux();
+        updateListWithoutQueryingAgainAux(id);
+    }
+
+    private void updateListWithoutQueryingAgainAux(long intOfDeletedTask) {
+        listTaskAdapter.update(OperationAux.DELETE_FROM_LIST_WITHOUT_QUERYING, intOfDeletedTask);
     }
 
     public void updateListAux(){

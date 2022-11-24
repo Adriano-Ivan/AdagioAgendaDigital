@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.metrics.LogSessionId;
 import android.os.Build;
 import android.renderscript.RenderScript;
 import android.util.Log;
@@ -109,7 +110,6 @@ public class TaskDAO {
         // Se for diferente de nulo, é porque o retorno se destina para o dialog do dia exibido na home
         if(day == null){
             if(typeListTaskManagementOrder == TypeListTaskManagementOrderDate.TODAY){
-
                 queryTodayManagementScreen = String.format("SELECT %s.%s as %s, %s.* FROM %s %s %s WHERE " +
                                 "date(%s.%s) = date('%s') %s %s" +
                                 "LIMIT %s OFFSET %s"
@@ -228,7 +228,7 @@ public class TaskDAO {
             if(c.moveToFirst()){
 
                 do {
-                    TaskDtoRead task = fromCursor(c,false);
+                    TaskDtoRead task = fromCursor(c,true);
                     tasks.add(task);
                 }while(c.moveToNext());
             }
@@ -305,6 +305,7 @@ public class TaskDAO {
             }
 
         }
+
         return quantityOfToday;
     }
 
@@ -317,7 +318,6 @@ public class TaskDAO {
                         TaskStaticValues.AUX_OFFSET_OF_REST_AFTER_TODAY
                 );
             }
-
             return TaskStaticValues.AUX_OFFSET_OF_REST_AFTER_TODAY;
         }
     }
@@ -521,7 +521,6 @@ public class TaskDAO {
     }
 
     public void delete(long id){
-        Log.i("delete", id+"");
       db.delete(DbTaskStructure.TABLE_NAME,String.format(
               "%s = %s", DbTaskStructure.Columns.ID,
               id

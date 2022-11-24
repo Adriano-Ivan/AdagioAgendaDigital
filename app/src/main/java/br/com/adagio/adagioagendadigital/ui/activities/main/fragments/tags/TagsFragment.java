@@ -130,8 +130,6 @@ public class TagsFragment extends Fragment
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        Log.i("SELECTED", "onContextItemSelected: ");
-
         if(item.getItemId() == R.id.menu_tag_delete){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                     item.getMenuInfo();

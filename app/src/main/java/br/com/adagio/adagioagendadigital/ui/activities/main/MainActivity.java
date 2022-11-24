@@ -259,7 +259,6 @@ public  class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task,Integer id) {
-        Log.i("PRIORITY", task.getPriority_id()+"");
 
         if(id == null){
             listTaskBridgeView.insert(task);

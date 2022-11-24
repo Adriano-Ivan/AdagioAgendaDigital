@@ -106,4 +106,21 @@ public class ListTaskAdapter extends BaseAdapter {
         this.tasks.addAll(tasks);
         notifyDataSetChanged();
     }
+
+    public void update(OperationAux operation, long intOfDeletedTask) {
+        if(operation == OperationAux.DELETE_FROM_LIST_WITHOUT_QUERYING){
+            List<TaskDtoRead> newTasks = new ArrayList<>();
+
+            for(TaskDtoRead task : tasks){
+                if(task.getId() != intOfDeletedTask){
+                    newTasks.add(task);
+                }
+            }
+
+            tasks.clear();
+            this.tasks.addAll(newTasks);
+
+            notifyDataSetChanged();
+        }
+    }
 }

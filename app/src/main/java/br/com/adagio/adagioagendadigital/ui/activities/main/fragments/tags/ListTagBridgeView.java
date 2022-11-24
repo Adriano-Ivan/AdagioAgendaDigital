@@ -42,7 +42,7 @@ public class ListTagBridgeView {
 
     public void delete(int position){
         long id = listTagAdapter.getItemId(position);
-        Log.i("DELETE", "delete: "+id);
+     
         tagDAO.delete(id);
         updateListAux();
     }

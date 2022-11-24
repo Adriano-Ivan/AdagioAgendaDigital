@@ -106,6 +106,8 @@ public class TaskManagementFragment extends Fragment
 
     // Chamada de métodos para definição
     private void setAttributes(){
+        typeListTaskOrderDate = TypeListTaskManagementOrderDate.TODAY;
+        typeListTaskOrderPriority = TypeListTaskManagementOrderPriority.PRIORITY_ASC;
         defineViews();
         setConfigurationVisibilitity(true);
         defineListeners();
@@ -353,10 +355,12 @@ public class TaskManagementFragment extends Fragment
 
     public void setTaskAsFinished(TaskDtoRead task){
         listTaskBridgeView.setTaskAsFinished(task);
+        updatePaginationVisibility();
     }
 
     public void setTaskAsUnfinished(TaskDtoRead task){
         listTaskBridgeView.setTaskAsUnfinished(task);
+        updatePaginationVisibility();
     }
 
     @Override
@@ -379,6 +383,7 @@ public class TaskManagementFragment extends Fragment
     @Override
     public void onFragmentTaskDeleteInteraction(int position) {
        listTaskBridgeView.delete(position);
+       updatePaginationVisibility();
     }
 
     public void openDialogToFinishTask(TaskDtoRead task) {
