@@ -60,7 +60,15 @@ public class ListTaskBridgeView {
         long id = listTaskAdapter.getItemId(position);
 
         taskDAO.delete(id);
-        updateListWithoutQueryingAgainAux(id);
+
+        updateList(TaskStaticValues.LIMIT_LIST,
+                TaskStaticValues.OFFSET_LIST - TaskStaticValues.LIMIT_LIST,
+                false
+        );
+        updateList(TaskStaticValues.LIMIT_LIST,
+                TaskStaticValues.OFFSET_LIST + TaskStaticValues.LIMIT_LIST,
+                true
+        );
     }
 
     private void updateListWithoutQueryingAgainAux(long intOfDeletedTask) {
