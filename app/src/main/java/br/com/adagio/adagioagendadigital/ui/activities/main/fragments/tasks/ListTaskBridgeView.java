@@ -61,14 +61,16 @@ public class ListTaskBridgeView {
 
         taskDAO.delete(id);
 
-        updateList(TaskStaticValues.LIMIT_LIST,
-                TaskStaticValues.OFFSET_LIST - TaskStaticValues.LIMIT_LIST,
-                false
-        );
-        updateList(TaskStaticValues.LIMIT_LIST,
-                TaskStaticValues.OFFSET_LIST + TaskStaticValues.LIMIT_LIST,
-                true
-        );
+        if(TaskStaticValues.CURRENT_PAGE > 1){
+            updateList(TaskStaticValues.LIMIT_LIST,
+                    TaskStaticValues.OFFSET_LIST - TaskStaticValues.LIMIT_LIST,
+                    false
+            );
+            updateList(TaskStaticValues.LIMIT_LIST,
+                    TaskStaticValues.OFFSET_LIST + TaskStaticValues.LIMIT_LIST,
+                    true
+            );
+        }
     }
 
     private void updateListWithoutQueryingAgainAux(long intOfDeletedTask) {

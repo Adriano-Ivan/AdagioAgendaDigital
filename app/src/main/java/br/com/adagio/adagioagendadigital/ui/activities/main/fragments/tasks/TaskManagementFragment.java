@@ -383,6 +383,14 @@ public class TaskManagementFragment extends Fragment
     @Override
     public void onFragmentTaskDeleteInteraction(int position) {
        listTaskBridgeView.delete(position);
+
+       if(TaskStaticValues.CURRENT_PAGE == 1){
+           TaskStaticValues.goBackToDefaultValue();
+           listTaskBridgeView.setOrderDateType(typeListTaskOrderDate);
+           listTaskBridgeView.setOrderPriorityType(typeListTaskOrderPriority);
+           listTaskBridgeView.updateListAux();
+       }
+
        updatePaginationVisibility();
     }
 
