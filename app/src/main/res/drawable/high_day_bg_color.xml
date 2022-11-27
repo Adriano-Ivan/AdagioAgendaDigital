@@ -6,9 +6,9 @@
     android:thicknessRatio="2"
     android:useLevel="false"
     >
-    <solid  android:color="@color/yellow"/>
+    <solid  android:color="@color/adagio_yellow"/>
 
     <stroke
         android:width="2dp"
-        android:color="@color/yellow"/>
+        android:color="@color/adagio_yellow"/>
 </shape>

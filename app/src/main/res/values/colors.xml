@@ -15,4 +15,9 @@
     <color name="yellow">#ECEC25</color>
     <color name="red">#FF0000</color>
     <color name="light_gray">#cccccc</color>
+
+    <color name="adagio_gray">#ccccff</color>
+    <color name="adagio_blue">#6699ff</color>
+    <color name="adagio_yellow">#ffff66</color>
+    <color name="adagio_red">#ff0000</color>
 </resources>

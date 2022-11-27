@@ -26,6 +26,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
+import org.threeten.bp.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +71,8 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
     private ArrayList<LocalDateTime> low = new ArrayList<>();
 
     Drawable drawable = null;
+
+    private LocalDateTime previousSelectedDayWithoutDefaultSystemPriority = null;
 
     private DefaultDayWithoutDefaultSystemPriority defaultDayWithoutDefaultSystemPriority =
             new DefaultDayWithoutDefaultSystemPriority( );
@@ -165,19 +169,13 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
 
                 if(!oneOfSetOfTaskMomentsContainsTasksWithDefaultDefinedPriorities(date.getYear(),
                         date.getMonth(),date.getDay())) {
-
-                    materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
-
-                    drawable=ContextCompat.getDrawable(getContext(),
-                            R.drawable.default_day_without_default_system_priority_container);
-
-                    defaultDayWithoutDefaultSystemPriority.defineDrawable(drawable);
-                    defaultDayWithoutDefaultSystemPriority.defineDate(
-                            LocalDateTime.of(date.getYear(),date.getMonth(),date.getDay(),0,0,0)
+                    previousSelectedDayWithoutDefaultSystemPriority=LocalDateTime.of(
+                        date.getYear(),date.getMonth(),date.getDay(),0,0,0,0
                     );
-
-                    materialCalendarView.addDecorator(defaultDayWithoutDefaultSystemPriority);
+                    configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(date.getYear(),
+                            date.getMonth(),date.getDay());
                 } else {
+                    previousSelectedDayWithoutDefaultSystemPriority=null;
                     materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
                 }
 
@@ -191,10 +189,30 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
                 updatePickedDate();
                 defineDayColors();
+
+                if(previousSelectedDayWithoutDefaultSystemPriority != null) {
+
+                    configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(previousSelectedDayWithoutDefaultSystemPriority.getYear(),
+                            previousSelectedDayWithoutDefaultSystemPriority.getMonth().getValue(),
+                            previousSelectedDayWithoutDefaultSystemPriority.getDayOfMonth());
+                }
             }
         });
         buttonToChooseYear.setOnClickListener(this);
+    }
 
+    private void configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(int year,int month, int day){
+        materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
+
+        drawable=ContextCompat.getDrawable(getContext(),
+                R.drawable.default_day_without_default_system_priority_container);
+
+        defaultDayWithoutDefaultSystemPriority.defineDrawable(drawable);
+        defaultDayWithoutDefaultSystemPriority.defineDate(
+                LocalDateTime.of(year,month,day,0,0,0)
+        );
+
+        materialCalendarView.addDecorator(defaultDayWithoutDefaultSystemPriority);
     }
 
     private void defineDefaultValues(){
@@ -218,6 +236,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
                 LocalDateTime.now().getHour(),
                 LocalDateTime.now().getMinute()
         );
+
     }
 
   // Método chamado após uma data ser clicada
@@ -259,16 +278,16 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
        );
 
        Drawable lowDrawable = ContextCompat.getDrawable(getContext(),R.drawable.low_day_container);
-       materialCalendarView.addDecorator(new AdagioDayLowDecorator(low,lowDrawable));
+       materialCalendarView.addDecorator(new AdagioDayLowDecorator(low,lowDrawable,R.color.adagio_gray));
 
        Drawable averageDrawable = ContextCompat.getDrawable(getContext(),R.drawable.medium_day_container);
-       materialCalendarView.addDecorator(new AdagioDayAverageDecorator(average,averageDrawable));
+       materialCalendarView.addDecorator(new AdagioDayAverageDecorator(average,averageDrawable,R.color.adagio_blue));
 
        Drawable highDrawable = ContextCompat.getDrawable(getContext(),R.drawable.high_day_container);
-       materialCalendarView.addDecorator(new AdagioDayHighDecorator(high,highDrawable));
+       materialCalendarView.addDecorator(new AdagioDayHighDecorator(high,highDrawable, R.color.adagio_yellow));
 
        Drawable criticalDrawable = ContextCompat.getDrawable(getContext(),R.drawable.critical_day_container);
-       materialCalendarView.addDecorator(new AdagioDayCriticalDecorator(criticals,criticalDrawable));
+       materialCalendarView.addDecorator(new AdagioDayCriticalDecorator(criticals,criticalDrawable,R.color.adagio_red));
 
        Drawable defaultTodayDrawable = ContextCompat.getDrawable(getContext(),R.drawable.default_today_container);
        materialCalendarView.addDecorator(new DefaultTodayDecorator(
@@ -298,11 +317,8 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
 
     //
     private LocalDateTime getAuxLocalDateTime(LocalDateTime now){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
            return LocalDateTime.of(HomeStaticValues.PICKED_YEAR_MEMO,  HomeStaticValues.PICKED_MONTH_MEMO,
                     HomeStaticValues.PICKED_DAY_MEMO,now.getHour(),now.getMinute());
-        }
-        return null;
     }
 
     // Após um mês ou ano ser modificado, define a visualização atual do calendário

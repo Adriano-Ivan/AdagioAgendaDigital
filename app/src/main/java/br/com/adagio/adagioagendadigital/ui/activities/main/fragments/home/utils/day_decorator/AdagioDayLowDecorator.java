@@ -11,8 +11,7 @@ import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class AdagioDayLowDecorator extends AdagioDayDecorator{
-    public AdagioDayLowDecorator(ArrayList<LocalDateTime> dates, Drawable drawable) {
-        super(dates,drawable);
-        this.color= Color.parseColor("#CCCCCC");
+    public AdagioDayLowDecorator(ArrayList<LocalDateTime> dates, Drawable drawable,int color) {
+        super(dates,drawable,color);
     }
 }

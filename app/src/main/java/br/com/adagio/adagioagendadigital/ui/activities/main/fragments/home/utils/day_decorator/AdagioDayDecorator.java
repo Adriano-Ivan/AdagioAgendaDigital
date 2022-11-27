@@ -32,6 +32,12 @@ public abstract class AdagioDayDecorator implements DayViewDecorator {
         this.drawable = drawable;
     }
 
+    public AdagioDayDecorator(ArrayList<LocalDateTime> dates, Drawable drawable,int color){
+        this.dates = new ArrayList<>(dates);
+        this.drawable = drawable;
+        this.color = color;
+    }
+
     @Override
     public boolean shouldDecorate(CalendarDay day) {
         boolean containsDate = containsDate(day);

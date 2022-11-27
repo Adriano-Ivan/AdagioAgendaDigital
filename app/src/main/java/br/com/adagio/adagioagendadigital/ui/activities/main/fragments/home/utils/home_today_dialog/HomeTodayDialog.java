@@ -3,6 +3,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.util
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 
@@ -26,6 +28,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeF
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.ListTagToTaskBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.TagsToTaskStaticValues;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class HomeTodayDialog extends DialogFragment implements View.OnClickListener {
 
     private ListView tasksList;
@@ -57,6 +60,7 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
         this.tasksToFinishIds=new ArrayList<>(finishedTasks);
         day = pickedDate;
     }
+
 
     @NonNull
     @Override
@@ -141,7 +145,6 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
             tasksToStartAgainIds.remove(tasksToStartAgainIds.indexOf(id));
         }
 
-        printToFinish();
     }
 
     public void includeTaskToRestart(int id) {
@@ -153,7 +156,6 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
             tasksToFinishIds.remove(tasksToFinishIds.indexOf(id));
         }
 
-        printToRestart();
     }
 
     @Override

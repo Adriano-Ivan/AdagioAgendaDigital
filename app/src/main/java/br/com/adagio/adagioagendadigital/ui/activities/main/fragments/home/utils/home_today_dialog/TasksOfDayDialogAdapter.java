@@ -1,6 +1,7 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 
@@ -18,6 +20,7 @@ import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class TasksOfDayDialogAdapter  extends BaseAdapter {
 
     private final List<TaskDtoRead> tasks = new ArrayList<>();
@@ -54,6 +57,7 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
         return genereatedView;
     }
 
+
     private void defineTaskInformation(TaskDtoRead task, View generatedView){
         TextView name = generatedView.findViewById(R.id.task_of_day_item_text);
         name.setText(task.getDescription());
@@ -85,14 +89,14 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
 
     private int returnColor(TaskDtoRead task){
         if(task.getPriorityName().equals(Priorities.HIGH.getValue())){
-            return parentFragment.getContext().getColor(R.color.yellow);
+            return parentFragment.getContext().getColor(R.color.adagio_yellow);
         } else if(task.getPriorityName().equals(Priorities.LOW.getValue())){
-            return parentFragment.getContext().getColor(R.color.light_gray);
+            return parentFragment.getContext().getColor(R.color.adagio_gray);
         } else if(task.getPriorityName().equals(Priorities.CRITICAL.getValue())){
-            return parentFragment.getContext().getColor(R.color.red);
+            return parentFragment.getContext().getColor(R.color.adagio_red);
         }
 
-        return parentFragment.getContext().getColor(R.color.blue);
+        return parentFragment.getContext().getColor(R.color.adagio_blue);
     }
     private View returnTaskView(ViewGroup viewGroup){
         return LayoutInflater.from(context)
