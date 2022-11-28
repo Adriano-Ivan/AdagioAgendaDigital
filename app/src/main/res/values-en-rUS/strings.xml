@@ -54,8 +54,8 @@
     <string name="fragment_task_initial_moment_desc">Initial moment (biggest to smallest)</string>
     <string name="fragment_task_user_wants_to_create_task">create a task</string>
     <string name="fragment_task_update_list">update list</string>
-    <string name="fragment_task_hide_options">hide configurations options</string>
-    <string name="task_show_options">Show configurations options</string>
+    <string name="fragment_task_hide_options">Go back to list</string>
+    <string name="task_show_options">List configurations options</string>
     <string name="create_your_task">create your task</string>
     <string name="teste">test</string>
     <string name="fragment_task_submit">save task</string>
@@ -115,4 +115,7 @@
     <string name="october">October</string>
     <string name="november">November</string>
     <string name="december">December</string>
+    <string name="fragment_relatories_select_type">Select type</string>
+    <string name="tasks_of_day_create_task_in_this_day">Create task</string>
+    <string name="tasks_of_day_generate_relatory">Generate relatory</string>
 </resources>

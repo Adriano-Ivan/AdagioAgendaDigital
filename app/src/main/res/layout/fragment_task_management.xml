@@ -147,20 +147,35 @@
 
         </LinearLayout>
 
+        <!--
         <Button
             android:id="@+id/fragment_task_hide_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:outlineAmbientShadowColor="@android:color/transparent"
-            android:shadowColor="@android:color/transparent"
+
             android:backgroundTint="@android:color/transparent"
             android:gravity="right"
-            style="?android:attr/borderlessButtonStyle"
+
             android:layout_gravity="right"
             android:text="@string/fragment_task_hide_options"
+            android:shadowColor="@android:color/transparent"
+            style="?android:attr/borderlessButtonStyle"
             />
-        
+        -->
+        <Button
+            android:id="@+id/fragment_task_hide_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:text="@string/fragment_task_hide_options"
+            android:layout_margin="3dp"
+
+            />
+
         <LinearLayout
             android:id="@+id/fragment_task_container_pagination"
             android:layout_width="match_parent"
