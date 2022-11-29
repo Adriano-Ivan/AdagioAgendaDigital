@@ -110,6 +110,8 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         for(int value : values){
             total += value;
         }
+        if (total == 0)
+            total = 1;
         float percLow = (low*10000)/total;
         float percMedium = (medium*10000)/total;
         float percHigh = (high*10000)/total;
