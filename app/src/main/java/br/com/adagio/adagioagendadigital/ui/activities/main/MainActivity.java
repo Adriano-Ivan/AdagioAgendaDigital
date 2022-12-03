@@ -1,7 +1,10 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,14 +15,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+
+import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
@@ -65,9 +79,17 @@ public  class MainActivity extends AppCompatActivity implements
     private TextView textTop;
     private ImageButton returnScreenButton;
     private ImageButton checkRegisterButton;
+    private TaskDAO Tdao;
+
+    public  int x = 0;
 
     private ListTaskBridgeView listTaskBridgeView;
     private ListTagBridgeView listTagBridgeView;
+
+    private final String CHANNEL_ID = "primary_channel_id";
+    private final String KEY_GROUP = "KEY";
+    private final int NOTIFICATION_ID = 001;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +102,8 @@ public  class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
+        Tdao =  TaskDAO.getInstance(this);
+        start();
         setNavigationAttributes();
     }
 
@@ -246,6 +269,7 @@ public  class MainActivity extends AppCompatActivity implements
         } else if(view.getId() == R.id.main_activity_check_register &&
                 MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
             formTaskFragment.auxSubmitTask();
+            //displayNotification();
            goToTaskOrTagManagement(GoTo.TASK);
         } else if(view.getId() == R.id.main_activity_return_screen_button &&
                 MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TAGS){
@@ -312,5 +336,94 @@ public  class MainActivity extends AppCompatActivity implements
     private enum GoTo{
         TAG,
         TASK
+    }
+
+
+    private  void notificationTaskStarted(String nome, String prioridade, int x){
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.user_icon)
+                .setContentTitle("A tarefa "+nome+" foi iniciada")
+                .setContentText("Sua Prioridade é "+ prioridade)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setGroup(KEY_GROUP)
+                .setGroupSummary(true);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(x, builder.build());
+    }
+
+    private  void notificationTask15minToFinish(String nome, String prioridade, int x){
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.user_icon)
+                .setContentTitle("Falta 15 minutos para o fim da tarefa "+nome)
+                .setContentText("Sua Prioridade é "+ prioridade)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setGroup(KEY_GROUP)
+                .setGroupSummary(true);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(x, builder.build());
+    }
+
+    private  void notificationTaskFinished(String nome, String prioridade, int x){
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.user_icon)
+                .setContentTitle("Tempo da tarefa"+nome+"acabou")
+                .setContentText("Sua Prioridade é "+ prioridade)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setGroup(KEY_GROUP)
+                .setGroupSummary(true);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(x, builder.build());
+    }
+
+
+    private void createNotificationChannel(){
+            CharSequence name = "Notification";
+            String description = "Channel Notification";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+    }
+
+    public void start() {
+        Timer t = new Timer();
+        TimerTask tk = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("morri");
+                getTaskNotification();
+            }
+        };
+        t.schedule(tk,0,60000);
+    }
+
+    private void getTaskNotification(){
+        List <TaskDtoRead> taks = Tdao.listAllFromToday(LocalDateTime.now().getHour());
+        for(TaskDtoRead T : taks){
+            SystemClock.sleep(2000);
+            if(T.getInitialMoment().getMinute() == LocalDateTime.now().getMinute()){
+                notificationTaskStarted(T.getDescription(),T.getPriorityName(),x);
+                x++;
+            }
+            if(T.getLimitMoment().getMinute()-15 == LocalDateTime.now().getMinute()){
+                notificationTask15minToFinish(T.getDescription(),T.getPriorityName(),x);
+                x++;
+            }
+            if(T.getLimitMoment().getMinute() == LocalDateTime.now().getMinute()){
+                notificationTaskFinished(T.getDescription(),T.getPriorityName(),x);
+                x++;
+            }
+        }
     }
 }
