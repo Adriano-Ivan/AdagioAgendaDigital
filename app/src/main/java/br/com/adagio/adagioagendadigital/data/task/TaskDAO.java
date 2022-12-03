@@ -52,7 +52,39 @@ public class TaskDAO {
     }
 
     // Encapsula as listagens de tasks, recebendo parâmetros para guiar a construção do retorno
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
+    public List<TaskDtoRead> listAllFromToday(int hour){
+        ArrayList <TaskDtoRead> tasks = new ArrayList<>();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String query = String.format("SELECT * FROM %s WHERE strftime('year-month-day hour', %s) like '%s' " +
+                        "OR strftime('year-month-day hour', %s) like '%s'",
+                DbTaskStructure.TABLE_NAME,
+                DbTaskStructure.Columns.INITIAL_MOMENT,
+                String.format("%s-%s-%s %s",localDateTime.getYear(), localDateTime.getMonth().getValue(), convertToDefoultDay(localDateTime.getDayOfMonth()), hour),
+                DbTaskStructure.Columns.LIMIT_MOMENT,
+                String.format("%s-%s-%s %s",localDateTime.getYear(), localDateTime.getMonth().getValue(), convertToDefoultDay(localDateTime.getDayOfMonth()), hour)
+        ).replaceAll("year-month-day","%Y-%m-%d").replaceAll("hour", "%H");
+        Log.d("tasks",DbTaskStructure.Columns.LIMIT_MOMENT);
+        try(Cursor c = db.rawQuery(query, null)){
+            if(c.moveToFirst()){
+                do {
+                    TaskDtoRead task = fromCursor(c,false);
+                    Log.d("tasks", task.toString());
+                    tasks.add(task);
+                }while(c.moveToNext());
+            }
+
+            return tasks;
+        }
+    }
+
+    private String convertToDefoultDay(int dayOfMonth) {
+        if(Integer.toString(dayOfMonth).length() == 1){
+            return "0"+dayOfMonth;
+        }
+        return Integer.toString(dayOfMonth);
+    }
+
     public List<TaskDtoRead> list(int limit, int offset, LocalDateTime day,
                                   TypeListTaskManagementOrderDate typeListTaskManagementOrder,
                                   TypeListTaskManagementOrderPriority typeListTaskManagementOrderPriority,
