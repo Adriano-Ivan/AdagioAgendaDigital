@@ -324,8 +324,9 @@ public class TaskManagementFragment extends Fragment
             listTaskBridgeView.setOrderDateType(typeListTaskOrderDate);
             listTaskBridgeView.setOrderPriorityType(typeListTaskOrderPriority);
             listTaskBridgeView.updateListAux();
-            updatePaginationVisibility();
+
             setConfigurationVisibilitity(false);
+            updatePaginationVisibility();
         }
     }
 

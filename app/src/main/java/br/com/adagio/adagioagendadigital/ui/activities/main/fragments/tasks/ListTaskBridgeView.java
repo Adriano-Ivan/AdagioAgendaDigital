@@ -103,6 +103,7 @@ public class ListTaskBridgeView {
     }
 
     public boolean thereIsNextPage() {
+
         if(taskDAO.getQuantityOfTasks() >
                TaskStaticValues.NEXT_POSSIBLE_QUANTITY ){
             return true;
@@ -112,6 +113,7 @@ public class ListTaskBridgeView {
     }
 
     public boolean thereIsPreviousPage() {
+
         if(TaskStaticValues.OFFSET_LIST == 0){
             return false;
         }
