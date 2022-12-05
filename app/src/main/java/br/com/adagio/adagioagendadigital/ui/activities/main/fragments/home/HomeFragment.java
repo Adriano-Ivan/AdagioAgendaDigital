@@ -277,6 +277,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
                pickedDate.getMonthValue(),pickedDate.getYear(),Priorities.LOW
        );
 
+
        Drawable lowDrawable = ContextCompat.getDrawable(getContext(),R.drawable.low_day_container);
        materialCalendarView.addDecorator(new AdagioDayLowDecorator(low,lowDrawable,R.color.adagio_gray));
 

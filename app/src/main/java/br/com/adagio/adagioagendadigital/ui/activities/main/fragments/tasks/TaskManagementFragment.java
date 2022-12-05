@@ -301,8 +301,8 @@ public class TaskManagementFragment extends Fragment
     @Override
     public void onClick(View view) {
         if(view.getId() == buttonHideContainerOptions.getId()){
-
            setConfigurationVisibilitity(false);
+           updatePaginationVisibility();
         } else if(view.getId() == buttonGoToFormTasks.getId()){
             mListener.onFragmentTaskFormInteraction(Action.GO_TO_TASK,null);
         }else if(view.getId() == fabButtonGoToTasks.getId()){

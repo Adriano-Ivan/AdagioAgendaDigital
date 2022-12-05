@@ -286,7 +286,7 @@ public class TaskDAO {
                 't', DbPriorityStructure.TABLE_NAME,'p', 'p',DbPriorityStructure.Columns.ID,
                 't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT,
                 year, DbTaskStructure.Columns.INITIAL_MOMENT,
-                month, 'p', DbPriorityStructure.Columns.NAME,priority.getValue()
+                getReturnDefaultMont(month), 'p', DbPriorityStructure.Columns.NAME,priority.getValue()
         ).replaceAll("YEAR", "%Y").replaceAll("MONTH","%m");
 
 
@@ -304,6 +304,14 @@ public class TaskDAO {
         }
 
         return localDateTimes;
+    }
+
+    private String getReturnDefaultMont(int month) {
+        if(Integer.toString(month).length() == 1){
+            return String.format("0%s", month);
+        }
+
+        return String.format("%s",month);
     }
 
     private boolean arrayListContainsLocalDateTimeWithYearAndMonth(ArrayList<LocalDateTime> arrayList,LocalDateTime localDateTimeFromQuery) {
