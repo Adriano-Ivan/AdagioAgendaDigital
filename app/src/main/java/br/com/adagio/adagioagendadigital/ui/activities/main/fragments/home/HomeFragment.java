@@ -112,6 +112,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
        setNewStateOfCalendar();
        setMonthsDropdownProperties();
        defineDayColors();
+       normalizeCalendar();
    }
 
     private void setMonthsDropdownProperties (){
@@ -130,6 +131,8 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HomeStaticValues.setPickedMonthMemo(position+1);
                 setNewStateOfCalendar();
+
+                normalizeCalendar();
                 Log.i("CLICKED", "onItemClick: "+parent.getSelectedItem());
             }
         });
@@ -187,20 +190,23 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
         materialCalendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-                updatePickedDate();
-                defineDayColors();
-
-                if(previousSelectedDayWithoutDefaultSystemPriority != null) {
-
-                    configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(previousSelectedDayWithoutDefaultSystemPriority.getYear(),
-                            previousSelectedDayWithoutDefaultSystemPriority.getMonth().getValue(),
-                            previousSelectedDayWithoutDefaultSystemPriority.getDayOfMonth());
-                }
+                normalizeCalendar();
             }
         });
         buttonToChooseYear.setOnClickListener(this);
     }
 
+    public void normalizeCalendar(){
+        updatePickedDate();
+        defineDayColors();
+
+        if(previousSelectedDayWithoutDefaultSystemPriority != null) {
+
+            configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(previousSelectedDayWithoutDefaultSystemPriority.getYear(),
+                    previousSelectedDayWithoutDefaultSystemPriority.getMonth().getValue(),
+                    previousSelectedDayWithoutDefaultSystemPriority.getDayOfMonth());
+        }
+    }
     private void configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(int year,int month, int day){
         materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
 

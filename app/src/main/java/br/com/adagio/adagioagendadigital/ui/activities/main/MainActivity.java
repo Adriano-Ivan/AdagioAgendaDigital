@@ -197,7 +197,6 @@ public  class MainActivity extends AppCompatActivity implements
         return R.string.adagio;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onSaveYear(int year) {
         HomeStaticValues.setPickedYearMemo(year);
@@ -205,9 +204,9 @@ public  class MainActivity extends AppCompatActivity implements
         setNewStateOfCalendar();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setNewStateOfCalendar(){
         homeFragment.setNewStateOfCalendar();
+        homeFragment.normalizeCalendar();
     }
 
     @Override
