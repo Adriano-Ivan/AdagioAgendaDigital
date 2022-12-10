@@ -269,7 +269,9 @@ public  class MainActivity extends AppCompatActivity implements
                 MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TASKS){
             formTaskFragment.auxSubmitTask();
             //displayNotification();
-           goToTaskOrTagManagement(GoTo.TASK);
+            if(formTaskFragment.validFormInformation()){
+                goToTaskOrTagManagement(GoTo.TASK);
+            }
         } else if(view.getId() == R.id.main_activity_return_screen_button &&
                 MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TAGS){
             goToTaskOrTagManagement(GoTo.TAG);

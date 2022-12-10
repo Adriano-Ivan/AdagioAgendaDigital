@@ -118,4 +118,6 @@
     <string name="fragment_relatories_select_type">Select type</string>
     <string name="tasks_of_day_create_task_in_this_day">Create task</string>
     <string name="tasks_of_day_generate_relatory">Generate relatory</string>
+    <string name="task_description_invalid">Write something to describe the task</string>
+    <string name="something_went_wrong">Invalid information was provided</string>
 </resources>

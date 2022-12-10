@@ -30,6 +30,15 @@
             android:layout_margin="5dp"
             android:hint="@string/fragment_form_task_placeholder_decription"
             android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:paddingLeft="10dp"
+            android:visibility="gone"
+            android:textColor="@color/adagio_red"
+            android:id="@+id/fragment_form_task_description_error_label"
+            android:text="@string/task_description_invalid" />
 
 
         <LinearLayout

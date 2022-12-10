@@ -133,4 +133,6 @@
     <string name="fragment_relatories_select_type">Selecionar tipo</string>
     <string name="tasks_of_day_create_task_in_this_day">Criar tarefa</string>
     <string name="tasks_of_day_generate_relatory">Gerar relatório</string>
+    <string name="task_description_invalid">Digite alguma coisa para descrever a tarefa</string>
+    <string name="something_went_wrong">Algumas informações estão inválidas</string>
 </resources>

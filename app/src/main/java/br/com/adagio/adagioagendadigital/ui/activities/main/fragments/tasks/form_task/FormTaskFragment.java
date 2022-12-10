@@ -22,9 +22,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
@@ -34,6 +38,7 @@ import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Priority;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.util.FormTaskError;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.AddTagToTaskDialog;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -74,6 +79,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private RadioButton radioButtonPriorityHigh;
     private RadioButton radioButtonPriorityCritical;
 
+    private TextView descriptionErrorLabel;
+
     private PriorityDAO priorityDAO;
     private int priority_id;
 
@@ -91,6 +98,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private boolean isToEdit;
 
     private Button buttonToOpenTagDialog;
+
+    public Hashtable<FormTaskError,Boolean>  formTaskError = new Hashtable<FormTaskError, Boolean>();
 
     public FormTaskFragment() {
 
@@ -125,6 +134,15 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         defineViews();
         defineListeners();
         defineDefaultValues();
+        setDictionaryFormErrors();
+    }
+
+    private void setDictionaryFormErrors() {
+        formTaskError.put(FormTaskError.DESCRIPTION, false);
+        formTaskError.put(FormTaskError.INITIAL_DATE, false);
+        formTaskError.put(FormTaskError.INITIAL_HOUR, false);
+        formTaskError.put(FormTaskError.LIMIT_DATE,false);
+        formTaskError.put(FormTaskError.LIMIT_HOUR, false);
     }
 
     private void definePossibleAttributesToEdition(){
@@ -145,10 +163,6 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         priorityDAO =PriorityDAO.getInstance(getActivity());
 
         priorities = new ArrayList<>(priorityDAO.list());
-
-        for(Priority priority:priorities){
-            Log.i("PRIORITY: ", priority.getId() + ", "+priority.getName());
-        }
     }
 
     private void defineViews(){
@@ -175,6 +189,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         radioButtonPriorityCritical=rootView.findViewById(R.id.fragment_form_task_choose_critical);
 
         buttonToOpenTagDialog = rootView.findViewById(R.id.fragment_form_task_button_to_open_tags_dialog);
+
+        descriptionErrorLabel = rootView.findViewById(R.id.fragment_form_task_description_error_label);
 
         if(possibleTaskToEdit == null){
             switchCompatFinishedOrNot.setChecked(false);
@@ -476,24 +492,49 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         return Integer.toString(dayOrMonthOrHourOrMinute);
     }
 
+    public boolean validFormInformation (){
+        boolean validForm = true;
+
+        if(descriptionEditText.getText().toString().trim().equals("")){
+            validForm = false;
+            formTaskError.put(FormTaskError.DESCRIPTION, true);
+        } else {
+            formTaskError.put(FormTaskError.DESCRIPTION, false);
+        }
+
+        return validForm;
+    }
+
+    private void propagateErrorWarnings(){
+        if(formTaskError.get(FormTaskError.DESCRIPTION)){
+            descriptionErrorLabel.setVisibility(View.VISIBLE);
+        } else {
+            descriptionErrorLabel.setVisibility(View.GONE);
+        }
+    }
+
     public void auxSubmitTask(){
         submitTask();
     }
 
     private void submitTask(){
-        TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
-                returnInitialMoment(),
-                returnLimitMoment(),
-                priority_id,
-                isFinished,
-                acumulatedIdTags
-        );
-        if(possibleTaskToEdit == null){
-            tListener.onFragmentTaskFormSubmitInteraction(tCreate,null);
+        if(validFormInformation()){
+            TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
+                    returnInitialMoment(),
+                    returnLimitMoment(),
+                    priority_id,
+                    isFinished,
+                    acumulatedIdTags
+            );
+            if(possibleTaskToEdit == null){
+                tListener.onFragmentTaskFormSubmitInteraction(tCreate,null);
+            } else {
+                tListener.onFragmentTaskFormSubmitInteraction(tCreate, possibleTaskToEdit.getId());
+            }
         } else {
-            tListener.onFragmentTaskFormSubmitInteraction(tCreate, possibleTaskToEdit.getId());
+            Toast.makeText(getContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
+            propagateErrorWarnings();
         }
-
     }
 
     private String returnInitialMoment(){
