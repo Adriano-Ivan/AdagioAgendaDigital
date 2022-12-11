@@ -63,6 +63,14 @@
                 android:textSize="13dp"
                 android:text="@string/fragment_form_task_choose_initial_date"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:visibility="gone"
+                android:textColor="@color/adagio_red"
+                android:id="@+id/fragment_form_task_initial_date_error_label"
+                android:text="@string/task_initial_date_invalid" />
         </LinearLayout>
 
 
@@ -88,6 +96,14 @@
                 android:textSize="13dp"
                 android:text="@string/fragment_form_task_choose_initial_hour"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:visibility="gone"
+                android:textColor="@color/adagio_red"
+                android:id="@+id/fragment_form_task_initial_hour_error_label"
+                android:text="@string/task_initial_hour_invalid" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,6 +128,15 @@
                 android:textSize="13dp"
                 android:text="@string/fragment_form_task_choose_final_date"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+
+                android:visibility="gone"
+                android:textColor="@color/adagio_red"
+                android:id="@+id/fragment_form_task_final_date_error_label"
+                android:text="@string/task_final_date_invalid" />
         </LinearLayout>
 
         <LinearLayout
@@ -137,6 +162,15 @@
                 android:textSize="13dp"
                 android:text="@string/fragment_form_task_choose_final_hour"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+
+                android:visibility="gone"
+                android:textColor="@color/adagio_red"
+                android:id="@+id/fragment_form_task_final_hour_error_label"
+                android:text="@string/task_final_hour_invalid" />
         </LinearLayout>
 
         <LinearLayout

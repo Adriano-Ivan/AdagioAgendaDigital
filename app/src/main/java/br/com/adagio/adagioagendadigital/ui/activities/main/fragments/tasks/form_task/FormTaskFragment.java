@@ -24,10 +24,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.Normalizer;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -80,6 +80,10 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private RadioButton radioButtonPriorityCritical;
 
     private TextView descriptionErrorLabel;
+    private TextView limitDateErrorLabel;
+    private TextView initialDateErrorLabel;
+    private TextView initialHourErrorLabel;
+    private TextView limitHourErrorLabel;
 
     private PriorityDAO priorityDAO;
     private int priority_id;
@@ -191,6 +195,10 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         buttonToOpenTagDialog = rootView.findViewById(R.id.fragment_form_task_button_to_open_tags_dialog);
 
         descriptionErrorLabel = rootView.findViewById(R.id.fragment_form_task_description_error_label);
+        initialDateErrorLabel = rootView.findViewById(R.id.fragment_form_task_initial_date_error_label);
+        limitDateErrorLabel = rootView.findViewById(R.id.fragment_form_task_final_date_error_label);
+        initialHourErrorLabel = rootView.findViewById(R.id.fragment_form_task_initial_hour_error_label);
+        limitHourErrorLabel = rootView.findViewById(R.id.fragment_form_task_final_hour_error_label);
 
         if(possibleTaskToEdit == null){
             switchCompatFinishedOrNot.setChecked(false);
@@ -492,6 +500,102 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         return Integer.toString(dayOrMonthOrHourOrMinute);
     }
 
+    private LocalDate returnAuxiliarInitialDateToVerify(){
+        return LocalDate.of(year, month, day);
+    }
+
+    private LocalDate returnAuxiliarLimitDateToVerify(){
+        return  LocalDate.of(finalYear,finalMonth,finalDay);
+    }
+
+    private boolean initialDateIsBefore(LocalDate initialDateToVerify){
+        return initialDateToVerify
+                .isBefore(returnAuxiliarLimitDateToVerify());
+    }
+
+    private boolean initialDateIsEqual(LocalDate initialDateToVerify){
+        return initialDateToVerify.isEqual(returnAuxiliarLimitDateToVerify());
+    }
+
+    private boolean limitDateIsAfter(LocalDate limitDateToVerify){
+        return limitDateToVerify.isAfter(returnAuxiliarInitialDateToVerify());
+    }
+
+    private boolean limitDateIsEqual(LocalDate limitDateToVerify){
+        return limitDateToVerify.isEqual(returnAuxiliarInitialDateToVerify());
+    }
+
+    private boolean initialDateIsBeforeOrEqual(){
+        LocalDate initialDateToVerify = returnAuxiliarInitialDateToVerify();
+
+        return  initialDateIsBefore(initialDateToVerify)
+                || initialDateIsEqual(initialDateToVerify);
+    }
+
+    private boolean limitDateIsAfterOrEqual(){
+        LocalDate limitDateToVerify = returnAuxiliarLimitDateToVerify();
+
+        return limitDateIsAfter(limitDateToVerify) ||
+                limitDateIsEqual(limitDateToVerify);
+    }
+
+    private boolean taskDateIsInvalid(MomentDate momentDate){
+        if(momentDate == MomentDate.INITIAL){
+            if(initialDateIsBeforeOrEqual()){
+                return false;
+            }
+        } else if(momentDate == MomentDate.LIMIT) {
+            if(limitDateIsAfterOrEqual()){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean initialTimeIsAfter(LocalTime initialTimeToVerify, LocalTime limitTimeToVerify){
+        if(initialTimeToVerify.isAfter(limitTimeToVerify)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean limitTimeIsBefore(LocalTime limitTimeToVerify, LocalTime initialTimeToVerify){
+        if(limitTimeToVerify.isBefore(initialTimeToVerify)){
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean taskTimeIsInvalid (MomentTime momentTime){
+        LocalTime initialTimeToVerify = LocalTime.of(hour, minute);
+        LocalTime limitTimeToVerify = LocalTime.of(finalHour, finalMinute);
+
+        if(momentTime == MomentTime.INITIAL){
+
+            if(initialDateIsEqual(returnAuxiliarInitialDateToVerify())){
+                return initialTimeIsAfter(initialTimeToVerify,limitTimeToVerify);
+            } else if(initialDateIsBefore(returnAuxiliarInitialDateToVerify())){
+                return false;
+            }
+
+            return initialTimeIsAfter(initialTimeToVerify,limitTimeToVerify);
+
+        } else if(momentTime == MomentTime.LIMIT){
+
+            if(initialDateIsEqual(returnAuxiliarInitialDateToVerify())){
+                return limitTimeIsBefore(limitTimeToVerify, initialTimeToVerify);
+            } else if(initialDateIsBefore(returnAuxiliarInitialDateToVerify())){
+                return false;
+            }
+
+            return limitTimeIsBefore(limitTimeToVerify,initialTimeToVerify);
+        }
+
+        return true;
+    }
+
     public boolean validFormInformation (){
         boolean validForm = true;
 
@@ -502,6 +606,34 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             formTaskError.put(FormTaskError.DESCRIPTION, false);
         }
 
+        if(taskDateIsInvalid(MomentDate.INITIAL)){
+            validForm = false;
+            formTaskError.put(FormTaskError.INITIAL_DATE, true);
+        } else {
+            formTaskError.put(FormTaskError.INITIAL_DATE, false);
+        }
+
+        if(taskDateIsInvalid(MomentDate.LIMIT)){
+            validForm = false;
+            formTaskError.put(FormTaskError.LIMIT_DATE, true);
+        } else {
+            formTaskError.put(FormTaskError.LIMIT_DATE, false);
+        }
+
+        if(taskTimeIsInvalid(MomentTime.INITIAL)){
+            validForm = false;
+            formTaskError.put(FormTaskError.INITIAL_HOUR, true);
+        } else {
+            formTaskError.put(FormTaskError.INITIAL_HOUR, false);
+        }
+
+        if(taskTimeIsInvalid(MomentTime.LIMIT)){
+            validForm = false;
+            formTaskError.put(FormTaskError.LIMIT_HOUR, true);
+        } else {
+            formTaskError.put(FormTaskError.LIMIT_HOUR, false);
+        }
+
         return validForm;
     }
 
@@ -510,6 +642,30 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             descriptionErrorLabel.setVisibility(View.VISIBLE);
         } else {
             descriptionErrorLabel.setVisibility(View.GONE);
+        }
+
+        if(formTaskError.get(FormTaskError.INITIAL_DATE)){
+            initialDateErrorLabel.setVisibility(View.VISIBLE);
+        } else {
+            initialDateErrorLabel.setVisibility(View.GONE);
+        }
+
+        if(formTaskError.get(FormTaskError.LIMIT_DATE)){
+            limitDateErrorLabel.setVisibility(View.VISIBLE);
+        } else {
+            limitDateErrorLabel.setVisibility(View.GONE);
+        }
+
+        if (formTaskError.get(FormTaskError.INITIAL_HOUR)) {
+            initialHourErrorLabel.setVisibility(View.VISIBLE);
+        } else {
+            initialHourErrorLabel.setVisibility(View.GONE);
+        }
+
+        if(formTaskError.get(FormTaskError.LIMIT_HOUR)){
+            limitHourErrorLabel.setVisibility(View.VISIBLE);
+        } else{
+            limitHourErrorLabel.setVisibility(View.GONE);
         }
     }
 
@@ -565,5 +721,15 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentTaskFormCreateInteractionListener {
 
         void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task,Integer id);
+    }
+
+    private enum MomentDate {
+        LIMIT,
+        INITIAL
+    }
+
+    private enum MomentTime {
+        LIMIT,
+        INITIAL
     }
 }

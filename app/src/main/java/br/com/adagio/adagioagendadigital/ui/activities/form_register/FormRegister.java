@@ -10,6 +10,10 @@ import android.view.MenuItem;
 
 import br.com.adagio.adagioagendadigital.R;
 
+// Activity não está sendo usada no momento, por conta de mudanças no direcionamento do projeto,
+// mas será mantida pelo valor que agrega a trabalhos futuros e pelo fato de que manter em um branch
+// separado poderia causar confusões em resoluções futuras de merge ou rebase. Portanto, compensa mantê-la, não
+// havendo problemas graves em sua presença no projeto.
 public class FormRegister extends AppCompatActivity {
 
     @Override

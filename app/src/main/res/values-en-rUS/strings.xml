@@ -119,5 +119,11 @@
     <string name="tasks_of_day_create_task_in_this_day">Create task</string>
     <string name="tasks_of_day_generate_relatory">Generate relatory</string>
     <string name="task_description_invalid">Write something to describe the task</string>
-    <string name="something_went_wrong">Invalid information was provided</string>
+    <string name="task_initial_date_invalid">Verify if the date is greater or lower than the final date</string>
+    <string name="task_final_date_invalid">Verify if the date is greater or lower than the initial date</string>
+    <string name="task_initial_hour_invalid">Verify if this hour is greater than the final or equal, and if the dates are not equal</string>
+    <string name="task_final_hour_invalid">Verify if this hour is greater than the initial or equal,  and if the dates are not equal</string>
+    <string name="tag_already_exists">Tag already exists</string>
+    <string name="empty_tag_is_not_allowed">Empty tag is not allowed</string>
+   <string name="something_went_wrong">Invalid information was provided</string>
 </resources>

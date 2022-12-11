@@ -11,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Hashtable;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.utils.FormTagErrors;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
 
@@ -29,6 +33,11 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
 
     private boolean isToEdit;
     private Tag tagToEdit;
+
+    private Hashtable<FormTagErrors, Boolean> formTagErrors = new Hashtable<>();
+
+    private TextView nameErrorEmptyLabel;
+    private TextView nameErrorAlreadyExistsLabel;
 
     public FormTagFragment() {
 
@@ -62,6 +71,12 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         defineViews();
         defineListeners();
         defineFields();
+        setFormErrors();
+    }
+
+    private void setFormErrors (){
+        formTagErrors.put(FormTagErrors.EMPTY_TAG, false);
+        formTagErrors.put(FormTagErrors.TAG_ALREADY_EXISTS, false);
     }
 
     private void definePossibleAttributesToEdition(){
@@ -80,7 +95,8 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         nameTextView = rootView.findViewById(R.id.fragment_form_tag_name);
         buttonSubmit = rootView.findViewById(R.id.fragment_form_tag_submit);
         createOrEditYourTagTextView=rootView.findViewById(R.id.create_or_edit_your_tag_text_view);
-
+        nameErrorEmptyLabel = rootView.findViewById(R.id.fragment_form_tag_empty);
+        nameErrorAlreadyExistsLabel = rootView.findViewById(R.id.fragment_form_tag_already_exists_error_label);
     }
 
     private void defineListeners(){
@@ -107,13 +123,46 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void submitTag(){
-        Tag tag = new Tag(nameTextView.getText().toString());
+    public boolean validFormInformation(){
+        boolean isValid = true;
 
-        if(isToEdit){
-            tListener.onFragmentTagFormEditInteraction(tag, tagToEdit);
+        if(nameTextView.getText().toString().trim().equals("")){
+            isValid = false;
+            formTagErrors.put(FormTagErrors.EMPTY_TAG, true);
         } else {
-            tListener.onFragmentTagFormSubmitInteraction(tag);
+            formTagErrors.put(FormTagErrors.EMPTY_TAG, false);
+        }
+
+        return isValid;
+    }
+
+    private void propagateErrorWarnings(){
+
+        if (formTagErrors.get(FormTagErrors.TAG_ALREADY_EXISTS)) {
+            nameErrorAlreadyExistsLabel.setVisibility(View.VISIBLE);
+        } else {
+            nameErrorAlreadyExistsLabel.setVisibility(View.GONE);
+        }
+
+        if(formTagErrors.get(FormTagErrors.EMPTY_TAG)){
+            nameErrorEmptyLabel.setVisibility(View.VISIBLE);
+        } else{
+            nameErrorEmptyLabel.setVisibility(View.GONE);
+        }
+    }
+
+    private void submitTag(){
+        if(validFormInformation()){
+            Tag tag = new Tag(nameTextView.getText().toString());
+
+            if(isToEdit){
+                tListener.onFragmentTagFormEditInteraction(tag, tagToEdit);
+            } else {
+                tListener.onFragmentTagFormSubmitInteraction(tag);
+            }
+        } else {
+            Toast.makeText(getContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
+            propagateErrorWarnings();
         }
 
     }

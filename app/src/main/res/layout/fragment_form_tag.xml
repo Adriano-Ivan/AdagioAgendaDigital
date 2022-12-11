@@ -29,7 +29,22 @@
             android:layout_margin="5dp"
             android:hint="@string/fragment_form_tag_placeholder_name"
             android:layout_height="wrap_content"/>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:visibility="gone"
+            android:textColor="@color/adagio_red"
+            android:id="@+id/fragment_form_tag_already_exists_error_label"
+            android:text="@string/tag_already_exists" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:visibility="gone"
+            android:textColor="@color/adagio_red"
+            android:id="@+id/fragment_form_tag_empty"
+            android:text="@string/empty_tag_is_not_allowed" />
 
         <Button
             android:id="@+id/fragment_form_tag_submit"

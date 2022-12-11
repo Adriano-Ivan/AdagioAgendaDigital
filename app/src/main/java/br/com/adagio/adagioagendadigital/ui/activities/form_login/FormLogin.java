@@ -1,10 +1,12 @@
 package br.com.adagio.adagioagendadigital.ui.activities.form_login;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -12,6 +14,11 @@ import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.ui.activities.form_register.FormRegister;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
 
+// Activity não está sendo usada no momento, por conta de mudanças no direcionamento do projeto,
+// mas será mantida pelo valor que agrega a trabalhos futuros e pelo fato de que manter em um branch
+// separado poderia causar confusões em resoluções futuras de merge ou rebase. Portanto, compensa mantê-la, não
+// havendo problemas graves em sua presença no projeto.
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class FormLogin extends AppCompatActivity implements View.OnClickListener {
 
     private TextView textToRegisterForm;
