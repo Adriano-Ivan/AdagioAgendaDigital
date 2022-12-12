@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
 import br.com.adagio.adagioagendadigital.data.task.DbTaskStructure;
@@ -67,7 +68,7 @@ public class TagDAO {
 
     public void save(Tag tag) {
         ContentValues values = new ContentValues();
-        values.put(DbTagStructure.Columns.NAME, tag.getName());
+        values.put(DbTagStructure.Columns.NAME, tag.getName().toLowerCase().trim());
 
         long id = db.insert(DbTagStructure.TABLE_NAME, null, values);
     }
@@ -76,6 +77,24 @@ public class TagDAO {
         String query = String.format("SELECT * FROM %s WHERE %s = %s;",
                 DbTagStructure.TABLE_NAME,DbTagStructure.Columns.ID, id);
 
+        return returnByQuery(query);
+    }
+
+    public boolean thereIsNoTagWithGivenName(String name){
+        if(returnByName(name) == null){
+            return true;
+        }
+        return false;
+    }
+
+    private Tag returnByName(String name){
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%s';",
+                DbTagStructure.TABLE_NAME,DbTagStructure.Columns.NAME, name.toLowerCase().trim());
+
+        return returnByQuery(query);
+    }
+
+    private Tag returnByQuery(String query){
         Tag tag = null;
         try(Cursor c = db.rawQuery(query, null)){
 

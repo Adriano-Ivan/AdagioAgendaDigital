@@ -82,4 +82,8 @@ public class ListTagBridgeView {
 
         return true;
     }
+
+    public boolean uniqueTag(String name){
+        return tagDAO.thereIsNoTagWithGivenName(name);
+    }
 }

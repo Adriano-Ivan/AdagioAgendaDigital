@@ -18,6 +18,7 @@ import java.util.Hashtable;
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.utils.FormTagErrors;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
@@ -31,6 +32,7 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
     private TextView nameTextView;
     private Button buttonSubmit;
 
+    private ListTagBridgeView listTagBridgeView;
     private boolean isToEdit;
     private Tag tagToEdit;
 
@@ -72,6 +74,8 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
         defineListeners();
         defineFields();
         setFormErrors();
+
+        listTagBridgeView =new ListTagBridgeView(getActivity());
     }
 
     private void setFormErrors (){
@@ -125,12 +129,20 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
 
     public boolean validFormInformation(){
         boolean isValid = true;
+        String nameTag = nameTextView.getText().toString().trim();
 
-        if(nameTextView.getText().toString().trim().equals("")){
+        if(nameTag.equals("")){
             isValid = false;
             formTagErrors.put(FormTagErrors.EMPTY_TAG, true);
         } else {
             formTagErrors.put(FormTagErrors.EMPTY_TAG, false);
+        }
+
+        if(!listTagBridgeView.uniqueTag(nameTag)){
+            isValid = false;
+            formTagErrors.put(FormTagErrors.TAG_ALREADY_EXISTS, true);
+        } else {
+            formTagErrors.put(FormTagErrors.TAG_ALREADY_EXISTS, false);
         }
 
         return isValid;
