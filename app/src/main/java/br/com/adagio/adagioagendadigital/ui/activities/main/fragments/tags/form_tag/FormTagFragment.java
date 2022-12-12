@@ -138,7 +138,7 @@ public class FormTagFragment extends Fragment implements View.OnClickListener {
             formTagErrors.put(FormTagErrors.EMPTY_TAG, false);
         }
 
-        if(!listTagBridgeView.uniqueTag(nameTag)){
+        if(!listTagBridgeView.uniqueTag(nameTag) && !isToEdit){
             isValid = false;
             formTagErrors.put(FormTagErrors.TAG_ALREADY_EXISTS, true);
         } else {
