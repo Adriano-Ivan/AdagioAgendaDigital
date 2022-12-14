@@ -278,7 +278,9 @@ public  class MainActivity extends AppCompatActivity implements
         } else if(view.getId() == R.id.main_activity_check_register &&
                 MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.TAGS){
             formTagFragment.auxSubmitTag();
-            goToTaskOrTagManagement(GoTo.TAG);
+            if(formTagFragment.validFormInformation()){
+                goToTaskOrTagManagement(GoTo.TAG);
+            }
         }
     }
 
