@@ -60,7 +60,7 @@
     <string name="teste">test</string>
     <string name="fragment_task_submit">save task</string>
     <string name="task_delete_option">delete task</string>
-    <string name="task_edit_option">edti task</string>
+    <string name="task_edit_option">edit task</string>
     <string name="task_confirmation_delete">Do you really want to delete this task ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -126,4 +126,5 @@
     <string name="tag_already_exists">Tag already exists</string>
     <string name="empty_tag_is_not_allowed">Empty tag is not allowed</string>
    <string name="something_went_wrong">Invalid information was provided</string>
+    <string name="without_tasks_of_today_title">Without tasks for this day</string>
 </resources>

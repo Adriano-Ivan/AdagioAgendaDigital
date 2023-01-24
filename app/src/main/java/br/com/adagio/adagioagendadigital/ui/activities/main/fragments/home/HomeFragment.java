@@ -26,8 +26,6 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
-import org.threeten.bp.LocalDate;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +41,7 @@ import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.AdagioDayLowDecorator;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.DefaultDayWithoutDefaultSystemPriority;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.day_decorator.DefaultTodayDecorator;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeTodayDialog;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeDayDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.NumberPickerDialogToChooseYear;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -57,7 +55,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
     private TextView textViewTodayDate;
 
     private LocalDateTime pickedDate;
-    private HomeTodayDialog todayDialog;
+    private HomeDayDialog todayDialog;
     private boolean dialogIsShown;
 
     private ArrayList<Integer> finishedTasksIds  = new ArrayList<>();
@@ -249,7 +247,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
    public void onSelectedDayChange( int year, int month, int dayOfMonth) {
        pickedDate = LocalDateTime.of(year,month,dayOfMonth,0,0,0);
 
-       todayDialog = new HomeTodayDialog(pickedDate,
+       todayDialog = new HomeDayDialog(pickedDate,
                taskDAO.returnFinishedOrUnfinishedTasksIds(pickedDate,
                        true
                ),

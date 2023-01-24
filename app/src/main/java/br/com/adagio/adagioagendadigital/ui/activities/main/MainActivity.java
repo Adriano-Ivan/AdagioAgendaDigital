@@ -37,6 +37,7 @@ import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeDayDialog;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.FormTagFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationDialog;
@@ -65,7 +66,9 @@ public  class MainActivity extends AppCompatActivity implements
         AddTagToTaskDialog.OnFragmentTaskAddTagInteractionListener,
         FinishOrNotTaskConfirmationDialog.OnFragmentTaskFinishOrNotInteractionListener,
         DeleteTagConfirmationDialog.OnFragmentTagDeleteInteractionListener,
-        View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener  {
+        View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener,
+        HomeDayDialog.OnFragmentTaskFormForSpecifiedDayInteractionListener
+        {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -281,12 +284,24 @@ public  class MainActivity extends AppCompatActivity implements
             if(formTagFragment.validFormInformation()){
                 goToTaskOrTagManagement(GoTo.TAG);
             }
+        } else if(view.getId() == R.id.main_activity_return_screen_button
+                && MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.HOME
+        ){
+            goToHome(null);
+        }else if(view.getId() == R.id.main_activity_check_register
+                && MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.HOME
+        ){
+            formTaskFragment.auxSubmitTask();
+
+            if(formTaskFragment.validFormInformation()){
+                goToHome(null);
+            }
+
         }
     }
 
     @Override
     public void onFragmentTaskFormSubmitInteraction(TaskDtoCreate task,Integer id) {
-
         if(id == null){
             listTaskBridgeView.insert(task);
         } else {
@@ -296,8 +311,17 @@ public  class MainActivity extends AppCompatActivity implements
         goToTaskOrTagManagement(GoTo.TASK);
     }
 
-    private void goToTaskOrTagManagement(GoTo goTo){
+    // REVISAR
+    private void goToHome(Object objectForFutureParameters){
+        returnScreenButton.setVisibility(View.GONE);
+        checkRegisterButton.setVisibility(View.GONE);
 
+        MainStaticValues.setCurrentFragment(CurrentFragment.HOME);
+        textTop.setText(getResources().getString(returnCurrentTitle()));
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, homeFragment).commit();
+    }
+
+    private void goToTaskOrTagManagement(GoTo goTo){
         returnScreenButton.setVisibility(View.GONE);
         checkRegisterButton.setVisibility(View.GONE);
 
@@ -334,6 +358,21 @@ public  class MainActivity extends AppCompatActivity implements
             taskFragment.setTaskAsUnfinished(taskToFinish);
         }
 
+    }
+
+    @Override
+    public void onFragmentTaskFormForSpecifiedDayInteraction(TaskManagementFragment.Action action, LocalDateTime day) {
+        returnScreenButton.setVisibility(View.VISIBLE);
+        checkRegisterButton.setVisibility(View.VISIBLE);
+
+        Bundle data = new Bundle();
+        formTaskFragment  = new FormTaskFragment();
+
+        data.putSerializable("predefinedDay", day);
+        formTaskFragment.setArguments(data);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,formTaskFragment)
+                .commit();
     }
 
     private enum GoTo{

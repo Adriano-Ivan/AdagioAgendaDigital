@@ -25,7 +25,7 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
 
     private final List<TaskDtoRead> tasks = new ArrayList<>();
     private final Context context;
-    private HomeTodayDialog parentFragment;
+    private HomeDayDialog parentFragment;
 
     public TasksOfDayDialogAdapter(Context context){
         this.context = context;
@@ -109,7 +109,7 @@ public class TasksOfDayDialogAdapter  extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void setParentFragment(HomeTodayDialog fragment){
+    public void setParentFragment(HomeDayDialog fragment){
         parentFragment=fragment;
     }
 }

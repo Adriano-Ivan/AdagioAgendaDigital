@@ -105,6 +105,8 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     public Hashtable<FormTaskError,Boolean>  formTaskError = new Hashtable<FormTaskError, Boolean>();
 
+    private LocalDateTime predefinedDay = null;
+
     public FormTaskFragment() {
 
     }
@@ -122,6 +124,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         rootView = inflater.inflate(R.layout.fragment_form_task, container, false);
 
         definePossibleAttributesToEdition();
+        definePossibleAttributeForPredefinedDay();
         setAttributes();
 
         return rootView;
@@ -150,16 +153,21 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void definePossibleAttributesToEdition(){
-        if(getArguments() != null)    {
-            isToEdit = true;
+        if(getArguments() != null){
             possibleTaskToEdit = (TaskDtoRead) getArguments().getSerializable("taskToEdit");
+        }
 
-            Log.i("TASK", possibleTaskToEdit.getId()+
-                    " "+possibleTaskToEdit.getDescription()+
-                    " "+possibleTaskToEdit.getPriority_id());
+        if( possibleTaskToEdit != null)    {
+            isToEdit = true;
         } else {
             isToEdit = false;
             possibleTaskToEdit = null;
+        }
+    }
+
+    private void definePossibleAttributeForPredefinedDay(){
+        if(getArguments() != null){
+            predefinedDay = (LocalDateTime) getArguments().getSerializable("predefinedDay");
         }
     }
 
@@ -208,7 +216,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void defineDefaultValues(){
-        final LocalDateTime today = LocalDateTime.now();
+        final LocalDateTime today = predefinedDay != null ? predefinedDay : LocalDateTime.now();
 
         defineMomentProperties(today);
 
@@ -280,13 +288,17 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        Log.i("PRIORITY VALUE", ""+priority.getValue());
-
         definePriority(priority);
     }
 
     private void defineMomentProperties(LocalDateTime today) {
+        boolean isTodayInFact =
+                today.getDayOfMonth() == LocalDateTime.now().getDayOfMonth() &&
+                        today.getYear() == LocalDateTime.now().getYear() &&
+                        today.getMonthValue() == LocalDateTime.now().getMonthValue();
+
         if(possibleTaskToEdit == null){
+            Log.i("isToday", isTodayInFact+"");
             day = today.getDayOfMonth();
             finalDay = today.getDayOfMonth();
 
@@ -296,10 +308,10 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             year = today.getYear();
             finalYear =today.getYear();
 
-            hour = today.getHour();
+            hour = isTodayInFact ? today.getHour()  : LocalDateTime.now().getHour();
             finalHour  = 23;
 
-            minute = today.getMinute();
+            minute = isTodayInFact ?  today.getMinute() : LocalDateTime.now().getMinute();
             finalMinute=59;
         }else {
             day = possibleTaskToEdit.getInitialMoment().getDayOfMonth();
@@ -311,11 +323,12 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
             year = possibleTaskToEdit.getInitialMoment().getYear();
             finalYear = possibleTaskToEdit.getLimitMoment().getYear();
 
-            hour = possibleTaskToEdit.getInitialMoment().getHour();
+            Log.i("isToday", isTodayInFact+"");
+            hour =  possibleTaskToEdit.getInitialMoment().getHour();
             finalHour =possibleTaskToEdit.getLimitMoment().getHour();
 
-            minute = possibleTaskToEdit.getInitialMoment().getMinute();
-            finalMinute = possibleTaskToEdit.getLimitMoment().getMinute();
+            minute = possibleTaskToEdit.getInitialMoment().getMinute() ;
+            finalMinute =  possibleTaskToEdit.getLimitMoment().getMinute();
         }
     }
 
@@ -385,7 +398,6 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.fragment_form_task_submit){
-            Log.i("priority id", priority_id+"");
             submitTask();
         } else if(view.getId() == R.id.fragment_form_task_choose_initial_date){
             showInitialDateDialog();

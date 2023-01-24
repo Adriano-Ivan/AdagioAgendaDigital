@@ -2,6 +2,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.util
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,28 +18,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.HomeFragment;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.ListTagToTaskBridgeView;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.utils.add_tag_to_task_dialog.TagsToTaskStaticValues;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.form_task.FormTaskFragment;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class HomeTodayDialog extends DialogFragment implements View.OnClickListener {
+public class HomeDayDialog extends DialogFragment implements View.OnClickListener {
 
     private ListView tasksList;
     private TasksOfDayBridgeView taskOfDayBridgeView;
     private LocalDateTime day;
 
+    private OnFragmentTaskFormForSpecifiedDayInteractionListener dayListener;
+
     private ArrayList<Integer> tasksToFinishIds  = new ArrayList<>();
     private ArrayList<Integer> tasksToStartAgainIds=new ArrayList<>();
 
     private LinearLayout linearLayoutContainerPagination;
+    private LinearLayout withoutTaskForThisDayContainer;
 
     private ImageButton imageButtonNextPage;
     private ImageButton imageButtonPreviousPage;
@@ -47,14 +51,18 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
     private ImageButton imageButtonPreviousPageDisabled;
 
     private TextView textViewCurrentPage;
+
     private Button saveDefinitionsButton;
     private Button buttonCloseDialog;
 
+    private Button buttonGoToFormTaskForThisDay;
+    private Button buttonGoToRelatoryGeneration;
+
     private HomeFragment parentFragment;
 
-    public HomeTodayDialog(LocalDateTime pickedDate,
-                           ArrayList<Integer> finishedTasks,
-                           ArrayList<Integer> tasksToStartIds
+    public HomeDayDialog(LocalDateTime pickedDate,
+                         ArrayList<Integer> finishedTasks,
+                         ArrayList<Integer> tasksToStartIds
                            ){
         this.tasksToStartAgainIds = new ArrayList<>(tasksToStartIds);
         this.tasksToFinishIds=new ArrayList<>(finishedTasks);
@@ -82,6 +90,13 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
         defineDefaultVisualizations();
         updateTasksList();
 
+        if(taskOfDayBridgeView.getAdapterCount() == 0){
+            withoutTaskForThisDayContainer.setVisibility(View.VISIBLE);
+        } else {
+            withoutTaskForThisDayContainer.setVisibility(View.GONE);
+
+        }
+
         return builder.create();
     }
 
@@ -89,12 +104,15 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
         tasksList =layout.findViewById(R.id.tasks_of_day_task_body_list);
 
         linearLayoutContainerPagination=layout.findViewById(R.id.fragment_today_dialog_container_pagination);
+        withoutTaskForThisDayContainer = layout.findViewById(R.id.without_tasks_for_this_day_container);
+
         imageButtonNextPage=layout.findViewById(R.id.fragment_today_dialog_next_page);
         imageButtonNextPageDisabled=layout.findViewById(R.id.fragment_today_dialog_next_page_disabled);
         imageButtonPreviousPage=layout.findViewById(R.id.fragment_today_dialog_previous_page);
         imageButtonPreviousPageDisabled=layout.findViewById(R.id.fragment_today_dialog_previous_page_disabled);
         buttonCloseDialog=layout.findViewById(R.id.tasks_of_day_close_dialog);
 
+        buttonGoToFormTaskForThisDay = layout.findViewById(R.id.tasks_of_day_create_task_in_this_day);
         textViewCurrentPage=layout.findViewById(R.id.fragment_today_dialog_text_page);
         saveDefinitionsButton=layout.findViewById(R.id.tasks_of_day_save_finished_or_not_tasks);
     }
@@ -104,6 +122,7 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
         imageButtonPreviousPage.setOnClickListener(this);
         saveDefinitionsButton.setOnClickListener(this);
         buttonCloseDialog.setOnClickListener(this);
+        buttonGoToFormTaskForThisDay.setOnClickListener(this);
     }
 
     private void updateTasksList(){
@@ -177,6 +196,9 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
             this.dismiss();
         } else if(view.getId() == buttonCloseDialog.getId()){
             this.dismiss();
+        } else if(view.getId() == buttonGoToFormTaskForThisDay.getId()){
+            this.dismiss();
+            goToFormTaskForThisDay();
         }
     }
 
@@ -198,6 +220,10 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
         for(Integer id: tasksToStartAgainIds){
             Log.i("to restart", ""+id);
         }
+    }
+
+    private void goToFormTaskForThisDay(){
+        dayListener.onFragmentTaskFormForSpecifiedDayInteraction(TaskManagementFragment.Action.GO_TO_TASK,day);
     }
 
     public boolean isAmongToFinish(int id) {
@@ -223,5 +249,21 @@ public class HomeTodayDialog extends DialogFragment implements View.OnClickListe
 
     public void setParentFragment(HomeFragment parentFragment){
         this.parentFragment =parentFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentTaskFormForSpecifiedDayInteractionListener) {
+            dayListener = (OnFragmentTaskFormForSpecifiedDayInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentTaskFormInteractionListener");
+        }
+    }
+
+    public interface OnFragmentTaskFormForSpecifiedDayInteractionListener {
+
+        void onFragmentTaskFormForSpecifiedDayInteraction(TaskManagementFragment.Action action, LocalDateTime day);
     }
 }

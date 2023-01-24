@@ -10,10 +10,36 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:textSize="18dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:padding="8dp"
         android:layout_height="wrap_content"
         android:text="@string/tasks_of_today_title"
         />
+
+    <LinearLayout
+        android:id="@+id/without_tasks_for_this_day_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:text="@string/without_tasks_of_today_title"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/fragment_today_dialog_container_pagination"

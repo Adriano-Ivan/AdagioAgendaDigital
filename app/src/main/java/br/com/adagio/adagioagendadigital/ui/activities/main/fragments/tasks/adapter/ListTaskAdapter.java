@@ -12,6 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,15 +64,27 @@ public class ListTaskAdapter extends BaseAdapter {
         return genereatedView;
     }
 
+    private String formatDateForShow(LocalDateTime localDateTime){
+        //        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+
+        return String.format("%s/%s/%s %s:%s",
+                    localDateTime.getDayOfMonth(),
+                    localDateTime.getMonthValue(),
+                    localDateTime.getYear(),
+                    localDateTime.getHour(),
+                localDateTime.getMinute()
+                );
+    }
+
     private void defineTaskInformation(TaskDtoRead task, View generatedView){
         TextView description = generatedView.findViewById(R.id.item_task_description);
         description.setText(task.getDescription());
 
         TextView initialMoment =generatedView.findViewById(R.id.item_task_initial_moment);
-        initialMoment.setText(task.getInitialMoment().toString());
+        initialMoment.setText(formatDateForShow(task.getInitialMoment()));
 
         TextView limitMoment =generatedView.findViewById(R.id.item_task_limit_moment);
-        limitMoment.setText(task.getLimitMoment().toString());
+        limitMoment.setText(formatDateForShow(task.getLimitMoment()));
 
         TextView finishTaskShortcut = generatedView.findViewById(R.id.item_task_finish_task);
         TextView notFinishTaskShortcut = generatedView.findViewById(R.id.item_task_not_finish_task);

@@ -141,4 +141,5 @@
     <string name="tag_already_exists">Tag já existe</string>
     <string name="empty_tag_is_not_allowed">Tag não pode ser vazia</string>
     <string name="something_went_wrong">Algumas informações estão inválidas</string>
+    <string name="without_tasks_of_today_title">Sem tarefas para esse dia</string>
 </resources>
