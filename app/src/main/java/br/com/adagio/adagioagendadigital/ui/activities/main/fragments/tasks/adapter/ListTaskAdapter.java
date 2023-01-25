@@ -10,17 +10,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
+import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.TaskManagementFragment;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -90,7 +87,17 @@ public class ListTaskAdapter extends BaseAdapter {
         TextView notFinishTaskShortcut = generatedView.findViewById(R.id.item_task_not_finish_task);
 
         TextView priorityName =generatedView.findViewById(R.id.item_task_priority_name);
-        priorityName.setText(task.getPriorityName());
+
+        if(task.getPriorityName().equals(Priorities.LOW.getValue())){
+            priorityName.setText(R.string.low);
+        } else if(task.getPriorityName().equals(Priorities.AVERAGE.getValue())){
+            priorityName.setText(R.string.average);
+        } else if(task.getPriorityName().equals(Priorities.HIGH.getValue())){
+            priorityName.setText(R.string.high);
+        } else if(task.getPriorityName().equals(Priorities.CRITICAL.getValue())){
+            priorityName.setText(R.string.critical);
+        }
+
 
         if(task.isFinished()){
             finishTaskShortcut.setVisibility(View.GONE);
@@ -120,6 +127,22 @@ public class ListTaskAdapter extends BaseAdapter {
     public void update(List<TaskDtoRead> tasks){
         this.tasks.clear();
         this.tasks.addAll(tasks);
+        notifyDataSetChanged();
+    }
+
+    public void updateWithoutRepeat(TaskDtoRead task){
+        List<TaskDtoRead> newTasksDtoRead = new ArrayList<TaskDtoRead>();
+
+        for(TaskDtoRead taskDtoRead : this.tasks){
+            if(taskDtoRead.getId() == task.getId()){
+                taskDtoRead.setFinished(task.isFinished());
+            }
+            newTasksDtoRead.add(taskDtoRead);
+        }
+
+        this.tasks.clear();
+        this.tasks.addAll(newTasksDtoRead);
+
         notifyDataSetChanged();
     }
 

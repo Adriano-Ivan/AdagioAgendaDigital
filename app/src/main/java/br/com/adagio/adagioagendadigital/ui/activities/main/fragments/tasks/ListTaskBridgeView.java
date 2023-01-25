@@ -2,7 +2,6 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.widget.ListView;
 
 import androidx.annotation.RequiresApi;
@@ -89,12 +88,20 @@ public class ListTaskBridgeView {
 
     public void setTaskAsFinished(TaskDtoRead task){
         taskDAO.updateToFinished(task);
-        updateListAux();
+
+        task.setFinished(true);
+        updateListAuxWithoutRepeat(task);
     }
 
     public void setTaskAsUnfinished(TaskDtoRead task) {
         taskDAO.updateToUnfinished(task);
-        updateListAux();
+
+        task.setFinished(false);
+        updateListAuxWithoutRepeat(task);
+    }
+
+    private void updateListAuxWithoutRepeat(TaskDtoRead task){
+        listTaskAdapter.updateWithoutRepeat(task);
     }
 
     public boolean thereArePreviousOrNextPage() {

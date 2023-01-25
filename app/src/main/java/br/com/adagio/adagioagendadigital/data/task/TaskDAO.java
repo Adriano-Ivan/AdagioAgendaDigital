@@ -281,12 +281,13 @@ public class TaskDAO {
         String query = String.format(
                 "SELECT %s.%s FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
                         " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
-                        " strftime('MONTH',%s) LIKE '%s' AND %s.%s LIKE '%s';" ,
+                        " strftime('MONTH',%s) LIKE '%s' AND %s.%s LIKE '%s' AND %s.%s = 0;" ,
                 't', DbTaskStructure.Columns.INITIAL_MOMENT, DbTaskStructure.TABLE_NAME,
                 't', DbPriorityStructure.TABLE_NAME,'p', 'p',DbPriorityStructure.Columns.ID,
                 't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT,
                 year, DbTaskStructure.Columns.INITIAL_MOMENT,
-                getReturnDefaultMont(month), 'p', DbPriorityStructure.Columns.NAME,priority.getValue()
+                getReturnDefaultMont(month), 'p', DbPriorityStructure.Columns.NAME,priority.getValue(),
+                't', DbTaskStructure.Columns.IS_FINISHED
         ).replaceAll("YEAR", "%Y").replaceAll("MONTH","%m");
 
 

@@ -208,8 +208,8 @@ public  class MainActivity extends AppCompatActivity implements
     }
 
     private void setNewStateOfCalendar(){
-        homeFragment.setNewStateOfCalendar();
-        homeFragment.normalizeCalendar();
+        homeFragment.setNewStateOfCalendar(false);
+        homeFragment.normalizeCalendar(false);
     }
 
     @Override
@@ -308,7 +308,11 @@ public  class MainActivity extends AppCompatActivity implements
             listTaskBridgeView.update(task,id);
         }
 
-        goToTaskOrTagManagement(GoTo.TASK);
+        if( MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.HOME){
+            goToHome(null);
+        } else {
+            goToTaskOrTagManagement(GoTo.TASK);
+        }
     }
 
     // REVISAR

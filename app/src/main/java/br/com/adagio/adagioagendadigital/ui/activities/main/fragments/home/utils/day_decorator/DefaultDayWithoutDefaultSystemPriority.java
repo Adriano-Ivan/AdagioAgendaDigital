@@ -2,6 +2,7 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.util
 
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -36,11 +37,13 @@ public class DefaultDayWithoutDefaultSystemPriority implements DayViewDecorator 
         day.getDay() == date.getDayOfMonth()){
             return true;
         }
+
         return false;
     }
 
     @Override
     public void decorate(DayViewFacade view) {
+        view.setBackgroundDrawable(this.drawable);
         view.setSelectionDrawable(drawable);
     }
 }

@@ -127,4 +127,9 @@
     <string name="empty_tag_is_not_allowed">Empty tag is not allowed</string>
    <string name="something_went_wrong">Invalid information was provided</string>
     <string name="without_tasks_of_today_title">Without tasks for this day</string>
+
+    <string name="low">Low</string>
+    <string name="average">Average</string>
+    <string name="high">High</string>
+    <string name="critical">Critical</string>
 </resources>

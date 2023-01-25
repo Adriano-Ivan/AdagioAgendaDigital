@@ -107,10 +107,10 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
        defineListeners();
        defineDefaultValues();
 
-       setNewStateOfCalendar();
+       setNewStateOfCalendar(true);
        setMonthsDropdownProperties();
        defineDayColors();
-       normalizeCalendar();
+       normalizeCalendar(true);
    }
 
     private void setMonthsDropdownProperties (){
@@ -128,17 +128,14 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HomeStaticValues.setPickedMonthMemo(position+1);
-                setNewStateOfCalendar();
+                setNewStateOfCalendar(false);
 
-                normalizeCalendar();
-                Log.i("CLICKED", "onItemClick: "+parent.getSelectedItem());
+                normalizeCalendar(false);
             }
         });
 
         monthsOptions.setText(months[HomeStaticValues.PICKED_MONTH_MEMO-1],false);
-
     }
-
 
     private void defineViews(){
         materialCalendarView=rootView.findViewById(R.id.fragment_home_calendar);
@@ -185,26 +182,30 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
                         date.getDay());
             }
         });
+
         materialCalendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-                normalizeCalendar();
+                HomeStaticValues.setPickedMonthMemo(date.getMonth());
+                normalizeCalendar(true);
             }
         });
+
         buttonToChooseYear.setOnClickListener(this);
     }
 
-    public void normalizeCalendar(){
+    public void normalizeCalendar(boolean markDate){
+
         updatePickedDate();
         defineDayColors();
 
-        if(previousSelectedDayWithoutDefaultSystemPriority != null) {
-
+        if(previousSelectedDayWithoutDefaultSystemPriority != null ) {
             configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(previousSelectedDayWithoutDefaultSystemPriority.getYear(),
                     previousSelectedDayWithoutDefaultSystemPriority.getMonth().getValue(),
                     previousSelectedDayWithoutDefaultSystemPriority.getDayOfMonth());
         }
     }
+
     private void configureAndDefineAppearanceOfDayWithoutDefaultSystemPriority(int year,int month, int day){
         materialCalendarView.removeDecorator(defaultDayWithoutDefaultSystemPriority);
 
@@ -240,7 +241,6 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
                 LocalDateTime.now().getHour(),
                 LocalDateTime.now().getMinute()
         );
-
     }
 
   // Método chamado após uma data ser clicada
@@ -255,6 +255,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
                        false
                )
        );
+
        todayDialog.setParentFragment(this);
 
        if(!dialogIsShown){
@@ -280,7 +281,6 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
        low = taskDAO.returnMonthLocalDateTimesOfGreatestPriorityDay(
                pickedDate.getMonthValue(),pickedDate.getYear(),Priorities.LOW
        );
-
 
        Drawable lowDrawable = ContextCompat.getDrawable(getContext(),R.drawable.low_day_container);
        materialCalendarView.addDecorator(new AdagioDayLowDecorator(low,lowDrawable,R.color.adagio_gray));
@@ -327,28 +327,32 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
     }
 
     // Após um mês ou ano ser modificado, define a visualização atual do calendário
-    private void auxSetNewStateOfCalendar(){
+    private void auxSetNewStateOfCalendar(boolean markDate){
         LocalDateTime now = LocalDateTime.now();
         pickedDate = getAuxLocalDateTime(now);
 
         materialCalendarView.setCurrentDate(
                 CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
-                        pickedDate.getDayOfMonth())
+                        now.getDayOfMonth())
         );
-        materialCalendarView.setSelectedDate(
-                CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
-                        pickedDate.getDayOfMonth())
-        );
+
+        if(markDate){
+            materialCalendarView.setSelectedDate(
+                    CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
+                            now.getDayOfMonth())
+            );
+        }
+
     }
 
     // Chama o método que faz a modificação da visualização do calendário, e define o dia como 1 caso o usuário vá para fevereiro, tendo antes escolhido um dia maior de outro mês (gerando exception)
-    public void setNewStateOfCalendar(){
+    public void setNewStateOfCalendar(boolean markDate){
 
         try {
-          auxSetNewStateOfCalendar();
+            auxSetNewStateOfCalendar( markDate);
         }catch(Exception e){
             HomeStaticValues.setPickedDayMemo(01);
-            auxSetNewStateOfCalendar();
+            auxSetNewStateOfCalendar(markDate);
         }
 
     }
@@ -395,6 +399,7 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
        }
        return contains;
    }
+
    private boolean parametersCoincideWithDate(int year, int month, int day, LocalDateTime dateTime){
         if(dateTime.getYear() == year &&
                 dateTime.getMonth().getValue() == month && dateTime.getDayOfMonth() == day){
