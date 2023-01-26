@@ -634,16 +634,45 @@ public class TaskDAO {
     }
 
     //queries EXCLUSIVAS para RELATÓRIOS
-    //futuramente substituir por ENUMS para facilitar compreensão
-    public int getQuantityOfTasksBy (/*int dayMonthYear, int recordType, LocalDateTime reference*/ int month, int year, Priorities priority){
-        int quantity = returnQuantityOfTasks(String.format("SELECT COUNT(*) FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
-                        " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
-                        " strftime('MONTH',%s) LIKE '%s' AND %s.%s LIKE '%s';" ,
-                /*'t', DbTaskStructure.Columns.INITIAL_MOMT,*/ DbTaskStructure.TABLE_NAME,
-                't', DbPriorityStructure.TABLE_NAME,'p', 'p',DbPriorityStructure.Columns.ID,
-                't', DbTaskStructure.Columns.PRIORITY_ID,DbTaskStructure.Columns.INITIAL_MOMENT,
-                year, DbTaskStructure.Columns.INITIAL_MOMENT,month, 'p', DbPriorityStructure.Columns.NAME, priority.getValue())
-                .replaceAll("YEAR", "%Y").replaceAll("MONTH","%m"));
+    public int getQuantityOfTasksByPriority (/*int dayMonthYear, int recordType, LocalDateTime reference*/String day, String month, String year, Priorities priority){
+        int quantity = 0;
+        if (day != "0") {
+            quantity = returnQuantityOfTasks(String.format("SELECT COUNT(*) FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s " +
+                                    " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
+                                    " strftime('MONTH', %s) LIKE '%s'" +
+                                    " AND strftime('DAY', %s) LIKE '%s'" +
+                                    " AND %s.%s LIKE '%s';",
+                            DbTaskStructure.TABLE_NAME, 't',
+                            DbPriorityStructure.TABLE_NAME, 'p', 'p', DbPriorityStructure.Columns.ID,
+                            't', DbTaskStructure.Columns.PRIORITY_ID,
+                            DbTaskStructure.Columns.INITIAL_MOMENT, year,
+                            DbTaskStructure.Columns.INITIAL_MOMENT, month,
+                            DbTaskStructure.Columns.INITIAL_MOMENT, day,
+                            'p', DbPriorityStructure.Columns.NAME, priority.getValue())
+                    .replaceAll("YEAR", "%Y").replaceAll("MONTH", "%m")
+                    .replaceAll("DAY", "%d"));
+
+        }
+        else if (month != "0") {
+            quantity = returnQuantityOfTasks(String.format("SELECT COUNT(*) FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
+                                    " WHERE strftime('YEAR', %s) LIKE '%s' AND" +
+                                    " strftime('MONTH', %s) LIKE '%s' AND %s.%s LIKE '%s';",
+                            /*'t', DbTaskStructure.Columns.INITIAL_MOMT,*/ DbTaskStructure.TABLE_NAME,
+                            't', DbPriorityStructure.TABLE_NAME, 'p', 'p', DbPriorityStructure.Columns.ID,
+                            't', DbTaskStructure.Columns.PRIORITY_ID, DbTaskStructure.Columns.INITIAL_MOMENT,
+                            year, DbTaskStructure.Columns.INITIAL_MOMENT, month, 'p', DbPriorityStructure.Columns.NAME, priority.getValue())
+                    .replaceAll("YEAR", "%Y").replaceAll("MONTH", "%m"));
+        }
+        else {
+            quantity = returnQuantityOfTasks(String.format("SELECT COUNT(*) FROM %s as %s INNER JOIN %s as %s ON %s.%s = %s.%s" +
+                                    " WHERE strftime('YEAR', %s) LIKE '%s'"+
+                                    " AND %s.%s LIKE '%s';",
+                            /*'t', DbTaskStructure.Columns.INITIAL_MOMT,*/ DbTaskStructure.TABLE_NAME,
+                            't', DbPriorityStructure.TABLE_NAME, 'p', 'p', DbPriorityStructure.Columns.ID,
+                            't', DbTaskStructure.Columns.PRIORITY_ID, DbTaskStructure.Columns.INITIAL_MOMENT,
+                            year, 'p', DbPriorityStructure.Columns.NAME, priority.getValue())
+                    .replaceAll("YEAR", "%Y"));
+        }
         return quantity;
     }
 
