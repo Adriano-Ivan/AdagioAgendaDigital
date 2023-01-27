@@ -5,19 +5,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import br.com.adagio.adagioagendadigital.data.DbLayer;
-import br.com.adagio.adagioagendadigital.data.task.DbTaskStructure;
-import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Notification;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
+
 public class NotificationDAO {
     private static NotificationDAO instance;
     private SQLiteDatabase db;
@@ -44,7 +39,6 @@ public class NotificationDAO {
         values.put(DbNotificationStructure.Columns.PRIORITY_NAME, notification.getPriority_name());
 
         long id = db.insert(DbNotificationStructure.TABLE_NAME, null, values);
-
     }
 
     public void delete(long id){
@@ -59,25 +53,45 @@ public class NotificationDAO {
         db.execSQL(DbNotificationStructure.returnSqlToCreate());
     }
 
-    public void deleteFirst(){
-        String query = String.format(
-                "SELECT * FROM %s LIMIT 1", DbNotificationStructure.TABLE_NAME
+    private int count(){
+        String query  = String.format(
+                "SELECT COUNT(*) Contador FROM %s" ,DbNotificationStructure.TABLE_NAME
         );
-
-        Notification notification=null;
+            int contador = 0;
         try(Cursor c = db.rawQuery(query, null)){
 
             if(c.moveToFirst()){
                 do {
-                    notification = fromCursor(c);
-
+                   contador = cursor(c);
                 }while(c.moveToNext());
             }
 
         }
 
-        if(notification !=null){
-            delete(notification.getId());
+        return contador;
+    }
+
+    public void deleteFirst(){
+        if(count() == 100){
+            String query = String.format(
+                    "SELECT * FROM %s LIMIT 1", DbNotificationStructure.TABLE_NAME
+            );
+
+            Notification notification=null;
+            try(Cursor c = db.rawQuery(query, null)){
+
+                if(c.moveToFirst()){
+                    do {
+                        notification = fromCursor(c);
+
+                    }while(c.moveToNext());
+                }
+
+            }
+
+            if(notification !=null){
+                delete(notification.getId());
+            }
         }
     }
 
@@ -117,6 +131,11 @@ public class NotificationDAO {
         }
 
         return notifications;
+    }
+
+    private Integer cursor(Cursor c){
+        @SuppressLint("Range") int contador = c.getInt(c.getColumnIndex("Contador"));
+        return new Integer(contador);
     }
 
     private Notification fromCursor(Cursor c){

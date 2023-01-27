@@ -1,11 +1,15 @@
 package br.com.adagio.adagioagendadigital.ui.activities.main;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,21 +27,27 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 
-import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.data.notification.NotificationDAO;
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
+import br.com.adagio.adagioagendadigital.models.entities.Notification;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
+<<<<<<< Updated upstream
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeDayDialog;
+=======
+import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.notifications.ListNotificationBridgeView;
+>>>>>>> Stashed changes
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.FormTagFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationDialog;
@@ -66,9 +76,13 @@ public  class MainActivity extends AppCompatActivity implements
         AddTagToTaskDialog.OnFragmentTaskAddTagInteractionListener,
         FinishOrNotTaskConfirmationDialog.OnFragmentTaskFinishOrNotInteractionListener,
         DeleteTagConfirmationDialog.OnFragmentTagDeleteInteractionListener,
+<<<<<<< Updated upstream
         View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener,
         HomeDayDialog.OnFragmentTaskFormForSpecifiedDayInteractionListener
         {
+=======
+        View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener {
+>>>>>>> Stashed changes
 
     private BottomNavigationView bottomNavigationView;
 
@@ -82,31 +96,35 @@ public  class MainActivity extends AppCompatActivity implements
     private TextView textTop;
     private ImageButton returnScreenButton;
     private ImageButton checkRegisterButton;
+    private ImageButton bottonDeleteAll;
     private TaskDAO Tdao;
+    private Notification notification;
+    private NotificationDAO notificationDAO;
 
     public  int x = 0;
 
     private ListTaskBridgeView listTaskBridgeView;
     private ListTagBridgeView listTagBridgeView;
+    private ListNotificationBridgeView listNotificationBridgeView;
 
     private final String CHANNEL_ID = "primary_channel_id";
     private final String KEY_GROUP = "KEY";
     private final int NOTIFICATION_ID = 001;
+    int SUMMARY_ID = 0;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setNavigationAttributes();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Tdao =  TaskDAO.getInstance(this);
         start();
+        Tdao =  TaskDAO.getInstance(this);
         setNavigationAttributes();
     }
 
@@ -115,8 +133,8 @@ public  class MainActivity extends AppCompatActivity implements
         textTop.setText(getResources().getString(returnCurrentTitle()));
         listTaskBridgeView = new ListTaskBridgeView(this);
         listTagBridgeView = new ListTagBridgeView(this);
+        listNotificationBridgeView = new ListNotificationBridgeView(this);
         relatoriesFragment = new RelatoriesFragment(this);
-
         setViews();
         setListeners();
 
@@ -128,6 +146,7 @@ public  class MainActivity extends AppCompatActivity implements
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 returnScreenButton.setVisibility(View.GONE);
                 checkRegisterButton.setVisibility(View.GONE);
+                bottonDeleteAll.setVisibility(View.GONE);
                 switch(item.getItemId()){
                     case R.id.home_button:
                         MainStaticValues.setCurrentFragment(CurrentFragment.HOME);
@@ -143,6 +162,7 @@ public  class MainActivity extends AppCompatActivity implements
                         MainStaticValues.setCurrentFragment(CurrentFragment.NOTIFICATIONS);
                         textTop.setText(getResources().getString(returnCurrentTitle()));
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, notificationsFragment).commit();
+                        bottonDeleteAll.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.tags_button:
                         MainStaticValues.setCurrentFragment(CurrentFragment.TAGS);
@@ -165,11 +185,13 @@ public  class MainActivity extends AppCompatActivity implements
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         returnScreenButton = findViewById(R.id.main_activity_return_screen_button);
         checkRegisterButton = findViewById(R.id.main_activity_check_register);
+        bottonDeleteAll = findViewById(R.id.main_activity_check_deleteAll);
     }
 
     private void setListeners(){
         returnScreenButton.setOnClickListener(this);
         checkRegisterButton.setOnClickListener(this);
+        bottonDeleteAll.setOnClickListener(this);
     }
 
     private Fragment returnCurrentFragment(){
@@ -284,6 +306,7 @@ public  class MainActivity extends AppCompatActivity implements
             if(formTagFragment.validFormInformation()){
                 goToTaskOrTagManagement(GoTo.TAG);
             }
+<<<<<<< Updated upstream
         } else if(view.getId() == R.id.main_activity_return_screen_button
                 && MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.HOME
         ){
@@ -297,6 +320,24 @@ public  class MainActivity extends AppCompatActivity implements
                 goToHome(null);
             }
 
+=======
+        }else if(view.getId() == R.id.main_activity_check_deleteAll){
+            System.out.println("estou aqui");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Deseja realmente limpar todas as Notificações")
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            listNotificationBridgeView.deletAll();
+                            notificationsFragment.configureAdapter();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+                builder.show();
+>>>>>>> Stashed changes
         }
     }
 
@@ -384,62 +425,85 @@ public  class MainActivity extends AppCompatActivity implements
         TASK
     }
 
-
-    private  void notificationTaskStarted(String nome, String prioridade, int x){
-        createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.user_icon)
-                .setContentTitle("A tarefa "+nome+" foi iniciada")
-                .setContentText("Sua Prioridade é "+ prioridade)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setGroup(KEY_GROUP)
-                .setGroupSummary(true);
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(x, builder.build());
-    }
-
-    private  void notificationTask15minToFinish(String nome, String prioridade, int x){
-        createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.user_icon)
-                .setContentTitle("Falta 15 minutos para o fim da tarefa "+nome)
-                .setContentText("Sua Prioridade é "+ prioridade)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setGroup(KEY_GROUP)
-                .setGroupSummary(true);
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(x, builder.build());
-    }
-
-    private  void notificationTaskFinished(String nome, String prioridade, int x){
-        createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.user_icon)
-                .setContentTitle("Tempo da tarefa"+nome+"acabou")
-                .setContentText("Sua Prioridade é "+ prioridade)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setGroup(KEY_GROUP)
-                .setGroupSummary(true);
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(x, builder.build());
-    }
-
-
     private void createNotificationChannel(){
-            CharSequence name = "Notification";
-            String description = "Channel Notification";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
+        CharSequence name = "Notification";
+        String description = "Channel Notification";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    private  void notificationTaskStarted(String nome, String prioridade, int x, int id){
+        int tanks_id = id;
+        LocalDateTime dataAtual = LocalDateTime.now();
+        String message = "A tarefa "+nome+" foi iniciada" ;
+        String priority_name = prioridade ;
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_adagio)
+                .setColor(Color.rgb(124,58,255))
+                .setContentTitle(message)
+                .setContentText(priority_name)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true);
+
+        salvar(tanks_id, dataAtual, message, priority_name);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(x, builder.build());
+    }
+
+    private  void notificationTask15minToFinish(String nome, String prioridade, int x, int id){
+        int tanks_id = id;
+        LocalDateTime dataAtual = LocalDateTime.now();
+        String message = "Falta 15 minutos para o fim da tarefa "+nome ;
+        String priority_name = prioridade ;
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_adagio)
+                .setColor(Color.rgb(124,58,255))
+                .setContentTitle(message)
+                .setContentText(priority_name)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true);
+
+        salvar(tanks_id, dataAtual, message, priority_name);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(x, builder.build());
+    }
+
+    private  void notificationTaskFinished(String nome, String prioridade, int x, int id){
+        int tanks_id = id;
+        LocalDateTime dataAtual = LocalDateTime.now();
+        String message = "Tempo da Tarefa "+nome+"acabou" ;
+        String priority_name = prioridade ;
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_adagio)
+                .setColor(Color.rgb(124,58,255))
+                .setContentTitle(message)
+                .setContentText(priority_name)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true);
+
+        salvar(tanks_id, dataAtual, message, priority_name);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(x, builder.build());
+    }
+
+    public void salvar(int task_id, LocalDateTime emitted_at, String message, String priority_name){
+        notification = new Notification(task_id,emitted_at,message,priority_name);
+        listNotificationBridgeView.insert(notification);
+        System.out.println(notification.getMessage());
     }
 
     public void start() {
@@ -447,28 +511,29 @@ public  class MainActivity extends AppCompatActivity implements
         TimerTask tk = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("morri");
                 getTaskNotification();
+                listNotificationBridgeView.vereficarNumberNotification();
+                System.out.println("entrei aqui 1");
             }
         };
-        t.schedule(tk,0,60000);
+        t.schedule(tk,new Date(),60000);
     }
 
     private void getTaskNotification(){
         List <TaskDtoRead> taks = Tdao.listAllFromToday(LocalDateTime.now().getHour());
         for(TaskDtoRead T : taks){
             SystemClock.sleep(2000);
-            if(T.getInitialMoment().getMinute() == LocalDateTime.now().getMinute()){
-                notificationTaskStarted(T.getDescription(),T.getPriorityName(),x);
+            if(T.getInitialMoment().getMinute() == LocalDateTime.now().getMinute() && T.getInitialMoment().getHour()  == LocalDateTime.now().getHour()){
+                notificationTaskStarted(T.getDescription(),T.getPriorityName(),x, T.getId());
                 x++;
-            }
-            if(T.getLimitMoment().getMinute()-15 == LocalDateTime.now().getMinute()){
-                notificationTask15minToFinish(T.getDescription(),T.getPriorityName(),x);
-                x++;
-            }
-            if(T.getLimitMoment().getMinute() == LocalDateTime.now().getMinute()){
-                notificationTaskFinished(T.getDescription(),T.getPriorityName(),x);
-                x++;
+            }else
+                if(T.getLimitMoment().getMinute()-15 == LocalDateTime.now().getMinute() && T.getLimitMoment().getHour()  == LocalDateTime.now().getHour()){
+                    notificationTask15minToFinish(T.getDescription(),T.getPriorityName(),x,T.getId());
+                    x++;
+            }else
+                if(T.getLimitMoment().getMinute() == LocalDateTime.now().getMinute() && T.getLimitMoment().getHour()  == LocalDateTime.now().getHour()){
+                    notificationTaskFinished(T.getDescription(),T.getPriorityName(),x,T.getId());
+                    x++;
             }
         }
     }
