@@ -60,11 +60,11 @@ public class TaskDAO {
                         "OR strftime('year-month-day hour', %s) like '%s'",
                 DbTaskStructure.TABLE_NAME,
                 DbTaskStructure.Columns.INITIAL_MOMENT,
-                String.format("%s-%s-%s %s",localDateTime.getYear(), localDateTime.getMonth().getValue(), convertToDefoultDay(localDateTime.getDayOfMonth()), hour),
+                String.format("%s-%s-%s %s",localDateTime.getYear(), convertToDefoultDay(localDateTime.getMonth().getValue()), convertToDefoultDay(localDateTime.getDayOfMonth()),hour ),
                 DbTaskStructure.Columns.LIMIT_MOMENT,
-                String.format("%s-%s-%s %s",localDateTime.getYear(), localDateTime.getMonth().getValue(), convertToDefoultDay(localDateTime.getDayOfMonth()), hour)
+                String.format("%s-%s-%s %s",localDateTime.getYear(), convertToDefoultDay(localDateTime.getMonth().getValue()), convertToDefoultDay(localDateTime.getDayOfMonth()), hour)
         ).replaceAll("year-month-day","%Y-%m-%d").replaceAll("hour", "%H");
-        Log.d("tasks",DbTaskStructure.Columns.LIMIT_MOMENT);
+        //Log.d("task", DbTaskStructure.Columns.INITIAL_MOMENT);
         try(Cursor c = db.rawQuery(query, null)){
             if(c.moveToFirst()){
                 do {
@@ -84,6 +84,7 @@ public class TaskDAO {
         }
         return Integer.toString(dayOfMonth);
     }
+
 
     public List<TaskDtoRead> list(int limit, int offset, LocalDateTime day,
                                   TypeListTaskManagementOrderDate typeListTaskManagementOrder,

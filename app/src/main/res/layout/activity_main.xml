@@ -51,6 +51,18 @@
             android:backgroundTint="@android:color/transparent"
             />
 
+        <ImageButton
+            android:id="@+id/main_activity_check_deleteAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_delete"
+            android:visibility="gone"
+            android:layout_gravity="right"
+            android:foregroundGravity="clip_horizontal"
+            android:layout_marginRight="4dp"
+            android:backgroundTint="@android:color/transparent"
+            />
+
     </LinearLayout>
 
     <RelativeLayout

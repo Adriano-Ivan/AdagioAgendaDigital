@@ -1,5 +1,9 @@
 package br.com.adagio.adagioagendadigital.models.entities;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.time.LocalDateTime;
 
 public class Notification {
@@ -12,6 +16,7 @@ public class Notification {
     private String message;
 
     private String priority_name;
+
 
     public Notification(int task_id,LocalDateTime emitted_at,String message,
                         String priority_name){
