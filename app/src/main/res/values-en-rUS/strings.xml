@@ -132,4 +132,7 @@
     <string name="average">Average</string>
     <string name="high">High</string>
     <string name="critical">Critical</string>
+    <string name="report_type">Mudar Relatório</string>
+    <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
+    <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
 </resources>

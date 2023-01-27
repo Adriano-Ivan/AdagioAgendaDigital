@@ -43,11 +43,8 @@ import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoCreate;
 import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Notification;
 import br.com.adagio.adagioagendadigital.models.entities.Tag;
-<<<<<<< Updated upstream
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.home.utils.home_today_dialog.HomeDayDialog;
-=======
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.notifications.ListNotificationBridgeView;
->>>>>>> Stashed changes
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.ListTagBridgeView;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.form_tag.FormTagFragment;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tags.utils.DeleteTagConfirmationDialog;
@@ -76,13 +73,9 @@ public  class MainActivity extends AppCompatActivity implements
         AddTagToTaskDialog.OnFragmentTaskAddTagInteractionListener,
         FinishOrNotTaskConfirmationDialog.OnFragmentTaskFinishOrNotInteractionListener,
         DeleteTagConfirmationDialog.OnFragmentTagDeleteInteractionListener,
-<<<<<<< Updated upstream
         View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener,
         HomeDayDialog.OnFragmentTaskFormForSpecifiedDayInteractionListener
         {
-=======
-        View.OnClickListener, DeleteTaskConfirmationDialog.OnFragmentTaskDeleteInteractionListener {
->>>>>>> Stashed changes
 
     private BottomNavigationView bottomNavigationView;
 
@@ -306,7 +299,6 @@ public  class MainActivity extends AppCompatActivity implements
             if(formTagFragment.validFormInformation()){
                 goToTaskOrTagManagement(GoTo.TAG);
             }
-<<<<<<< Updated upstream
         } else if(view.getId() == R.id.main_activity_return_screen_button
                 && MainStaticValues.CURRENT_FRAGMENT == CurrentFragment.HOME
         ){
@@ -319,8 +311,6 @@ public  class MainActivity extends AppCompatActivity implements
             if(formTaskFragment.validFormInformation()){
                 goToHome(null);
             }
-
-=======
         }else if(view.getId() == R.id.main_activity_check_deleteAll){
             System.out.println("estou aqui");
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -337,7 +327,6 @@ public  class MainActivity extends AppCompatActivity implements
                         }
                     });
                 builder.show();
->>>>>>> Stashed changes
         }
     }
 
