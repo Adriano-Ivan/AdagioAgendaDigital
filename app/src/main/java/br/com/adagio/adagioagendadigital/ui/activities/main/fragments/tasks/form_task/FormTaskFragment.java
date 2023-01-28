@@ -80,6 +80,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     private RadioButton radioButtonPriorityCritical;
 
     private TextView descriptionErrorLabel;
+    private TextView descriptionTooLargeErrorLabel;
     private TextView limitDateErrorLabel;
     private TextView initialDateErrorLabel;
     private TextView initialHourErrorLabel;
@@ -203,6 +204,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
         buttonToOpenTagDialog = rootView.findViewById(R.id.fragment_form_task_button_to_open_tags_dialog);
 
         descriptionErrorLabel = rootView.findViewById(R.id.fragment_form_task_description_error_label);
+        descriptionTooLargeErrorLabel = rootView.findViewById(R.id.fragment_form_task_description_too_large_error_label);
         initialDateErrorLabel = rootView.findViewById(R.id.fragment_form_task_initial_date_error_label);
         limitDateErrorLabel = rootView.findViewById(R.id.fragment_form_task_final_date_error_label);
         initialHourErrorLabel = rootView.findViewById(R.id.fragment_form_task_initial_hour_error_label);
@@ -611,6 +613,13 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     public boolean validFormInformation (){
         boolean validForm = true;
 
+        if(descriptionEditText.getText().toString().trim().length() > 150){
+            validForm = false;
+            formTaskError.put(FormTaskError.DESCRIPTION_TOO_LARGE, true);
+        } else {
+            formTaskError.put(FormTaskError.DESCRIPTION_TOO_LARGE, false);
+        }
+
         if(descriptionEditText.getText().toString().trim().equals("")){
             validForm = false;
             formTaskError.put(FormTaskError.DESCRIPTION, true);
@@ -650,6 +659,12 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void propagateErrorWarnings(){
+        if(formTaskError.get(FormTaskError.DESCRIPTION_TOO_LARGE)){
+            descriptionTooLargeErrorLabel.setVisibility(View.VISIBLE);
+        } else{
+            descriptionTooLargeErrorLabel.setVisibility(View.GONE);
+        }
+
         if(formTaskError.get(FormTaskError.DESCRIPTION)){
             descriptionErrorLabel.setVisibility(View.VISIBLE);
         } else {
@@ -687,7 +702,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
 
     private void submitTask(){
         if(validFormInformation()){
-            TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString(),
+            TaskDtoCreate tCreate = new TaskDtoCreate(descriptionEditText.getText().toString().trim(),
                     returnInitialMoment(),
                     returnLimitMoment(),
                     priority_id,

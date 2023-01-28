@@ -5,5 +5,6 @@ public enum FormTaskError {
     INITIAL_HOUR,
     INITIAL_DATE,
     LIMIT_HOUR,
-    LIMIT_DATE
+    LIMIT_DATE,
+    DESCRIPTION_TOO_LARGE
 }

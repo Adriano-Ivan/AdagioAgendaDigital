@@ -142,6 +142,7 @@
     <string name="empty_tag_is_not_allowed">Tag não pode ser vazia</string>
     <string name="something_went_wrong">Algumas informações estão inválidas</string>
     <string name="without_tasks_of_today_title">Sem tarefas para esse dia</string>
+    <string name="task_description_too_large">Tarefa precisa ser descrita em no máximo 150 caracteres</string>
     <string name="low">Baixa</string>
     <string name="average">Média</string>
     <string name="high">Alta</string>
@@ -149,4 +150,5 @@
     <string name="report_type">Mudar Relatório</string>
     <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
     <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
+    <string name="tasks_for">Tarefas para</string>
 </resources>

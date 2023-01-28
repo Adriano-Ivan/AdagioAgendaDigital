@@ -61,15 +61,23 @@ public class ListTaskAdapter extends BaseAdapter {
         return genereatedView;
     }
 
+    private String formatValueInteger(Integer value){
+        if(Integer.toString(value).length() == 1){
+            return "0"+Integer.toString(value);
+        }
+
+        return Integer.toString(value);
+    }
+
     private String formatDateForShow(LocalDateTime localDateTime){
         //        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
         return String.format("%s/%s/%s %s:%s",
-                    localDateTime.getDayOfMonth(),
-                    localDateTime.getMonthValue(),
+                    formatValueInteger(localDateTime.getDayOfMonth()),
+                    formatValueInteger(localDateTime.getMonthValue()),
                     localDateTime.getYear(),
-                    localDateTime.getHour(),
-                localDateTime.getMinute()
+                    formatValueInteger(localDateTime.getHour()),
+                formatValueInteger(localDateTime.getMinute())
                 );
     }
 

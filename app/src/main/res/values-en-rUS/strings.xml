@@ -127,7 +127,7 @@
     <string name="empty_tag_is_not_allowed">Empty tag is not allowed</string>
    <string name="something_went_wrong">Invalid information was provided</string>
     <string name="without_tasks_of_today_title">Without tasks for this day</string>
-
+    <string name="task_description_too_large">The maximum length of task description is 150 characters</string>
     <string name="low">Low</string>
     <string name="average">Average</string>
     <string name="high">High</string>
@@ -135,4 +135,5 @@
     <string name="report_type">Mudar Relatório</string>
     <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
     <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
+    <string name="tasks_for">Tasks for</string>
 </resources>

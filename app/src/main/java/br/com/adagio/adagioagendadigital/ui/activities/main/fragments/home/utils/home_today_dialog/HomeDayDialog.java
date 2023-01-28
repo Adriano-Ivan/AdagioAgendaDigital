@@ -51,6 +51,7 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
     private ImageButton imageButtonPreviousPageDisabled;
 
     private TextView textViewCurrentPage;
+    private TextView tasksModalTitle;
 
     private Button saveDefinitionsButton;
     private Button buttonCloseDialog;
@@ -111,6 +112,7 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
         imageButtonPreviousPage=layout.findViewById(R.id.fragment_today_dialog_previous_page);
         imageButtonPreviousPageDisabled=layout.findViewById(R.id.fragment_today_dialog_previous_page_disabled);
         buttonCloseDialog=layout.findViewById(R.id.tasks_of_day_close_dialog);
+        tasksModalTitle = layout.findViewById(R.id.tasks_modal_title);
 
         buttonGoToFormTaskForThisDay = layout.findViewById(R.id.tasks_of_day_create_task_in_this_day);
         textViewCurrentPage=layout.findViewById(R.id.fragment_today_dialog_text_page);
@@ -151,6 +153,10 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
                 imageButtonPreviousPageDisabled.setVisibility(View.GONE);
             }
         }
+
+        tasksModalTitle.setText(
+                String.format("%s : %s",getResources().getString(R.string.tasks_for), formatDateValue())
+        );
 
         textViewCurrentPage.setText(Integer.toString(TasksOfDayStaticValues.CURRENT_PAGE));
     }
@@ -208,18 +214,15 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
         parentFragment.defineDialogIsNotShown();
     }
 
-    private void printToFinish(){
-        Log.i("FINISH", "are:");
-        for(Integer id: tasksToFinishIds){
-            Log.i("to finish", ""+id);
-        }
-    }
+    private String formatDateValue(){
+        String dayOfMonthString = Integer.toString(day.getDayOfMonth());
+        String monthOfTask = Integer.toString(day.getMonthValue());
 
-    private void printToRestart(){
-        Log.i("RESTART", "are: ");
-        for(Integer id: tasksToStartAgainIds){
-            Log.i("to restart", ""+id);
-        }
+        return String.format("%s/%s/%s",
+                  dayOfMonthString.length() == 1 ? "0"+dayOfMonthString : dayOfMonthString,
+                monthOfTask.length() == 1? "0"+monthOfTask : monthOfTask,
+                day.getYear()
+                );
     }
 
     private void goToFormTaskForThisDay(){
