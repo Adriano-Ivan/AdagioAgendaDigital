@@ -136,4 +136,9 @@
     <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
     <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
     <string name="tasks_for">Tasks for</string>
+
+    <string name="priority">Priorities</string>
+    <string name="finishing">Finalization</string>
+    <string name="finished_by_priority">Finished by priorities</string>
+    <string name="four_most_used_tags">Most used tags</string>
 </resources>
