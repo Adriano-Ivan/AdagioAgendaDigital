@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +8,7 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -16,106 +16,116 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/chartTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="28dp"
-                android:textAlignment="center"
-                android:textColor="@color/adagio_purple_grey"
-                android:textStyle="bold"
-                android:text="Texto"
-                />
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/dailyChart"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="6"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="16dp"
                 android:gravity="center">
 
                 <Button
                     android:id="@+id/relatoryTypeBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:backgroundTint="@color/adagio_purple"
                     android:gravity="center"
-                    android:layout_gravity="center"
-                    android:text="@string/report_type"/>
+                    android:text="@string/report_type" />
             </LinearLayout>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/dailyChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="10" />
+
+            <TextView
+                android:id="@+id/finishedTasksCountTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/dateInfoTxt"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barsChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_relatories_fab_button_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            app:tint="@android:color/white"
-            android:backgroundTint="@color/adagio_purple_grey"
-            android:src="@drawable/icon_a"
-            android:contentDescription="@string/fragment_relatories_select_type"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="163dp"
-            android:visibility="invisible"/>
+    </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_relatories_fab_button_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="114dp"
-            android:backgroundTint="@color/adagio_purple_grey"
-            android:contentDescription="@string/fragment_relatories_select_type"
-            android:src="@drawable/icon_m"
-            android:visibility="invisible"
-            app:tint="@android:color/white" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_relatories_fab_button_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="163dp"
+        android:backgroundTint="@color/adagio_purple_grey"
+        android:contentDescription="@string/fragment_relatories_select_type"
+        android:src="@drawable/icon_a"
+        android:visibility="invisible"
+        app:tint="@android:color/white" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_relatories_fab_button_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="65dp"
-            android:backgroundTint="@color/adagio_purple_grey"
-            android:contentDescription="@string/fragment_relatories_select_type"
-            android:src="@drawable/icon_d"
-            android:visibility="invisible"
-            app:tint="@android:color/white" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_relatories_fab_button_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="114dp"
+        android:backgroundTint="@color/adagio_purple_grey"
+        android:contentDescription="@string/fragment_relatories_select_type"
+        android:src="@drawable/icon_m"
+        android:visibility="invisible"
+        app:tint="@android:color/white" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_relatories_fab_button_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom|end"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/adagio_purple"
-            android:contentDescription="@string/fragment_relatories_select_type"
-            android:src="@drawable/ic_baseline_description_24"
-            app:tint="@android:color/white" />
-    </RelativeLayout>
-</ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_relatories_fab_button_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="65dp"
+        android:backgroundTint="@color/adagio_purple_grey"
+        android:contentDescription="@string/fragment_relatories_select_type"
+        android:src="@drawable/icon_d"
+        android:visibility="invisible"
+        app:tint="@android:color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_relatories_fab_button_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/adagio_purple"
+        android:contentDescription="@string/fragment_relatories_select_type"
+        android:src="@drawable/ic_baseline_description_24"
+        app:tint="@android:color/white" />
+</RelativeLayout>

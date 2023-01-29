@@ -36,8 +36,13 @@
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/medium_day.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/medium_day_bg_color.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/drawable/medium_day_container.xml" value="0.124" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/dialog_relatory_type_picker.xml" value="0.153125" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/fragment_form_task.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/fragment_relatories.xml" value="0.264" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/fragment_tags.xml" value="0.25025641025641027" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/month_year_picker.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/number_picker_to_choose_year_view.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/layout/year_picker.xml" value="0.153125" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.124" />
         <entry key="..\:/Users/bruno/Workspace/AdagioAgendaDigital/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.124" />
         <entry key="app/src/main/res/drawable/button.xml" value="0.169" />
