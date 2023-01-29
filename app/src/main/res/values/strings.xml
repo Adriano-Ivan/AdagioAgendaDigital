@@ -148,7 +148,14 @@
     <string name="high">Alta</string>
     <string name="critical">Crítica</string>
     <string name="report_type">Mudar Relatório</string>
+<<<<<<< Updated upstream
     <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
     <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
     <string name="tasks_for">Tarefas para</string>
+=======
+    <string name="priority">Prioridade</string>
+    <string name="finishing">Finalização</string>
+    <string name="finished_by_priority">Finalizadas por prioridade</string>
+    <string name="four_most_used_tags">Tags mais usadas</string>
+>>>>>>> Stashed changes
 </resources>
