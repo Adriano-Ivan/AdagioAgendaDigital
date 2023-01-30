@@ -331,15 +331,17 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
         LocalDateTime now = LocalDateTime.now();
         pickedDate = getAuxLocalDateTime(now);
 
+        int dayNow = now.getDayOfMonth() > 28 && pickedDate.getMonthValue() == 2 ? 1 :now.getDayOfMonth();
+
         materialCalendarView.setCurrentDate(
                 CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
-                        now.getDayOfMonth())
+                        dayNow)
         );
 
         if(markDate){
             materialCalendarView.setSelectedDate(
                     CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
-                            now.getDayOfMonth())
+                            dayNow)
             );
         }
 
