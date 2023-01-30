@@ -3,8 +3,10 @@ package br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatorie
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.util.Calendar;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -14,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import java.time.LocalDate;
 import java.util.Date;
 
+import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories.RelatoriesFragment;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
