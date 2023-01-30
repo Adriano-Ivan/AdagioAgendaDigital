@@ -155,4 +155,7 @@
     <string name="finishing">Finalização</string>
     <string name="finished_by_priority">Finalizadas por prioridade</string>
     <string name="four_most_used_tags">Tags mais usadas</string>
+    <string name="youHave">Você possui</string>
+    <string name="completedTasksTxt">tarefas concluídas neste periodo!</string>
+    <string name="barChartTitle">Tarefas finalizadas por prioridade:</string>
 </resources>

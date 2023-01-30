@@ -59,11 +59,13 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
     private BarChart barChart;
     private TextView finishedTasksCountTxt;
     private Button relatoryTypeBtn;
+    private Button datePickerBtn;
 
     private final TaskDAO taskDAO;
     private final Context context;
     private RelatoriesTypes relatoriesTypes;
-    private String relatoriesCenter = "";
+    private String relatoriesPeriodText = "";
+    private String pieCenter = "";
     private String day, month, year;
     private int chartPeriod;
     private LocalDate relatoriesDate;
@@ -102,6 +104,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         rootView = inflater.inflate(R.layout.fragment_relatories, container, false);
         relatoryTypeBtn = rootView.findViewById(R.id.relatoryTypeBtn);
         finishedTasksCountTxt = rootView.findViewById(R.id.finishedTasksCountTxt);
+        datePickerBtn = rootView.findViewById(R.id.datePickerBtn);
 
         //setters
         relatoriesDate = LocalDate.now();
@@ -127,6 +130,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         yearRecord.setOnClickListener(this);
         pieChart.setOnChartGestureListener(this);
         relatoryTypeBtn.setOnClickListener(this);
+        datePickerBtn.setOnClickListener(this);
 
         loadPieChartData(true, chartPeriod);
        return rootView;
@@ -145,18 +149,18 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
             if (this.month.length() < 2)
                 this.month = "0" + this.month;
             this.year = Integer.toString(relatoriesDate.getYear());
-            setRelatoriesCenter(this.day + " de " + relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
+            setRelatoriesPeriodText(this.day + " de " + relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
         }
         else if (period == 1){
             this.month = Integer.toString(relatoriesDate.getMonthValue());
             if (this.month.length() < 2)
                 this.month = "0" + this.month;
             this.year = Integer.toString(relatoriesDate.getYear());
-            setRelatoriesCenter(relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
+            setRelatoriesPeriodText(relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
         }
         else {
             this.year = Integer.toString(relatoriesDate.getYear());
-            setRelatoriesCenter(this.year);
+            setRelatoriesPeriodText(this.year);
         }
 
         if (this.relatoriesTypes == RelatoriesTypes.PRIORITIES){
@@ -165,8 +169,152 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         if (this.relatoriesTypes == RelatoriesTypes.FINISHED){
             setByFinished(this.day, this.month, this.year);
         }
+        this.finishedTasksCountTxt.setText(this.getFinishedNumber());
+
         setBarChartData();
+        datePickerBtn.setText(this.relatoriesPeriodText);
         setupPieChart();
+    }
+
+    public void setupPieChart(){
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setUsePercentValues(true);
+        pieChart.setEntryLabelTextSize(0);
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.setCenterText(pieCenter);
+        pieChart.setCenterTextSize(18);
+
+        pieChart.getDescription().setEnabled(false);
+
+        Legend l = pieChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setTextSize(12);
+        l.setDrawInside(false);
+        l.setEnabled(true);
+    }
+
+    public void setByPriority(String d, String m, String y){
+        this.relatoryTypeBtn.setText("Por prioridades");
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        int low;
+        int medium;
+        int high;
+        int critical;
+        low = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.LOW);
+        medium = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.AVERAGE);
+        high = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.HIGH);
+        critical = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.CRITICAL);
+        ArrayList<Integer> values = new ArrayList<>();
+        Collections.addAll(values, low, medium, high, critical);
+
+        int total = 0;
+        for(int value : values){
+            total += value;
+        }
+        if (total == 0) {
+            total = 1;
+            pieCenter = "Sem ocorrências neste período.";
+        }
+        else{
+            pieCenter = "";
+        }
+        float percLow = (low*10000)/total;
+        float percMedium = (medium*10000)/total;
+        float percHigh = (high*10000)/total;
+        float percCritical = (critical*10000)/total;
+
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        if (percLow > 0){
+            entries.add(new PieEntry(percLow, "Baixa: " + low));
+            colors.add(this.getContext().getColor(R.color.adagio_gray));
+        }
+        if (percMedium > 0){
+            entries.add(new PieEntry(percMedium, "Média: " + medium));
+            colors.add(this.getContext().getColor(R.color.adagio_blue));
+        }
+        if (percHigh > 0){
+            entries.add(new PieEntry(percHigh, "Alta: " + high));
+            colors.add(this.getContext().getColor(R.color.adagio_yellow));
+        }
+        if (percCritical > 0){
+            entries.add(new PieEntry(percCritical, "Crítica: " + critical));
+            colors.add(this.getContext().getColor(R.color.adagio_red));
+        }
+
+        for (int color: ColorTemplate.VORDIPLOM_COLORS){
+            colors.add(color);
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(colors);
+        dataSet.setSliceSpace(6.5f);
+
+        PieData data = new PieData(dataSet);
+        data.setDrawValues(true);
+        data.setValueFormatter(new PercentFormatter(pieChart));
+        data.setValueTextSize(12f);
+        data.setValueTextColor(Color.BLACK);
+        pieChart.animateXY(600, 600);
+        pieChart.setData(data);
+        pieChart.invalidate();
+    }
+
+    public void setByFinished(String d, String m, String y){
+        this.relatoryTypeBtn.setText("Por finalização");
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        int finished;
+        int unfinished;
+
+        finished = taskDAO.getQuantityOfTasksByFinished(d, m, y, true);
+        unfinished =taskDAO.getQuantityOfTasksByFinished(d, m, y, false);
+
+        ArrayList<Integer> values = new ArrayList<>();
+        Collections.addAll(values, finished, unfinished);
+
+        int total = 0;
+        for(int value : values){
+            total += value;
+        }
+        if (total == 0) {
+            total = 1;
+            pieCenter = "Sem ocorrências neste período.";
+        } else{
+            pieCenter = "";
+        }
+        float percFinished = (finished*10000)/total;
+        float percUnfinished = (unfinished*10000)/total;
+
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        if (percFinished > 0){
+            entries.add(new PieEntry(percFinished, "Finalizadas: " + finished));
+            colors.add(this.getContext().getColor(R.color.adagio_blue));
+        }
+        if (percUnfinished > 0){
+            entries.add(new PieEntry(percUnfinished, "Pendentes: " + unfinished));
+            colors.add(this.getContext().getColor(R.color.adagio_gray));
+        }
+
+        for (int color: ColorTemplate.VORDIPLOM_COLORS){
+            colors.add(color);
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(colors);
+        dataSet.setSliceSpace(6.5f);
+
+        PieData data = new PieData(dataSet);
+        data.setDrawValues(true);
+        data.setValueFormatter(new PercentFormatter(pieChart));
+        data.setValueTextSize(12f);
+        data.setValueTextColor(Color.BLACK);
+
+        pieChart.animateXY(600, 600);
+        pieChart.setData(data);
+        pieChart.invalidate();
     }
     public void setBarChartData(){
         int low = 0;
@@ -218,140 +366,15 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(labels.size());
         xAxis.setLabelRotationAngle(340);
-        barChart.animateY(2000);
+        barChart.animateY(600);
         barChart.invalidate();
     }
-
-    public void setupPieChart(){
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setUsePercentValues(true);
-        pieChart.setEntryLabelTextSize(0);
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.setCenterText(relatoriesCenter);
-        pieChart.setCenterTextSize(18);
-
-        pieChart.getDescription().setEnabled(false);
-
-        Legend l = pieChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-        l.setTextSize(12);
-        l.setDrawInside(false);
-        l.setEnabled(true);
-    }
-
-    public void setByPriority(String d, String m, String y){
-//        this.chartTitle.setText("Por prioridades");
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        int low;
-        int medium;
-        int high;
-        int critical;
-        low = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.LOW);
-        medium = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.AVERAGE);
-        high = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.HIGH);
-        critical = taskDAO.getQuantityOfTasksByPriority(d, m, y, Priorities.CRITICAL);
-        ArrayList<Integer> values = new ArrayList<>();
-        Collections.addAll(values, low, medium, high, critical);
-
-        int total = 0;
-        for(int value : values){
-            total += value;
-        }
-        if (total == 0)
-            total = 1;
-        float percLow = (low*10000)/total;
-        float percMedium = (medium*10000)/total;
-        float percHigh = (high*10000)/total;
-        float percCritical = (critical*10000)/total;
-
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        if (percLow > 0){
-            entries.add(new PieEntry(percLow, "Baixa: " + low));
-            colors.add(this.getContext().getColor(R.color.adagio_gray));
-        }
-        if (percMedium > 0){
-            entries.add(new PieEntry(percMedium, "Média: " + medium));
-            colors.add(this.getContext().getColor(R.color.adagio_blue));
-        }
-        if (percHigh > 0){
-            entries.add(new PieEntry(percHigh, "Alta: " + high));
-            colors.add(this.getContext().getColor(R.color.adagio_yellow));
-        }
-        if (percCritical > 0){
-            entries.add(new PieEntry(percCritical, "Crítica: " + critical));
-            colors.add(this.getContext().getColor(R.color.adagio_red));
-        }
-
-        for (int color: ColorTemplate.VORDIPLOM_COLORS){
-            colors.add(color);
-        }
-
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(colors);
-        dataSet.setSliceSpace(6.5f);
-
-        PieData data = new PieData(dataSet);
-        data.setDrawValues(true);
-        data.setValueFormatter(new PercentFormatter(pieChart));
-        data.setValueTextSize(12f);
-        data.setValueTextColor(Color.BLACK);
-        pieChart.animateXY(600, 600);
-        pieChart.setData(data);
-        pieChart.invalidate();
-    }
-
-    public void setByFinished(String d, String m, String y){
-//        this.chartTitle.setText("Por finalização");
-        ArrayList<PieEntry> entries = new ArrayList<>();
+    public String getFinishedNumber(){
         int finished;
-        int unfinished;
 
-        finished = taskDAO.getQuantityOfTasksByFinished(d, m, y, true);
-        unfinished =taskDAO.getQuantityOfTasksByFinished(d, m, y, false);
+        finished = taskDAO.getQuantityOfTasksByFinished(this.day, this.month, this.year, true);
 
-        ArrayList<Integer> values = new ArrayList<>();
-        Collections.addAll(values, finished, unfinished);
-
-        int total = 0;
-        for(int value : values){
-            total += value;
-        }
-        if (total == 0)
-            total = 1;
-        float percFinished = (finished*10000)/total;
-        float percUnfinished = (unfinished*10000)/total;
-
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        if (percFinished > 0){
-            entries.add(new PieEntry(percFinished, "Finalizadas: " + finished));
-            colors.add(this.getContext().getColor(R.color.adagio_blue));
-        }
-        if (percUnfinished > 0){
-            entries.add(new PieEntry(percUnfinished, "Pendentes: " + unfinished));
-            colors.add(this.getContext().getColor(R.color.adagio_gray));
-        }
-
-        for (int color: ColorTemplate.VORDIPLOM_COLORS){
-            colors.add(color);
-        }
-
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(colors);
-        dataSet.setSliceSpace(6.5f);
-
-        PieData data = new PieData(dataSet);
-        data.setDrawValues(true);
-        data.setValueFormatter(new PercentFormatter(pieChart));
-        data.setValueTextSize(12f);
-        data.setValueTextColor(Color.BLACK);
-
-        pieChart.animateXY(600, 600);
-        pieChart.setData(data);
-        pieChart.invalidate();
+        return Integer.toString(finished);
     }
 
     @Override
@@ -375,6 +398,9 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         if (view.getId() == relatoryTypeBtn.getId()){
             RelatoriesTypePickerDialog dialog = new RelatoriesTypePickerDialog(this);
             dialog.show(getFragmentManager(), "RelatoriesTypePickerDialog");
+        }
+        if (view.getId() == datePickerBtn.getId()){
+            relatoriesDatePicker.startDatePicker();
         }
 
     }
@@ -437,7 +463,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onChartSingleTapped(MotionEvent me) {
-        relatoriesDatePicker.startDatePicker();
+
 
     }
 
@@ -478,12 +504,12 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         this.relatoriesTypes = relatoriesTypes;
     }
 
-    public String getRelatoriesCenter() {
-        return relatoriesCenter;
+    public String getRelatoriesPeriodText() {
+        return relatoriesPeriodText;
     }
 
-    public void setRelatoriesCenter(String relatoriesCenter) {
-        this.relatoriesCenter = relatoriesCenter;
+    public void setRelatoriesPeriodText(String relatoriesPeriodText) {
+        this.relatoriesPeriodText = relatoriesPeriodText;
     }
 
     public int getChartPeriod() {
