@@ -163,4 +163,6 @@
     <string name="relatories_finished">Finished</string>
     <string name="relatories_unfinished">Unfinished</string>
     <string name="relatories_finished_by_priority">Finished tasks by priority</string>
+    <string name="notification_message_one">The task \"</string>
+    <string name="notification_message_three">\" was started.</string>
 </resources>

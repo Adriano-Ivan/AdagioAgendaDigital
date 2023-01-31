@@ -67,7 +67,7 @@
     <string name="manage_your_tasks">Gerencie suas tarefas</string>
     <string name="view_your_notifications">Notificações</string>
     <string name="manage_your_tags">Gerencie suas tags</string>
-    <string name="view_your_relatories">Relatórios de terefas</string>
+    <string name="view_your_relatories">Relatórios de tarefas</string>
     <string name="fragment_task_order_by_date">Ordenar por</string>
     <string name="fragment_task_limit_moment">Limite</string>
     <string name="fragment_task_initial_moment">Início</string>
