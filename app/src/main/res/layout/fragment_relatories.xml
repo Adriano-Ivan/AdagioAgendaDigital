@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="25dp"
+    android:layout_marginBottom="24dp"
     android:fillViewport="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="40dp">
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/dailyChart"
@@ -28,16 +28,20 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="10" />
+
             <Button
                 android:id="@+id/relatoryTypeBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/adagio_purple"
+                android:background="@drawable/custom_border_grey"
+                android:drawableLeft="@android:drawable/ic_menu_edit"
+                android:elevation="20dp"
                 android:gravity="center"
                 android:text="@string/report_type"
-                android:textSize="@dimen/buttonText"
-                android:drawableRight="@android:drawable/ic_menu_edit"/>
+                android:textColor="@color/adagio_purple"
+                android:textSize="@dimen/labelSimple"
+                app:backgroundTint="@null" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -45,7 +49,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/customborder"
                 android:backgroundTint="@color/weak_white"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -84,7 +89,7 @@
                 android:layout_height="300dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="26dp" />
 
         </LinearLayout>
 
@@ -94,16 +99,17 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@color/white">
+        android:layout_marginTop="4dp">
         <Button
             android:id="@+id/datePickerBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="@dimen/buttonText"
-            android:textColor="@color/adagio_purple_grey"
-            android:backgroundTint="@color/adagio_gray"
-            android:drawableRight="@android:drawable/ic_menu_edit"/>
+            android:layout_height="42dp"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/labelSimple"
+            android:textStyle="bold"
+            android:background="@drawable/custom_border_lighter_blue"
+            app:backgroundTint="@null"
+            android:drawableLeft="@android:drawable/ic_menu_edit"/>
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragment_relatories_fab_button_year"
@@ -112,8 +118,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="163dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="168dp"
         android:backgroundTint="@color/adagio_purple_grey"
         android:contentDescription="@string/fragment_relatories_select_type"
         android:src="@drawable/icon_a"
@@ -127,8 +133,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="114dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="120dp"
         android:backgroundTint="@color/adagio_purple_grey"
         android:contentDescription="@string/fragment_relatories_select_type"
         android:src="@drawable/icon_m"
@@ -142,8 +148,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="65dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="71dp"
         android:backgroundTint="@color/adagio_purple_grey"
         android:contentDescription="@string/fragment_relatories_select_type"
         android:src="@drawable/icon_d"
@@ -159,8 +165,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/adagio_purple"
         android:contentDescription="@string/fragment_relatories_select_type"
         android:src="@drawable/ic_baseline_description_24"

@@ -62,10 +62,7 @@ public class RelatoriesDatePicker implements DatePickerDialog.OnDateSetListener 
             int month = relatoriesFragment.getRelatoriesDate().getMonthValue() - 1;
             int day = relatoriesFragment.getRelatoriesDate().getDayOfMonth();
 
-            int style = AlertDialog.THEME_HOLO_LIGHT;
-
-            datePickerDialog = new DatePickerDialog(relatoriesFragment.getContext(), style, dateSetListener, year, month, day);
-
+            datePickerDialog = new DatePickerDialog(relatoriesFragment.getContext(), R.style.DatePickerColor, dateSetListener, year, month, day);
             openDatePicker(relatoriesFragment.getRootView());
         }
         else if (relatoriesFragment.getChartPeriod() == 1){
@@ -86,56 +83,56 @@ public class RelatoriesDatePicker implements DatePickerDialog.OnDateSetListener 
 
     public String getMonthString(int month) {
         if (month == 1)
-            return "JAN";
+            return relatoriesFragment.getResources().getString(R.string.month_jan);
         if (month == 2)
-            return "FEV";
+            return relatoriesFragment.getResources().getString(R.string.month_feb);
         if (month == 3)
-            return "MAR";
+            return relatoriesFragment.getResources().getString(R.string.month_mar);
         if (month == 4)
-            return "ABR";
+            return relatoriesFragment.getResources().getString(R.string.month_apr);
         if (month == 5)
-            return "MAI";
+            return relatoriesFragment.getResources().getString(R.string.month_may);
         if (month == 6)
-            return "JUN";
+            return relatoriesFragment.getResources().getString(R.string.month_jun);
         if (month == 7)
-            return "JUL";
+            return relatoriesFragment.getResources().getString(R.string.month_jul);
         if (month == 8)
-            return "AGO";
+            return relatoriesFragment.getResources().getString(R.string.month_aug);
         if (month == 9)
-            return "SET";
+            return relatoriesFragment.getResources().getString(R.string.month_sep);
         if (month == 10)
-            return "OUT";
+            return relatoriesFragment.getResources().getString(R.string.month_oct);
         if (month == 11)
-            return "NOV";
+            return relatoriesFragment.getResources().getString(R.string.month_nov);
         else
-            return "DEZ";
+            return relatoriesFragment.getResources().getString(R.string.month_dec);
     }
 
     public String getMonthString(String month) {
         if (month.equals("01"))
-            return "JAN";
+            return relatoriesFragment.getResources().getString(R.string.month_jan);
         if (month.equals("02"))
-            return "FEV";
+            return relatoriesFragment.getResources().getString(R.string.month_feb);
         if (month.equals("03"))
-            return "MAR";
+            return relatoriesFragment.getResources().getString(R.string.month_mar);
         if (month.equals("04"))
-            return "ABR";
+            return relatoriesFragment.getResources().getString(R.string.month_apr);
         if (month.equals("05"))
-            return "MAI";
+            return relatoriesFragment.getResources().getString(R.string.month_may);
         if (month.equals("06"))
-            return "JUN";
+            return relatoriesFragment.getResources().getString(R.string.month_jun);
         if (month.equals("07"))
-            return "JUL";
+            return relatoriesFragment.getResources().getString(R.string.month_jul);
         if (month.equals("08"))
-            return "AGO";
+            return relatoriesFragment.getResources().getString(R.string.month_aug);
         if (month.equals("09"))
-            return "SET";
+            return relatoriesFragment.getResources().getString(R.string.month_sep);
         if (month.equals("10"))
-            return "OUT";
+            return relatoriesFragment.getResources().getString(R.string.month_oct);
         if (month.equals("11"))
-            return "NOV";
+            return relatoriesFragment.getResources().getString(R.string.month_nov);
         else
-            return "DEZ";
+            return relatoriesFragment.getResources().getString(R.string.month_dec);
     }
 
     public void openDatePicker(View view){

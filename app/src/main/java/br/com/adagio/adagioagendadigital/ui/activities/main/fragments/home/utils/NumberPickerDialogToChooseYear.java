@@ -47,7 +47,8 @@ public class NumberPickerDialogToChooseYear extends DialogFragment implements Di
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
 
         builder.setPositiveButton(R.string.confirmar, this)
                 .setNegativeButton(R.string.cancel, this);
@@ -62,7 +63,6 @@ public class NumberPickerDialogToChooseYear extends DialogFragment implements Di
 
         setAttributes();
         setListener();
-
 
         return builder.create();
     }

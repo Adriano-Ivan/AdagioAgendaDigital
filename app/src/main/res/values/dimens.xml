@@ -2,4 +2,5 @@
 <resources>
     <dimen name="listViewMarginBottom">28dp</dimen>
     <dimen name="buttonText">18dp</dimen>
+    <dimen name="labelSimple">16dp</dimen>
 </resources>

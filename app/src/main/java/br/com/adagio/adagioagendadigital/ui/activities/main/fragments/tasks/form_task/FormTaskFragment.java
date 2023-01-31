@@ -420,7 +420,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showInitialDateDialog(){
-        initialDateDialog = new DatePickerDialog(getActivity(),
+        initialDateDialog = new DatePickerDialog(getActivity(), R.style.DatePickerColor,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
@@ -442,7 +442,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showInitialHourDialog(){
-        initialTimeDialog = new TimePickerDialog(getActivity(),
+        initialTimeDialog = new TimePickerDialog(getActivity(), R.style.DatePickerColor,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {
@@ -464,7 +464,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showFinalDateDialog(){
-        finalDateDialog = new DatePickerDialog(getActivity(),
+        finalDateDialog = new DatePickerDialog(getActivity(), R.style.DatePickerColor,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int yearL, int monthL, int dayL) {
@@ -485,7 +485,7 @@ public class FormTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showFinalTimeDialog(){
-        finalTimeDialog = new TimePickerDialog(getActivity(),
+        finalTimeDialog = new TimePickerDialog(getActivity(), R.style.DatePickerColor,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourL, int minuteL) {

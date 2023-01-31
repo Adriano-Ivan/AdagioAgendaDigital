@@ -8,11 +8,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.dto.task.TaskDtoRead;
 import br.com.adagio.adagioagendadigital.models.entities.Notification;
+import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 
 public class NotificationAdapter extends BaseAdapter {
    private final Context context;
@@ -50,11 +54,26 @@ public class NotificationAdapter extends BaseAdapter {
     }
 
     private void defineNotificationInformation(Notification notification, View generatedView){
-        TextView menssage = generatedView.findViewById(R.id.item_notification_message);
-        menssage.setText(notification.getMessage());
+//        TextView menssage = generatedView.findViewById(R.id.item_notification_message);
+//        menssage.setText(notification.getMessage());
+        TextView item_notification_message_one = generatedView.findViewById(R.id.item_notification_message_one);
+        item_notification_message_one.setText(R.string.notification_message_one);
+
+        TextView item_notification_message_two = generatedView.findViewById(R.id.item_notification_message_two);
+        String taskName = notification.getMessage();
+        taskName = taskName.substring(9);
+        taskName = taskName.split(" ")[0];
+        taskName = taskName.toUpperCase();
+        item_notification_message_two.setText(taskName);
+
+        TextView item_notification_message_three = generatedView.findViewById(R.id.item_notification_message_three);
+        item_notification_message_three.setText(R.string.notification_message_three);
 
         TextView priority = generatedView.findViewById(R.id.item_notification_priority);
         priority.setText(notification.getPriority_name());
+
+        CardView cardViewIndicator = generatedView.findViewById(R.id.notifications_list_priority);
+        cardViewIndicator.setCardBackgroundColor(returnColor(notification));
 
         TextView emited_at = generatedView.findViewById(R.id.item_notification_emited_at);
         String dia;
@@ -92,5 +111,17 @@ public class NotificationAdapter extends BaseAdapter {
         this.notifications.clear();
         this.notifications.addAll(notifications);
         notifyDataSetChanged();
+    }
+
+    private int returnColor(Notification notification){
+        if(notification.getPriority_name().equals(Priorities.HIGH.getValue())){
+            return context.getColor(R.color.adagio_yellow);
+        } else if(notification.getPriority_name().equals(Priorities.LOW.getValue())){
+            return context.getColor(R.color.adagio_gray);
+        } else if(notification.getPriority_name().equals(Priorities.CRITICAL.getValue())){
+            return context.getColor(R.color.adagio_red);
+        }
+
+        return context.getColor(R.color.adagio_blue);
     }
 }

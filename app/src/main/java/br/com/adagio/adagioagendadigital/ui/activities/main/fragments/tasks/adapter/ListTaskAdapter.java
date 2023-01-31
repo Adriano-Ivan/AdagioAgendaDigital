@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -96,6 +97,9 @@ public class ListTaskAdapter extends BaseAdapter {
 
         TextView priorityName =generatedView.findViewById(R.id.item_task_priority_name);
 
+        CardView cardViewIndicator = generatedView.findViewById(R.id.task_list_priority);
+        cardViewIndicator.setCardBackgroundColor(returnColor(task));
+
         if(task.getPriorityName().equals(Priorities.LOW.getValue())){
             priorityName.setText(R.string.low);
         } else if(task.getPriorityName().equals(Priorities.AVERAGE.getValue())){
@@ -169,5 +173,16 @@ public class ListTaskAdapter extends BaseAdapter {
 
             notifyDataSetChanged();
         }
+    }
+    private int returnColor(TaskDtoRead task){
+        if(task.getPriorityName().equals(Priorities.HIGH.getValue())){
+            return parentFragment.getContext().getColor(R.color.adagio_yellow);
+        } else if(task.getPriorityName().equals(Priorities.LOW.getValue())){
+            return parentFragment.getContext().getColor(R.color.adagio_gray);
+        } else if(task.getPriorityName().equals(Priorities.CRITICAL.getValue())){
+            return parentFragment.getContext().getColor(R.color.adagio_red);
+        }
+
+        return parentFragment.getContext().getColor(R.color.adagio_blue);
     }
 }

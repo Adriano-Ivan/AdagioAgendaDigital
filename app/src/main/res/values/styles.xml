@@ -42,7 +42,38 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@drawable/customborder</item>
+    <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:windowBackground">@drawable/custom_dialog_gradient</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="DatePickerColor" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/custom_dialog_gradient</item>
+        <item name="colorAccent">@color/adagio_purple</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:paddingTop">0.7sp</item>
+        <item name="android:paddingBottom">0.7sp</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/adagio_purple</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+    <style name="PositiveButtonStyle"  parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:background">@drawable/custom_border_lighter_blue</item>
+        <item name="backgroundTint">@color/adagio_purple</item>
+        <item name="android:textColor">@color/adagio_gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/adagio_purple</item>
+        <item name="colorSwitchThumbNormal">#f1f1f1
+        </item>
+        <item name="android:colorForeground">#42221f1f
+        </item>
     </style>
 </resources>

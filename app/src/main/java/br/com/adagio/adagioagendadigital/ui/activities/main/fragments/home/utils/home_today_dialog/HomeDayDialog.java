@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,7 +76,7 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View layout = inflater.inflate(R.layout.fragment_home_today_dialog,null);
@@ -97,7 +99,6 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
             withoutTaskForThisDayContainer.setVisibility(View.GONE);
 
         }
-
         return builder.create();
     }
 
@@ -155,7 +156,7 @@ public class HomeDayDialog extends DialogFragment implements View.OnClickListene
         }
 
         tasksModalTitle.setText(
-                String.format("%s : %s",getResources().getString(R.string.tasks_for), formatDateValue())
+                String.format("%s %s",getResources().getString(R.string.tasks_for), formatDateValue())
         );
 
         textViewCurrentPage.setText(Integer.toString(TasksOfDayStaticValues.CURRENT_PAGE));

@@ -6,9 +6,11 @@
     android:thicknessRatio="2"
     android:useLevel="false"
     >
-    <solid  android:color="@color/adagio_blue"/>
-
-    <stroke
-        android:width="2dp"
-        android:color="@color/adagio_blue"/>
+<!--    <stroke-->
+<!--        android:width="2dp"-->
+<!--        android:color="@color/adagio_blue"/>-->
+    <gradient
+        android:startColor="@color/adagio_blue"
+        android:endColor="@color/white"
+        android:angle="45" />
 </shape>

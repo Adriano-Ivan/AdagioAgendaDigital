@@ -30,25 +30,17 @@ public class RelatoriesTypePickerDialog extends DialogFragment{
         this.relatoriesFragment = relatoriesFragment;
     }
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.dialog_relatory_type_picker, container, false);
-//        relatoryTypeRdg = (RadioGroup) view.findViewById(R.id.relatoryTypeRdg);
-//
-//        return view;
-//    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View dialog = inflater.inflate(R.layout.dialog_relatory_type_picker, null);
         relatoryTypeRdg = (RadioGroup) dialog.findViewById(R.id.relatoryTypeRdg);
 
-        builder.setView(dialog).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setView(dialog).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -56,7 +48,7 @@ public class RelatoriesTypePickerDialog extends DialogFragment{
                 idToRelatoriesType(selectedRdb.getId());
                 relatoriesFragment.loadPieChartData(false, relatoriesFragment.getChartPeriod());
             }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 RelatoriesTypePickerDialog.this.getDialog().cancel();
@@ -73,12 +65,6 @@ public class RelatoriesTypePickerDialog extends DialogFragment{
         else if (id == R.id.relatoryFinishingRdb){
             relatoriesFragment.setRelatoriesTypes(RelatoriesTypes.FINISHED);
         }
-//        else if (id == R.id.relatoryFinByPriorityRdb){
-//            relatoriesFragment.setRelatoriesTypes(RelatoriesTypes.FINISHED_BY_PRIORITY);
-//        }
-//        else if (id == R.id.relatoryMostUsedTagsRdb){
-//            relatoriesFragment.setRelatoriesTypes(RelatoriesTypes.MOST_USED_TAGS);
-//        }
         return relatoriesFragment.getRelatoriesTypes();
     }
 }
