@@ -16,10 +16,10 @@ import androidx.fragment.app.DialogFragment;
 import java.time.LocalDate;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
 
 public class YearPickerDialog extends DialogFragment {
 
-    private static final int MAX_YEAR = 2050;
     private DatePickerDialog.OnDateSetListener listener;
     private LocalDate localDate;
 
@@ -34,24 +34,24 @@ public class YearPickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View dialog = inflater.inflate(R.layout.dialog_year_picker, null);
         final NumberPicker yearNbp = (NumberPicker) dialog.findViewById(R.id.yearSoleNbp);
 
         int year = localDate.getYear();
-        yearNbp.setMinValue(year-5);
-        yearNbp.setMaxValue(MAX_YEAR);
+        yearNbp.setMinValue(LimitsYearValues.MIN_YEAR.value);
+        yearNbp.setMaxValue(LimitsYearValues.MAX_YEAR.value);
         yearNbp.setValue(year);
         yearNbp.setWrapSelectorWheel(false);
 
-        builder.setView(dialog).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setView(dialog).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 listener.onDateSet(null, yearNbp.getValue(), 0, 0);
             }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 YearPickerDialog.this.getDialog().cancel();

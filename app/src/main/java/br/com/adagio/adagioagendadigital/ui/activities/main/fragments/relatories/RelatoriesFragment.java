@@ -17,7 +17,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -38,18 +37,15 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import br.com.adagio.adagioagendadigital.R;
 import br.com.adagio.adagioagendadigital.data.task.TaskDAO;
-import br.com.adagio.adagioagendadigital.models.entities.Priority;
 import br.com.adagio.adagioagendadigital.models.enums.Priorities;
 import br.com.adagio.adagioagendadigital.models.enums.RelatoriesTypes;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories.utils.RelatoriesDatePicker;
 import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.relatories.utils.RelatoriesTypePickerDialog;
-import br.com.adagio.adagioagendadigital.ui.activities.main.fragments.tasks.adapter.ListTaskAdapter;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class RelatoriesFragment extends Fragment implements View.OnClickListener, OnChartGestureListener {
@@ -196,7 +192,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
     }
 
     public void setByPriority(String d, String m, String y){
-        this.relatoryTypeBtn.setText("Por prioridades");
+        this.relatoryTypeBtn.setText(getResources().getString(R.string.relatories_by_priority));
         ArrayList<PieEntry> entries = new ArrayList<>();
         int low;
         int medium;
@@ -215,7 +211,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         }
         if (total == 0) {
             total = 1;
-            pieCenter = "Sem ocorrências neste período.";
+            pieCenter = getResources().getString(R.string.relatories_no_tasks_in_period);
         }
         else{
             pieCenter = "";
@@ -228,19 +224,19 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         ArrayList<Integer> colors = new ArrayList<>();
 
         if (percLow > 0){
-            entries.add(new PieEntry(percLow, "Baixa: " + low));
+            entries.add(new PieEntry(percLow, getResources().getString(R.string.low) + low));
             colors.add(this.getContext().getColor(R.color.adagio_gray));
         }
         if (percMedium > 0){
-            entries.add(new PieEntry(percMedium, "Média: " + medium));
+            entries.add(new PieEntry(percMedium, getResources().getString(R.string.average) + medium));
             colors.add(this.getContext().getColor(R.color.adagio_blue));
         }
         if (percHigh > 0){
-            entries.add(new PieEntry(percHigh, "Alta: " + high));
+            entries.add(new PieEntry(percHigh, getResources().getString(R.string.high) + high));
             colors.add(this.getContext().getColor(R.color.adagio_yellow));
         }
         if (percCritical > 0){
-            entries.add(new PieEntry(percCritical, "Crítica: " + critical));
+            entries.add(new PieEntry(percCritical, getResources().getString(R.string.critical) + critical));
             colors.add(this.getContext().getColor(R.color.adagio_red));
         }
 
@@ -263,7 +259,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
     }
 
     public void setByFinished(String d, String m, String y){
-        this.relatoryTypeBtn.setText("Por finalização");
+        this.relatoryTypeBtn.setText(getResources().getString(R.string.relatories_by_finishing));
         ArrayList<PieEntry> entries = new ArrayList<>();
         int finished;
         int unfinished;
@@ -280,7 +276,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         }
         if (total == 0) {
             total = 1;
-            pieCenter = "Sem ocorrências neste período.";
+            pieCenter = getResources().getString(R.string.relatories_no_tasks_in_period);
         } else{
             pieCenter = "";
         }
@@ -290,11 +286,11 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         ArrayList<Integer> colors = new ArrayList<>();
 
         if (percFinished > 0){
-            entries.add(new PieEntry(percFinished, "Finalizadas: " + finished));
+            entries.add(new PieEntry(percFinished, getResources().getString(R.string.relatories_finished) + " " + finished));
             colors.add(this.getContext().getColor(R.color.adagio_blue));
         }
         if (percUnfinished > 0){
-            entries.add(new PieEntry(percUnfinished, "Pendentes: " + unfinished));
+            entries.add(new PieEntry(percUnfinished, getResources().getString(R.string.relatories_unfinished) + " " + unfinished));
             colors.add(this.getContext().getColor(R.color.adagio_gray));
         }
 
@@ -333,26 +329,26 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
 
         barEntryArrayList.add(new BarEntry(0, low));
         colors.add(this.getContext().getColor(R.color.adagio_gray));
-        labels.add("Baixa");
+        labels.add(getResources().getString(R.string.low));
         barEntryArrayList.add(new BarEntry(1, medium));
         colors.add(this.getContext().getColor(R.color.adagio_blue));
-        labels.add("Média");
+        labels.add(getResources().getString(R.string.average));
         barEntryArrayList.add(new BarEntry(2, high));
         colors.add(this.getContext().getColor(R.color.adagio_yellow));
-        labels.add("Alta");
+        labels.add(getResources().getString(R.string.high));
         barEntryArrayList.add(new BarEntry(3, critical));
         colors.add(this.getContext().getColor(R.color.adagio_red));
-        labels.add("Crítica");
+        labels.add(getResources().getString(R.string.critical));
 
         for (int color: ColorTemplate.VORDIPLOM_COLORS){
             colors.add(color);
         }
 
-        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Prioridades");
+        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, getResources().getString(R.string.priority));
         barDataSet.setColors(colors);
 
         Description description = new Description();
-        description.setText("Tarefas finalizadas por prioridade.");
+        description.setText(getResources().getString(R.string.relatories_finished_by_priority));
         barChart.setDescription(description);
 
         BarData barData = new BarData(barDataSet);

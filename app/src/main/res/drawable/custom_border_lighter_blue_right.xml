@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:topRightRadius="8dp"
+        android:bottomRightRadius="8dp"/>
+    <padding android:left="4dp"
+        android:right="4dp"
+        android:top="0dp"
+        android:bottom="0dp"/>
+    <gradient
+        android:angle="90"
+        android:centerX="50"
+        android:type="linear"
+        android:startColor="@color/adagio_purple_grad"
+        android:endColor="@color/adagio_purple_grad_two" />
+</shape>

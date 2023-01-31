@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="weak_white">#F3F3F3</color>
     <color name="adagio_purple">#3A4289</color>
+    <color name="adagio_purple_grad">#404BAF</color>
+    <color name="adagio_purple_grad_two">#5E6AD8</color>
     <color name="adagio_purple_grey">#1B1E37</color>
     <color name="green">#1DA605</color>
     <color name="blue">#0001FF</color>
@@ -17,8 +19,15 @@
     <color name="light_gray">#cccccc</color>
 
     <color name="adagio_gray">#ccccff</color>
+    <color name="adagio_gray_two">#DEDEEF</color>
     <color name="adagio_blue">#6699ff</color>
+    <color name="adagio_blue_grad">#A0B3DA</color>
     <color name="adagio_yellow">#ffff66</color>
-    <color name="adagio_red">#ff0000</color>
+    <color name="adagio_yellow_grad">#CDCDA3</color>
+    <color name="adagio_red">#B50B0B</color>
+    <color name="adagio_red_grad">#BD5151</color>
     <color name="adagio_purple_gray_darker">#2F3240</color>
+    <color name="adagio_green">#3AAF79</color>
+    <color name="adagio_green_grad">#70BEA0</color>
+
 </resources>

@@ -27,10 +27,10 @@
         <LinearLayout
             android:id="@+id/fragment_task_container_options"
             android:orientation="vertical"
-            android:background="@color/adagio_purple"
+            android:background="@drawable/custom_border_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+            android:padding="16dp"
 
             >
 
@@ -44,7 +44,8 @@
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/fragment_task_order_by_date"/>
+                    android:text="@string/fragment_task_order_by_date"
+                    android:textSize="@dimen/labelSimple"/>
 
                 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                    android:id="@+id/fragment_task_order_datetime_options"
@@ -57,31 +58,45 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:text="@string/fragment_task_order_by_today"
+                        android:textSize="@dimen/labelSimple"
+                        android:buttonTint="@color/adagio_gray"
                         />
                         <RadioButton android:id="@+id/fragment_task_order_by_initial_moment_asc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="@string/fragment_task_initial_moment_asc"
+                            android:text="@string/fragment_task_initial_moment"
+                            android:drawableRight="@android:drawable/arrow_up_float"
+                            android:textSize="@dimen/labelSimple"
+                            android:buttonTint="@color/adagio_gray"
                       />
                         <RadioButton android:id="@+id/fragment_task_order_by_limit_moment_asc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="@string/fragment_task_limit_moment_asc"
+                            android:text="@string/fragment_task_limit_moment"
+                            android:drawableRight="@android:drawable/arrow_up_float"
+                            android:textSize="@dimen/labelSimple"
+                            android:buttonTint="@color/adagio_gray"
                        />
 
                         <RadioButton android:id="@+id/fragment_task_order_by_initial_moment_desc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="@string/fragment_task_initial_moment_desc"
+                            android:text="@string/fragment_task_initial_moment"
+                            android:drawableRight="@android:drawable/arrow_down_float"
+                            android:textSize="@dimen/labelSimple"
+                            android:buttonTint="@color/adagio_gray"
                          />
                         <RadioButton android:id="@+id/fragment_task_order_by_limit_moment_desc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="@string/fragment_task_limit_moment_desc"
+                            android:text="@string/fragment_task_limit_moment"
+                            android:drawableRight="@android:drawable/arrow_down_float"
+                            android:textSize="@dimen/labelSimple"
+                            android:buttonTint="@color/adagio_gray"
                          />
                 </RadioGroup>
             </LinearLayout>
@@ -96,7 +111,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:text="@string/fragment_task_order_by_priority"/>
+                    android:text="@string/fragment_task_order_by_priority"
+                    android:textSize="@dimen/labelSimple" />
 
                 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/fragment_task_order_by_priority_options"
@@ -109,39 +125,50 @@
                         android:textColor="@color/white"
                         android:layout_marginRight="8dp"
                         android:text="@string/fragment_task_order_by_priority_asc"
+                        android:textSize="@dimen/labelSimple"
+                        android:buttonTint="@color/adagio_gray"
                         />
                     <RadioButton android:id="@+id/fragment_task_order_by_priority_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:text="@string/fragment_task_order_by_priority_desc"
+                        android:textSize="@dimen/labelSimple"
+                        android:buttonTint="@color/adagio_gray"
                       />
                 </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center">
                 <Button
                     android:id="@+id/fragment_task_update_list"
                     android:layout_width="wrap_content"
-                    android:backgroundTint="@color/green"
-                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_border_grey"
+                    app:backgroundTint="@null"
+                    android:layout_height="40dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="12dp"
-                    android:textSize="13dp"
+                    android:textSize="@dimen/labelSimple"
                     android:text="@string/fragment_task_update_list"
+                    android:textStyle="bold"
+                    android:textColor="@color/adagio_purple"
                     />
                 <Button
                     android:id="@+id/fragment_task_user_wants_to_create_task"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/green"
+                    android:layout_height="40dp"
+                    android:background="@drawable/custom_border_grey"
+                    app:backgroundTint="@null"
                     android:layout_marginBottom="10dp"
-                    android:textSize="13dp"
+                    android:textSize="@dimen/labelSimple"
                     android:text="@string/fragment_task_user_wants_to_create_task"
+                    android:textStyle="bold"
+                    android:textColor="@color/adagio_purple"
                     />
             </LinearLayout>
 
@@ -170,9 +197,12 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:gravity="right"
-            android:layout_gravity="right"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_border_lighter_blue"
+            app:backgroundTint="@null"
             android:text="@string/fragment_task_hide_options"
-            android:layout_margin="3dp"
+            android:textSize="@dimen/labelSimple"
+            android:layout_margin="4dp"
 
             />
 
@@ -260,7 +290,9 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_baseline_add_24"
         android:contentDescription="@string/fragment_task_user_wants_to_create_task"
-        android:layout_margin="5dp" />
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/adagio_purple"
+        app:tint="@android:color/white"/>
 
 </RelativeLayout>
 

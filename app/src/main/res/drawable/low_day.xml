@@ -11,5 +11,8 @@
 
     <item  android:drawable="@drawable/low_day_bg_color"/>
 
-
+    <gradient
+        android:startColor="@color/adagio_gray"
+        android:endColor="@color/adagio_gray_two"
+        android:angle="-45" />
 </selector>

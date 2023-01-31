@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import java.time.LocalDate;
 
 import br.com.adagio.adagioagendadigital.R;
+import br.com.adagio.adagioagendadigital.models.enums.LimitsYearValues;
 
 public class MonthYearPickerDialog extends DialogFragment {
 
@@ -34,7 +35,7 @@ public class MonthYearPickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View dialog = inflater.inflate(R.layout.dialog_month_year_picker, null);
@@ -49,17 +50,17 @@ public class MonthYearPickerDialog extends DialogFragment {
         monthNbp.setWrapSelectorWheel(false);
 
         int year = localDate.getYear();
-        yearNbp.setMinValue(year-5);
-        yearNbp.setMaxValue(MAX_YEAR);
+        yearNbp.setMinValue(LimitsYearValues.MIN_YEAR.value);
+        yearNbp.setMaxValue(LimitsYearValues.MAX_YEAR.value);
         yearNbp.setValue(year);
         yearNbp.setWrapSelectorWheel(false);
 
-        builder.setView(dialog).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setView(dialog).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 listener.onDateSet(null, yearNbp.getValue(), monthNbp.getValue(), 0);
             }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 MonthYearPickerDialog.this.getDialog().cancel();

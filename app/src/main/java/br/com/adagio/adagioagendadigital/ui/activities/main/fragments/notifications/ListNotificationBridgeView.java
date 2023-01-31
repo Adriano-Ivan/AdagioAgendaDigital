@@ -27,7 +27,6 @@ public class ListNotificationBridgeView {
 
     public void deletAll(){
         notificationDAO.deleteAll();
-        System.out.println("morri muito2");
         updateList();
     }
 

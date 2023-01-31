@@ -5,27 +5,38 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:orientation="vertical"
-        android:layout_margin="20dp">
+        android:layout_margin="16dp">
         <RadioGroup
             android:id="@+id/relatoryTypeRdg"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:background="@drawable/customborder"
+            android:backgroundTint="@color/weak_white"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:checkedButton="@id/relatoryFinishingRdb">
             <RadioButton
                 android:id="@+id/relatoryPriorityRdb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/priority"/>
+                android:text="@string/priority"
+                android:textSize="@dimen/labelSimple"
+                android:textColor="@color/adagio_purple_grey"
+                android:textStyle="bold"
+                android:buttonTint="@color/adagio_purple"/>
             <RadioButton
                 android:id="@+id/relatoryFinishingRdb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/finishing"/>
+                android:text="@string/finishing"
+                android:textSize="@dimen/labelSimple"
+                android:textColor="@color/adagio_purple_grey"
+                android:textStyle="bold"
+                android:buttonTint="@color/adagio_purple"/>
 
         </RadioGroup>
 

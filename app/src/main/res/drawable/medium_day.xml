@@ -10,4 +10,8 @@
         android:drawable="@drawable/medium_day_bg_color"/>
 
     <item  android:drawable="@drawable/medium_day_bg_color"/>
+    <gradient
+        android:startColor="@color/adagio_blue"
+        android:endColor="@color/adagio_blue_grad"
+        android:angle="-45" />
 </selector>
