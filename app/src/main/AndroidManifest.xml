@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="br.com.adagio.adagioagendadigital">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -31,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name = ".ui.activities.main.NotificationService">
+        </service>
     </application>
 
 </manifest>

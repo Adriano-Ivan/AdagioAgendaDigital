@@ -143,11 +143,17 @@
     <string name="something_went_wrong">Algumas informações estão inválidas</string>
     <string name="without_tasks_of_today_title">Sem tarefas para esse dia</string>
     <string name="task_description_too_large">Tarefa precisa ser descrita em no máximo 150 caracteres</string>
-    <string name="low">"Baixa "</string>
-    <string name="average">"Média "</string>
-    <string name="high">"Alta "</string>
-    <string name="critical">"Crítica "</string>
-    <string name="report_type">Mudar Relatório</string>
+    <string name="low">Baixa</string>
+    <string name="average">Média</string>
+    <string name="high">Alta</string>
+    <string name="critical">Crítica</string>
+    <string name="the_task">A tarefa" </string>
+    <string name="has_started">foi iniciada \"</string>
+    <string name="report_type">\" Mudar Relatório</string>
+    <string name="missing_15">Falta 15 minutos para tarefa \"</string>
+    <string name="is_finish"> \" ser finalizada</string>
+    <string name="is_finish2">O prazo definido da tarefa \"</string>
+    <string name="is_finish3">\" expirou </string>
     <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
     <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
     <string name="tasks_for">Tarefas para</string>
@@ -180,4 +186,5 @@
     <string name="notification_message_one">A tarefa \"</string>
     <string name="notification_message_three">\" foi iniciada.</string>
     <string name="relatories_saved_tasks_in">Período de</string>
+    <string name="dialog_notify">Deseja realmente limpar todas as Notificações?</string>
 </resources>
