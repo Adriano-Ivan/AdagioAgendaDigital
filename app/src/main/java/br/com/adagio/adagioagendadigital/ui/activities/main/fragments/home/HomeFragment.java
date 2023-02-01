@@ -329,9 +329,18 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
     // Após um mês ou ano ser modificado, define a visualização atual do calendário
     private void auxSetNewStateOfCalendar(boolean markDate){
         LocalDateTime now = LocalDateTime.now();
-        pickedDate = getAuxLocalDateTime(now);
-
         int dayNow = now.getDayOfMonth() > 28 && pickedDate.getMonthValue() == 2 ? 1 :now.getDayOfMonth();
+
+        try {
+            defineDateAux(dayNow,now,markDate);
+
+        } catch(Exception e){
+            defineDateAux(1,now,markDate);
+        }
+    }
+
+    private void defineDateAux(int dayNow, LocalDateTime now, boolean markDate){
+        pickedDate = getAuxLocalDateTime(now);
 
         materialCalendarView.setCurrentDate(
                 CalendarDay.from(pickedDate.getYear(),pickedDate.getMonthValue(),
@@ -344,7 +353,6 @@ public class HomeFragment extends Fragment implements /*CalendarView.OnDateChang
                             dayNow)
             );
         }
-
     }
 
     // Chama o método que faz a modificação da visualização do calendário, e define o dia como 1 caso o usuário vá para fevereiro, tendo antes escolhido um dia maior de outro mês (gerando exception)
