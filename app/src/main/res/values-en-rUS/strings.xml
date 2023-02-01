@@ -144,7 +144,7 @@
     <string name="youHave">You have</string>
     <string name="completedTasksTxt">tasks completed in this period!</string>
     <string name="barChartTitle">tasks finished by priority:</string>
-    <string name="ok">Ok</string>
+    <string name="ok">Save</string>
     <string name="month_jan">JAN</string>
     <string name="month_feb">FEB</string>
     <string name="month_mar">MAR</string>
@@ -164,5 +164,10 @@
     <string name="relatories_unfinished">Unfinished</string>
     <string name="relatories_finished_by_priority">Finished tasks by priority</string>
     <string name="notification_message_one">The task \"</string>
+<<<<<<< Updated upstream
     <string name="notification_message_three">\" was started.</string>
+=======
+    <string name="notification_message_three">\" has been started.</string>
+    <string name="relatories_saved_tasks_in">Period of</string>
+>>>>>>> Stashed changes
 </resources>

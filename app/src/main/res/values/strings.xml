@@ -143,10 +143,10 @@
     <string name="something_went_wrong">Algumas informações estão inválidas</string>
     <string name="without_tasks_of_today_title">Sem tarefas para esse dia</string>
     <string name="task_description_too_large">Tarefa precisa ser descrita em no máximo 150 caracteres</string>
-    <string name="low">Baixa</string>
-    <string name="average">Média</string>
-    <string name="high">Alta</string>
-    <string name="critical">Crítica</string>
+    <string name="low">"Baixa "</string>
+    <string name="average">"Média "</string>
+    <string name="high">"Alta "</string>
+    <string name="critical">"Crítica "</string>
     <string name="report_type">Mudar Relatório</string>
     <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
     <string name="notifications_deleteall_option">Excluir todas as Notificações</string>
@@ -158,7 +158,7 @@
     <string name="youHave">Você possui</string>
     <string name="completedTasksTxt">tarefas concluídas neste periodo!</string>
     <string name="barChartTitle">Tarefas finalizadas por prioridade:</string>
-    <string name="ok">Ok</string>
+    <string name="ok">Salvar</string>
     <string name="month_jan">jan.</string>
     <string name="month_feb">fev.</string>
     <string name="month_mar">mar.</string>
@@ -179,4 +179,5 @@
     <string name="relatories_finished_by_priority">Tarefas finalizadas por prioridade</string>
     <string name="notification_message_one">A tarefa \"</string>
     <string name="notification_message_three">\" foi iniciada.</string>
+    <string name="relatories_saved_tasks_in">Período de</string>
 </resources>

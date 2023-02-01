@@ -31,6 +31,7 @@ public class RelatoriesTypePickerDialog extends DialogFragment{
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class RelatoriesTypePickerDialog extends DialogFragment{
 
         View dialog = inflater.inflate(R.layout.dialog_relatory_type_picker, null);
         relatoryTypeRdg = (RadioGroup) dialog.findViewById(R.id.relatoryTypeRdg);
+        relatoriesTypeSetSelected(dialog);
 
         builder.setView(dialog).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -66,5 +68,17 @@ public class RelatoriesTypePickerDialog extends DialogFragment{
             relatoriesFragment.setRelatoriesTypes(RelatoriesTypes.FINISHED);
         }
         return relatoriesFragment.getRelatoriesTypes();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void relatoriesTypeSetSelected(View dialog){
+        if (relatoriesFragment.getRelatoriesTypes() == RelatoriesTypes.PRIORITIES){
+            selectedRdb = dialog.findViewById(R.id.relatoryPriorityRdb);
+        }
+        if (relatoriesFragment.getRelatoriesTypes() == RelatoriesTypes.FINISHED){
+            selectedRdb = dialog.findViewById(R.id.relatoryFinishingRdb);
+        }
+
+        selectedRdb.setChecked(true);
     }
 }

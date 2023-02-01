@@ -12,13 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginBottom="16dp"
         tools:context=".ui.activities.main.fragments.tasks.form_task.FormTaskFragment">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:padding="12dp"
+            android:padding="16dp"
             android:textSize="22dp"
             android:id="@+id/create_or_edit_your_tag_text_view"
             android:text="@string/create_your_tag" />
@@ -26,7 +27,8 @@
         <EditText
             android:id="@+id/fragment_form_tag_name"
             android:layout_width="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:hint="@string/fragment_form_tag_placeholder_name"
             android:layout_height="wrap_content"/>
         <TextView
@@ -52,7 +54,11 @@
             android:id="@+id/fragment_form_tag_submit"
             android:layout_width="match_parent"
             android:text="@string/fragment_task_submit"
-            android:backgroundTint="@color/green"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            app:backgroundTint="@null"
+            android:background="@drawable/custom_border_green"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>
