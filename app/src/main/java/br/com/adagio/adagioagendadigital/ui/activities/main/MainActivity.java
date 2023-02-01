@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -127,7 +128,7 @@ public  class MainActivity extends AppCompatActivity implements
         listTaskBridgeView = new ListTaskBridgeView(this);
         listTagBridgeView = new ListTagBridgeView(this);
         listNotificationBridgeView = new ListNotificationBridgeView(this);
-        relatoriesFragment = new RelatoriesFragment(this);
+        relatoriesFragment = new RelatoriesFragment(this, LocalDate.now());
         setViews();
         setListeners();
 

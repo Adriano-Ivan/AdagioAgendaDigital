@@ -34,12 +34,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
                 android:layout_gravity="center"
-                android:background="@drawable/custom_border_grey"
+                android:background="@drawable/custom_border_lighter_blue"
                 android:drawableLeft="@android:drawable/ic_menu_edit"
                 android:elevation="20dp"
                 android:gravity="center"
                 android:text="@string/report_type"
-                android:textColor="@color/adagio_purple"
+                android:textColor="@color/adagio_gray_two"
                 android:textSize="@dimen/labelSimple"
                 app:backgroundTint="@null" />
 
@@ -99,16 +99,19 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="8dp">
         <Button
             android:id="@+id/datePickerBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
             android:textSize="@dimen/labelSimple"
-            android:textStyle="bold"
-            android:background="@drawable/custom_border_lighter_blue"
-            app:backgroundTint="@null"
+            android:textColor="@color/adagio_purple_grey"
+            android:backgroundTint="@color/adagio_gray_two"
             android:drawableLeft="@android:drawable/ic_menu_edit"/>
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton

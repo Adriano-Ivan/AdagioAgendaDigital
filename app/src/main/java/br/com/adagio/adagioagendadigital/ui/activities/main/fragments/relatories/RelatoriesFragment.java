@@ -76,15 +76,21 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
     private final Animation rotateClose;
     private final Animation fromBottom;
     private final Animation toBottom;
-    private boolean clicked = false;
+    private final Animation fromBottomStatic;
+    private final Animation staticOpen;
+    private boolean clicked;
 
-    public RelatoriesFragment(Context context) {
+
+    public RelatoriesFragment(Context context, LocalDate relatoriesDate) {
         this.context = context;
         this.taskDAO = TaskDAO.getInstance(context);
         this.rotateOpen = AnimationUtils.loadAnimation(this.context, R.anim.rotate_open_anim);
         this.rotateClose = AnimationUtils.loadAnimation(this.context, R.anim.rotate_close_anim);
         this.fromBottom = AnimationUtils.loadAnimation(this.context, R.anim.from_bottom_anim);
         this.toBottom = AnimationUtils.loadAnimation(this.context, R.anim.to_bottom_anim);
+        this.fromBottomStatic = AnimationUtils.loadAnimation(this.context, R.anim.from_bottom_static);
+        this.staticOpen = AnimationUtils.loadAnimation(this.context, R.anim.staric_open_anim);
+
     }
 
     @Override
@@ -103,9 +109,10 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         datePickerBtn = rootView.findViewById(R.id.datePickerBtn);
 
         //setters
-        relatoriesDate = LocalDate.now();
-        relatoriesTypes = RelatoriesTypes.FINISHED;
-        chartPeriod = 0;
+        relatoriesDate = RelatoriesStaticValues.relatoriesDate;
+        relatoriesTypes = RelatoriesStaticValues.relatoriesTypes;
+        chartPeriod = RelatoriesStaticValues.chartPeriod;
+        clicked = RelatoriesStaticValues.isClicked;
         relatoriesDatePicker = new RelatoriesDatePicker(this);
 
         //FAB buttons
@@ -113,7 +120,6 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         dayRecord = rootView.findViewById(R.id.fragment_relatories_fab_button_day);
         monthRecord = rootView.findViewById(R.id.fragment_relatories_fab_button_month);
         yearRecord = rootView.findViewById(R.id.fragment_relatories_fab_button_year);
-
 
         //charts
         pieChart = rootView.findViewById(R.id.dailyChart);
@@ -128,8 +134,9 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         relatoryTypeBtn.setOnClickListener(this);
         datePickerBtn.setOnClickListener(this);
 
-        loadPieChartData(true, chartPeriod);
-       return rootView;
+        setOnFabCreate();
+        loadPieChartData(false, chartPeriod);
+        return rootView;
     }
 
     public void loadPieChartData(Boolean isFromOpen, int period){
@@ -145,18 +152,21 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
             if (this.month.length() < 2)
                 this.month = "0" + this.month;
             this.year = Integer.toString(relatoriesDate.getYear());
-            setRelatoriesPeriodText(this.day + " de " + relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
+            setRelatoriesPeriodText(rootView.getResources().getString(R.string.relatories_saved_tasks_in) +" "
+                    + this.day + " de " + relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
         }
         else if (period == 1){
             this.month = Integer.toString(relatoriesDate.getMonthValue());
             if (this.month.length() < 2)
                 this.month = "0" + this.month;
             this.year = Integer.toString(relatoriesDate.getYear());
-            setRelatoriesPeriodText(relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
+            setRelatoriesPeriodText(rootView.getResources().getString(R.string.relatories_saved_tasks_in) + " "
+                    + relatoriesDatePicker.getMonthString(this.month) + " de " + this.year);
         }
         else {
             this.year = Integer.toString(relatoriesDate.getYear());
-            setRelatoriesPeriodText(this.year);
+            setRelatoriesPeriodText(rootView.getResources().getString(R.string.relatories_saved_tasks_in) +" "
+                    + this.year);
         }
 
         if (this.relatoriesTypes == RelatoriesTypes.PRIORITIES){
@@ -189,6 +199,7 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         l.setTextSize(12);
         l.setDrawInside(false);
         l.setEnabled(true);
+        setStaticsAtributes(this.relatoriesDate, relatoriesTypes, chartPeriod);
     }
 
     public void setByPriority(String d, String m, String y){
@@ -378,18 +389,22 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         if (view.getId() == recordType.getId()){
             onTypeButtonClicked();
             clicked = !clicked;
+            RelatoriesStaticValues.isClicked = clicked;
         }
         if (view.getId() == dayRecord.getId()){
             chartPeriod = 0;
             loadPieChartData(false, chartPeriod);
+
         }
         if (view.getId() == monthRecord.getId()){
             chartPeriod = 1;
             loadPieChartData(false, chartPeriod);
+
         }
         if (view.getId() == yearRecord.getId()){
             chartPeriod = 2;
             loadPieChartData(false, chartPeriod);
+
         }
         if (view.getId() == relatoryTypeBtn.getId()){
             RelatoriesTypePickerDialog dialog = new RelatoriesTypePickerDialog(this);
@@ -406,6 +421,10 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         setVisibility(clicked);
         setAnimation(clicked);
     }
+    public void setOnFabCreate(){
+        setVisibility(!clicked);
+        setStaticAnimation(!clicked);
+    }
 
     public void setAnimation(boolean clicked) {
 
@@ -421,6 +440,21 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
             yearRecord.startAnimation(toBottom);
             recordType.startAnimation(rotateClose);
         }
+    }
+    public void setStaticAnimation(boolean clicked) {
+
+        if(!clicked){
+            dayRecord.startAnimation(fromBottomStatic);
+            monthRecord.startAnimation(fromBottomStatic);
+            yearRecord.startAnimation(fromBottomStatic);
+            recordType.startAnimation(staticOpen);
+        }
+//        else{
+//            dayRecord.startAnimation(toBottom);
+//            monthRecord.startAnimation(toBottom);
+//            yearRecord.startAnimation(toBottom);
+//            recordType.startAnimation(rotateClose);
+//        }
     }
 
     public void setVisibility(boolean clicked) {
@@ -522,5 +556,10 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
 
     public void setRelatoriesDate(LocalDate relatoriesDate) {
         this.relatoriesDate = relatoriesDate;
+    }
+    public static void setStaticsAtributes(LocalDate date, RelatoriesTypes types, int period){
+        RelatoriesStaticValues.relatoriesTypes = types;
+        RelatoriesStaticValues.relatoriesDate = date;
+        RelatoriesStaticValues.chartPeriod = period;
     }
 }
