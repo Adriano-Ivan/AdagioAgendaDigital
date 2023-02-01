@@ -1,6 +1,6 @@
 # Adagio
 
-** Aplicativo para registro e acompanhamento de tarefas, com recursos de calendário e relatório
+ Aplicativo para registro e acompanhamento de tarefas, com recursos de calendário e relatório
 
 # Tecnologias utilizadas
 
@@ -10,7 +10,7 @@
 
 # Rodar o projeto
 
-** Para rodar o projeto, é necessário
+ Para rodar o projeto, é necessário
 
 - Fazer o clone, utilizando o link: <a href="https://github.com/Adriano-Ivan/AdagioAgendaDigital">Link para clone</a>
 - Você pode importar o projeto pelo Android Studio
