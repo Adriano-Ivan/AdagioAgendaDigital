@@ -164,10 +164,7 @@
     <string name="relatories_unfinished">Unfinished</string>
     <string name="relatories_finished_by_priority">Finished tasks by priority</string>
     <string name="notification_message_one">The task \"</string>
-<<<<<<< Updated upstream
-    <string name="notification_message_three">\" was started.</string>
-=======
     <string name="notification_message_three">\" has been started.</string>
     <string name="relatories_saved_tasks_in">Period of</string>
->>>>>>> Stashed changes
+
 </resources>
