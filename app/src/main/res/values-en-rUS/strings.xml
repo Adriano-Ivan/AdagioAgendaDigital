@@ -18,7 +18,7 @@
     <string name="mode_calendar">calendar mode:</string>
     <string name="choose">choose</string>
     <string name="confirmar">confirm</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">cancelar</string>
     <string name="choose_the_month">choose the mont</string>
     <string name="january">January</string>
     <string name="activity_home_mode_slide_text">slide</string>
@@ -133,6 +133,8 @@
     <string name="high">High</string>
     <string name="critical">Critical</string>
     <string name="report_type">Mudar Relatório</string>
+    <string name="fragment_delete_all_notification">Excluir todas as notificacao</string>
+    <string name="notifications_deleteall_option">delete all notifications</string>
     <string name="tasks_for">Tasks for</string>
 
     <string name="priority">Priorities</string>
@@ -164,13 +166,12 @@
     <string name="notification_message_one">The task \"</string>
     <string name="notification_message_three">\" has been started.</string>
     <string name="relatories_saved_tasks_in">Period of</string>
-    <string name="fragment_delete_all_notification">Delete all notification</string>
-    <string name="notifications_deleteall_option">Delete all notification</string>
     <string name="the_task">The task \"</string>
-    <string name="has_started">\" has started</string>
-    <string name="is_finish2">the defined deadline for the task \"</string>
-    <string name="is_finish3">\" was expired </string>
-    <string name="missing_15">15 minutes left for \"</string>
-    <string name="is_finish"> \" task to be completed</string>
-    <string name="dialog_notify">Do you really want to delete all the notifications?</string>
+    <string name="has_started">\" has been started.</string>
+    <string name="missing_15">15 mins lasting for \"</string>
+    <string name="is_finish">\" to be finished.</string>
+    <string name="is_finish2">The deadline for the task \"</string>
+    <string name="is_finish3">\" has expired.</string>
+    <string name="dialog_notify">Do you really wish to clean all notifications?</string>
+    <string name="saved_tasks_in_period">Saved tasks in this period:</string>
 </resources>
