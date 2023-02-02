@@ -62,7 +62,7 @@ public class NotificationAdapter extends BaseAdapter {
         TextView item_notification_message_two = generatedView.findViewById(R.id.item_notification_message_two);
         String taskName = notification.getMessage();
         taskName = taskName.substring(9);
-        taskName = taskName.split(" ")[0];
+        taskName = taskName.split(generatedView.getResources().getString(R.string.has_started))[0];
         taskName = taskName.toUpperCase();
         item_notification_message_two.setText(taskName);
 
