@@ -235,19 +235,19 @@ public class RelatoriesFragment extends Fragment implements View.OnClickListener
         ArrayList<Integer> colors = new ArrayList<>();
 
         if (percLow > 0){
-            entries.add(new PieEntry(percLow, getResources().getString(R.string.low) + low));
+            entries.add(new PieEntry(percLow, getResources().getString(R.string.low) + " " + low));
             colors.add(this.getContext().getColor(R.color.adagio_gray));
         }
         if (percMedium > 0){
-            entries.add(new PieEntry(percMedium, getResources().getString(R.string.average) + medium));
+            entries.add(new PieEntry(percMedium, getResources().getString(R.string.average)+ " "  + medium));
             colors.add(this.getContext().getColor(R.color.adagio_blue));
         }
         if (percHigh > 0){
-            entries.add(new PieEntry(percHigh, getResources().getString(R.string.high) + high));
+            entries.add(new PieEntry(percHigh, getResources().getString(R.string.high)+ " "  + high));
             colors.add(this.getContext().getColor(R.color.adagio_yellow));
         }
         if (percCritical > 0){
-            entries.add(new PieEntry(percCritical, getResources().getString(R.string.critical) + critical));
+            entries.add(new PieEntry(percCritical, getResources().getString(R.string.critical)+ " "  + critical));
             colors.add(this.getContext().getColor(R.color.adagio_red));
         }
 
