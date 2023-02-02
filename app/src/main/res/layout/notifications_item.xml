@@ -18,28 +18,28 @@
                     android:maxWidth="270dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp" />
+                    android:textSize="16dp" />
                 <TextView
                     android:id="@+id/item_notification_message_two"
                     android:maxWidth="270dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/item_notification_message_three"
                     android:maxWidth="270dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp" />
+                    android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical|left">
+            android:layout_marginTop="4dp"
+            android:gravity="bottom|left">
                 <TextView
                 android:id="@+id/item_notification_priority"
                 android:layout_width="match_parent"
@@ -55,7 +55,6 @@
                     android:layout_height="24dp"
                     app:cardCornerRadius="15dp"
                     android:layout_marginLeft="16dp"
-
                     android:layout_gravity="center"
                     />
 

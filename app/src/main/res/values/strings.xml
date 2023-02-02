@@ -188,5 +188,6 @@
     <string name="relatories_saved_tasks_in">Período de</string>
     <string name="dialog_notify">Deseja realmente limpar todas as Notificações?</string>
     <string name="saved_tasks_in_period">Tarefas cadastradas neste período:</string>
+    <string name="line">-</string>
 
 </resources>

@@ -61,7 +61,7 @@ public class NotificationAdapter extends BaseAdapter {
 
         TextView item_notification_message_two = generatedView.findViewById(R.id.item_notification_message_two);
         String taskName = notification.getMessage();
-        taskName = taskName.substring(9);
+        taskName = taskName.substring(10);
         taskName = taskName.split(generatedView.getResources().getString(R.string.has_started))[0];
         taskName = taskName.toUpperCase();
         item_notification_message_two.setText(taskName);
@@ -73,7 +73,7 @@ public class NotificationAdapter extends BaseAdapter {
         priority.setText(notification.getPriority_name());
 
         CardView cardViewIndicator = generatedView.findViewById(R.id.notifications_list_priority);
-        cardViewIndicator.setCardBackgroundColor(returnColor(notification));
+        cardViewIndicator.setCardBackgroundColor(returnColor(notification, generatedView));
 
         TextView emited_at = generatedView.findViewById(R.id.item_notification_emited_at);
         String dia;
@@ -113,12 +113,15 @@ public class NotificationAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    private int returnColor(Notification notification){
-        if(notification.getPriority_name().equals(Priorities.HIGH.getValue())){
+    private int returnColor(Notification notification, View generatedView){
+        if(notification.getPriority_name().toUpperCase().equals(generatedView.getResources()
+                .getString(R.string.fragment_form_task_choose_high).toUpperCase())){
             return context.getColor(R.color.adagio_yellow);
-        } else if(notification.getPriority_name().equals(Priorities.LOW.getValue())){
+        } else if(notification.getPriority_name().toUpperCase().equals(generatedView.getResources()
+                .getString(R.string.fragment_form_task_choose_short).toUpperCase())){
             return context.getColor(R.color.adagio_gray);
-        } else if(notification.getPriority_name().equals(Priorities.CRITICAL.getValue())){
+        } else if(notification.getPriority_name().toUpperCase().equals(generatedView.getResources()
+                .getString(R.string.fragment_form_task_choose_critical).toUpperCase())){
             return context.getColor(R.color.adagio_red);
         }
 
