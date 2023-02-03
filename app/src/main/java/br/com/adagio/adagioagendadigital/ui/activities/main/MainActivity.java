@@ -124,11 +124,10 @@ public  class MainActivity extends AppCompatActivity implements
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for(ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)){
             if(NotificationService.class.getName().equals(service.service.getClassName())){
-                System.out.println("estou aqui");
                 return true;
             }
         }
-                System.out.println("estou aqui2");
+
         return false;
     }
 
