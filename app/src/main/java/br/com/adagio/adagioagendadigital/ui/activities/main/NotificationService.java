@@ -50,8 +50,10 @@ public class NotificationService extends Service {
     private TaskDAO Tdao;
 
     private final String CHANNEL_ID = "primary_channel_id";
+    private final String CHANNEL_ID2 = "my_channel_02";
     private final String KEY_GROUP = "KEY";
     private  int NOTIFICATION_ID = 001;
+    private  int NOTIFICATION_ID2 = 1000;
     int SUMMARY_ID = 0;
     public  int x = 0;
 
@@ -68,8 +70,9 @@ public class NotificationService extends Service {
 
         listNotificationBridgeView = new ListNotificationBridgeView(this);
         Tdao =  TaskDAO.getInstance(this);
-        notification(NOTIFICATION_ID);
+        notification(NOTIFICATION_ID2);
         start();
+        start2();
         return START_STICKY;
     }
 
@@ -87,18 +90,33 @@ public class NotificationService extends Service {
         notificationManager.createNotificationChannel(channel);
     }
 
-    private  void notification( int NOTIFICATION_ID){
-        createNotificationChannel();
-        android.app.Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+    private void createNotificationChannel2(){
+        CharSequence name = "Notification2";
+        String description = "Channel Notification2";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID2, name, importance);
+        channel.setDescription(description);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    private  void notification( int NOTIFICATION_ID2){
+        createNotificationChannel2();
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, notificationIntent,
+                        PendingIntent.FLAG_IMMUTABLE);
+
+        android.app.Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID2)
                 .setSmallIcon(R.drawable.ic_stat_adagio)
                 .setColor(Color.rgb(124,58,255))
                 .setContentTitle("executando")
+                .setContentIntent(pendingIntent)
                 .build();
 
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        startForeground(NOTIFICATION_ID,builder);
+        startForeground(NOTIFICATION_ID2,builder);
     }
 
     private  void notificationTaskStarted(String nome, String prioridade, int x, int id){
@@ -108,15 +126,22 @@ public class NotificationService extends Service {
         System.out.println(message);
         String priority_name = prioridade ;
         createNotificationChannel();
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, notificationIntent,
+                        PendingIntent.FLAG_IMMUTABLE);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_adagio)
                 .setColor(Color.rgb(124,58,255))
                 .setContentTitle(message)
                 .setContentText(priority_name)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true);
+
 
         salvar(tanks_id, dataAtual, message, priority_name);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -129,13 +154,19 @@ public class NotificationService extends Service {
         String message =getResources().getString(R.string.missing_15)+nome+getResources().getString(R.string.is_finish) ;
         String priority_name = prioridade ;
         createNotificationChannel();
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, notificationIntent,
+                        PendingIntent.FLAG_IMMUTABLE);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_adagio)
                 .setColor(Color.rgb(124,58,255))
                 .setContentTitle(message)
                 .setContentText(priority_name)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true);
 
@@ -151,13 +182,19 @@ public class NotificationService extends Service {
         String message = getResources().getString(R.string.is_finish2)+nome+getResources().getString(R.string.is_finish3);
         String priority_name = prioridade ;
         createNotificationChannel();
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, notificationIntent,
+                        PendingIntent.FLAG_IMMUTABLE);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_adagio)
                 .setColor(Color.rgb(124,58,255))
                 .setContentTitle(message+"foi finalizada")
                 .setContentText(priority_name)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true);
 
@@ -200,6 +237,16 @@ public class NotificationService extends Service {
             }
         };
         t.schedule(tk,new Date(),60000);
+    }
+
+    public void start2() {
+        Timer t = new Timer();
+        TimerTask tk = new TimerTask() {
+            @Override
+            public void run() {
+            }
+        };
+        t.schedule(tk,new Date(),1000);
     }
 
     public int tratar_minutos(int minutos){
