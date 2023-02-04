@@ -81,25 +81,29 @@ public class NotificationService extends Service {
     private void createNotificationChannel(){
         CharSequence name = "Notification";
         String description = "Channel Notification";
-        int importance = NotificationManager.IMPORTANCE_HIGH;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
 
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
 
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private void createNotificationChannel2(){
         CharSequence name = "Notification2";
         String description = "Channel Notification2";
-        int importance = NotificationManager.IMPORTANCE_HIGH;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
 
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID2, name, importance);
-        channel.setDescription(description);
+            NotificationChannel channel2 = new NotificationChannel(CHANNEL_ID2, name, importance);
+            channel2.setDescription(description);
 
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel2);
+        }
     }
 
     private  void notification( int NOTIFICATION_ID2){
