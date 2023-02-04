@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.ServiceCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -111,11 +112,12 @@ public  class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Intent intent = new Intent(this,NotificationService.class);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setNavigationAttributes();
         if(!foregroundServiceRunning()){
-            startForegroundService(new Intent(this, NotificationService.class));
+            ContextCompat.startForegroundService(this,intent);
         }
     }
 
